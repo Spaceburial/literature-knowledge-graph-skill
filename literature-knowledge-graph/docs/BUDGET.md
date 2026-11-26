@@ -15,6 +15,12 @@ Pipeline cost on the worked example (141 paragraphs, 166,815 characters, 2 paper
 So the scripts are not the budget. **The budget is spent on the model reading the paragraphs**, and
 that is what the cap has to control.
 
+Measured again on a synthetic 2,000-paragraph / 557,804-character corpus (fourteen times the demo):
+`prepare_case` 0.28 s, `heuristic_extract` 1.6 s, `build_graph` 0.7 s, `query_graph` 0.6 s,
+`finalize` 0.7 s — about 4 s in total. Escaping the lexical gate instead of copying quotes is the
+expensive path, and even that is bounded: 200 paraphrased quotes verified against 200 paragraphs of
+251,657 characters take 2.5 s, because fuzzy matching slides a window no larger than the quote.
+
 ## What is modelled, and with which parameters
 
 | quantity | model | status |
