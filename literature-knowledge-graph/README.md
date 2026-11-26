@@ -5,10 +5,141 @@ queryable knowledge graph**: typed entities and directed relations, each bound t
 `source_id` + `paragraph_id` + a verbatim quote, aligned across papers, with merge,
 conflict and uncertainty records, plus ≥3 executed queries.
 
-The skill follows the runtime contract of the challenge it was written for: inputs at
-`/input` (`case.json`, `task.md`, `corpus-manifest.json`, `material.json`,
-`primary-material.json`, `secondary-material.json`), work under `/app/work`, deliverables
-under `/app/output` including `result.json`.
+Runs offline on the bundled two-paper example: Python 3.9+, standard library only, no network.
+
+## Quickstart — three commands, then one query
+
+From this directory, on the bundled example (two real open-access papers):
+
+```bash
+# 1 · the whole pipeline: prepare -> build -> query -> export -> finalize
+bash run.sh all --case-dir examples/demo_perovskite/input \
+     --annotations examples/demo_perovskite/annotations.example.json \
+     --queries examples/demo_perovskite/queries.example.json --work work --out out
+
+# 2 · check the installation (25 self-test checks)
+bash run.sh test
+
+# 3 · ask the graph one question, with its evidence printed
+bash run.sh query --graph work/graph.json --type metric_compare \
+       --name "power conversion efficiency" --out work/q.json
+```
+
+```
+[query_graph] 1 queries: 1 answered, 0 partial, 0 undetermined -> work/q.json
+  Q1 metric_compare: answered (8 nodes, 7 edges, 7 evidence)
+
+Q1 metric_compare -> answered
+  node DMTH-COF [material] P1
+  node power conversion efficiency [metric] P1,P2
+  node Boc-PDA-COF [material] P1
+  node Tp-COF [material] P1
+  node mesoscopic device architecture [model] P1
+  node FA0.9MA0.1PbI2.85Br0.15 [material] P2
+  node Cs0.05FA0.90MA0.05PbI2.85Br0.15 [material] P2
+  node passivation [method] P1,P2
+  value P1/d0063: 14.7%, 20.78%, 41.36%
+  value P1/d0056: 15.88%, 18.88%, 76.46%, 20.78%
+  value P2/Par31: no % value in the text (other numbers: 15)
+  note Values are listed per source/paragraph and are NOT aggregated or averaged; different conditions/samples make …
+  evidence 7 quote(s)
+    P1/d0063: “The increase in PCE is even more significant, with a rise from 14.7% for pristine to 20.7…”
+    P1/d0056: “The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and…”
+```
+
+Command 1 writes `out/result.json` (the graded deliverable: `status`, `summary`,
+`evidence_index`, `uncertainty`, `validation`) plus `nodes.csv`, `edges.csv`, `evidence.csv`,
+`graph.mmd` and `graph.graphml`. The single-query form prints the answer; a whole query file
+stays in `queries_result.json`, the source of truth (`-v` prints every answer).
+
+The same pipeline stage by stage, when you need to inspect the intermediates:
+
+```bash
+bash run.sh prepare  --case-dir examples/demo_perovskite/input --out work/case_bundle.json
+bash run.sh build    --bundle work/case_bundle.json \
+       --annotations examples/demo_perovskite/annotations.example.json --out work/graph.json
+bash run.sh query    --graph work/graph.json --queries examples/demo_perovskite/queries.example.json \
+                     --out work/queries_result.json
+bash run.sh export   --graph work/graph.json --queries work/queries_result.json --outdir out
+bash run.sh finalize --bundle work/case_bundle.json --graph work/graph.json \
+                     --queries work/queries_result.json --out out/result.json --outdir out
+```
+
+Query types (`--type`, or the `type` field of a query object):
+
+| type | key arguments | answers |
+|---|---|---|
+| `entity` | `name` | one entity, its aliases, sources and incident relations |
+| `neighbors` | `name`, `relation`, `direction` | what one entity is linked to, filtered by relation |
+| `path` | `from`, `to`, `max_hops` | a chain of relations between two entities (or `undetermined`) |
+| `relation_search` | `relation`, `keyword` | all relations of a type, optionally keyword-filtered |
+| `cross_paper` | — | shared vs source-exclusive entities, plus recorded conflicts |
+| `evidence_trace` | `id` (node or edge) | the paragraph and quote behind one item |
+| `metric_compare` | `name` | per-source/per-paragraph values, never aggregated |
+
+With no `--queries`, a built-in set of four runs (`entity`, `relation_search`, `cross_paper`,
+`evidence_trace`); a `--queries` path that does not exist is an error, not a silent fallback.
+On the command line only `--type` and `--name` are settable; `path`, `neighbors` and
+`relation_search` need their other fields, so pass those as a query file
+(`{"queries":[{"qid":"Q1","type":"path","from":"A","to":"B","max_hops":3}]}`).
+
+Evidence is labelled by what verification actually achieved: a node or edge is `verified` when a
+quote was located, `unverified` when it carries no quote at all, and `rejected` when the quotes it
+did carry were not found in the cited paragraph — rejected items stay in the graph, listed in
+`uncertainty`, and never count towards the coverage figure. A `fuzzy` match (≥0.90 similarity) is
+accepted but flagged weak, and it can never survive a changed number.
+
+## Bring your own corpus
+
+One directory, one paper per material file. Paper text is read from the `paragraphs` list of
+`material.json`, `primary-material.json` or `secondary-material.json`, or from any `*.txt`,
+`*.md`, `*.pdf` (needs `pdftotext`) or JATS `*.xml` file in that directory:
+
+```
+mycase/
+  case.json                 {"case_id": "my-case", "output_contract": {...}}
+  corpus-manifest.json      metadata only: source_id, doi, title, authors, license, sha256
+  primary-material.json     paper 1 — the only file that carries text
+  secondary-material.json   paper 2
+```
+
+```json
+{"source_id": "P1", "doi": "10.1000/xyz", "role": "primary",
+ "paragraphs": [{"source_id": "P1", "paragraph_id": "s3p2", "section": "Results",
+                 "text": "The passivated film reached a power conversion efficiency of 21.3% with PEAI passivation under AM1.5G illumination."}]}
+```
+
+`paragraph_id` must be the provider's own id where one exists (JATS `p` id, database id); ids
+generated from PDF/plain text are `d####` and every item built from them carries
+`paragraph_id_kind="derived"`. Paragraph text shorter than 40 characters is skipped (the count is
+reported, never dropped silently). Without a manifest, `source_id` comes from the `source_id`
+field or the file stem. `corpus-manifest.json` is metadata only — the `file` fields it lists are
+**not** parsed for text, so a manifest entry alone yields a source with zero paragraphs, and a
+directory with no readable paragraph exits non-zero naming the accepted file names.
+
+The graph is built from annotations, not from the bundle. Minimum working `annotations.json` for
+the paragraph above (verified: 2 nodes, 1 edge, `metric_compare` answers `21.3%`):
+
+```json
+{"nodes": [
+  {"label": "PEAI", "type": "material",
+   "mentions": [{"source_id": "P1", "paragraph_id": "s3p2", "quote": "21.3% with PEAI passivation"}]},
+  {"label": "power conversion efficiency", "type": "metric", "aliases": ["PCE"],
+   "mentions": [{"source_id": "P1", "paragraph_id": "s3p2", "quote": "21.3% with PEAI passivation"}]}],
+ "edges": [
+  {"source_label": "PEAI", "target_label": "power conversion efficiency", "type": "reports",
+   "evidence": [{"source_id": "P1", "paragraph_id": "s3p2", "quote": "21.3% with PEAI passivation"}]}]}
+```
+
+```bash
+bash run.sh build --bundle work/case_bundle.json --annotations mycase/annotations.json --out work/graph.json
+```
+
+`quote` must be copied verbatim from the cited paragraph; a quote that is not found is rejected and
+the item is kept but labelled `unverified`. The full shape is `schema/graph.schema.json`, a
+fill-in file is `templates/annotations.template.json`, and the reading procedure is `SKILL.md`
+§Procedure. With no annotations file, `build_graph.py` stops and names both routes instead of
+writing an empty graph.
 
 ## What is in this directory
 
@@ -25,40 +156,45 @@ under `/app/output` including `result.json`.
 | `scripts/add_paper.py` | incremental update: merge a new paper, preserve existing ids, log added/merged/conflicts |
 | `scripts/heuristic_extract.py` | deterministic fallback extractor (baseline, not the quality path) |
 | `scripts/run_all.py` | one-command pipeline for the demo and for fallback runs |
+| `scripts/render_png.py` | optional `graph.png` preview (needs matplotlib; skipped if absent) |
+| `run.sh` | stage dispatcher: `prepare \| build \| query \| export \| finalize \| extract \| test \| all` (`extract` takes `--bundle`/`--out`) |
 | `templates/` | fill-in annotation JSON + a per-window extraction prompt |
 | `examples/demo_perovskite/` | a real two-paper worked example (inputs, curated annotations, outputs) |
-| `tests/selftest.py` | 20 checks: quote verification, merge safety, type conflicts, end-to-end |
-| `docs/` | method, limitations, measured gain over the baseline, changelog |
+| `tests/selftest.py` | 25 checks: quote verification, merge safety, type conflicts, end-to-end |
+| `docs/` | method, limitations, measured gain, budget, changelog, attempt ledger, usability test |
+
+## Runtime contract
+
+The skill follows the contract of the challenge it was written for: inputs at `/input`
+(`case.json`, `task.md`, `corpus-manifest.json`, `material.json`, `primary-material.json`,
+`secondary-material.json`), work under `/app/work`, deliverables under `/app/output`, including
+`result.json`. Those are also the **defaults** of every script: run them elsewhere and pass
+`--case-dir`, `--work`, `--out` explicitly. One-command form:
+
+```bash
+bash run.sh all --case-dir /input --work /app/work --out /app/output \
+                --annotations /app/work/annotations.json        # omit to use the heuristic fallback
+```
+
+`--case-dir` is required: without it the normaliser would search the current directory and could
+ingest unrelated files as a corpus. A failed stage aborts the run instead of writing an empty
+`result.json`.
+
+`result.json.status` has three values. `success` requires 100 % evidence coverage, ≥3 answered
+queries, evidence bound to ≥2 sources, complete source metadata, a `case_id` and no dropped edges;
+`partial` names each shortfall in `status_reasons` (truncated input, unverified items, dropped
+endpoints, a paper with no evidence, <3 answered queries); `undetermined` means no node, or no
+evidence, survived verification. `success` is not a claim that every query was answerable — a
+queries file of four may leave one `undetermined` and still be `success`. Read the reasons and the
+`undetermined` branch, do not read the status alone.
 
 ## Requirements
 
 - Python 3.9+ (standard library only; no third-party packages).
-- No network access is needed at run time. `prepare_case.py` also parses JATS XML if present.
-
-## Run it
-
-```bash
-# 1. normalise the case
-python scripts/prepare_case.py --case-dir /input --out /app/work/case_bundle.json
-
-# 2. write /app/work/annotations.json from a close reading (see SKILL.md Step 2)
-
-# 3. build, query, export, finalise
-python scripts/build_graph.py  --bundle /app/work/case_bundle.json \
-       --annotations /app/work/annotations.json --out /app/work/graph.json
-python scripts/query_graph.py  --graph /app/work/graph.json --out /app/work/queries_result.json
-python scripts/export_graph.py --graph /app/work/graph.json \
-       --queries /app/work/queries_result.json --outdir /app/output
-python scripts/finalize.py     --bundle /app/work/case_bundle.json \
-       --graph /app/work/graph.json --queries /app/work/queries_result.json \
-       --out /app/output/result.json --outdir /app/output
-```
-
-Or in one command (uses the fallback extractor if `annotations.json` is absent):
-
-```bash
-python scripts/run_all.py --case-dir /input --work /app/work --out /app/output
-```
+- No network access is needed at run time.
+- Input formats: JSON paragraph records, JATS XML, Markdown, plain text, and PDF (PDF conversion
+  shells out to the external `pdftotext` from Poppler; everything else is pure standard library).
+  Ids derived from PDF/plain text are `d####` and flagged `paragraph_id_kind="derived"`.
 
 ## Worked example
 
@@ -77,13 +213,15 @@ FA0.9MA0.1PbI2.85Br0.15 / CsFAMA), **different device areas** (0.50 vs 0.14 cm²
 merging, non-merge justification and cross-paper conflict logging on real text.
 `examples/demo_perovskite/output/` is a labelled example output, not a graded answer.
 
-Result: 35 nodes, 34 edges, 100% evidenced, 4 merge decisions, 4 recorded cross-paper
+Result: 35 nodes, 34 edges, 100% evidenced, 9 merge decisions (5 merged, 4 kept
+separate by decision), 4 recorded cross-paper
 conflicts, 6/6 queries answered, `status="success"`.
 
 ## Testing
 
 ```bash
-python tests/selftest.py      # 25 checks, exit 0 = pass
+bash run.sh test                      # 25 checks, exit 0 = pass
+python3 tests/regression/regression.py   # R1–R9, 40 checks
 ```
 
 ## Version and provenance
