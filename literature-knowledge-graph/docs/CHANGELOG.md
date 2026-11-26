@@ -75,7 +75,9 @@ closes one hole in the evidence gate.
   funding, competing interests, data availability, acknowledgements, footnotes) are excluded and
   counted in `bundle.warnings`. 172 raw blocks → 166 body paragraphs, 6 back-matter blocks named.
 - `prepare_case.py`: warnings about skipped blocks are recorded in `bundle.warnings` before the
-  bundle is written (they were appended after the dump, so only stdout showed them).
+  bundle is written (they were appended after the dump, so only stdout showed them), and the
+  no-paragraph failure now echoes every collected warning, so a PDF without `pdftotext`, or a
+  manifest whose files were never parsed, states its own cause instead of a generic list.
 - `finalize.py`: the no-graph result keeps the full `result.json` shape (empty `nodes`/`edges`,
   `validation` keys) instead of a three-key stub.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
