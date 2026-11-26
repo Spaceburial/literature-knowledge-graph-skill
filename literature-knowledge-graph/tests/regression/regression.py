@@ -478,8 +478,8 @@ def r10(work):
 NODE_TYPES = {"researcher", "material", "method", "task", "metric", "conclusion", "dataset",
               "model", "other"}
 EDGE_TYPES = {"uses", "compares", "outperforms", "supports", "contradicts", "measures",
-              "evaluated_on", "reports", "improves", "part_of", "produces", "based_on", "cites",
-              "other"}
+              "evaluated_on", "reports", "improves", "increases", "decreases", "part_of", "produces",
+              "based_on", "cites", "other"}
 MERGE_DECISIONS = {"merged", "kept_separate", "not_applicable"}
 
 
@@ -581,6 +581,19 @@ def r11(work):
         broken["edges"][0]["type"] = "banana"
     ok, _ = schema_verdict(broken, schema)
     check("a graph with an out-of-schema relation type is rejected", not ok)
+
+    # the vocabulary exists in three places (schema, extractor, this test); drift between them is
+    # how a relation silently became "other" on a real run
+    schema_rel = set(schema["$defs"]["edge"]["properties"]["type"]["enum"])
+    schema_node = set(schema["$defs"]["node"]["properties"]["type"]["enum"])
+    sys.path.insert(0, SCRIPTS)
+    import build_graph as BG
+    check("relation vocabulary agrees across schema, build_graph and the test",
+          schema_rel == set(BG.REL_TYPES) == EDGE_TYPES,
+          (sorted(schema_rel - set(BG.REL_TYPES)), sorted(EDGE_TYPES - schema_rel)))
+    check("node vocabulary agrees across schema and build_graph",
+          schema_node == set(BG.NODE_TYPES), (sorted(schema_node - set(BG.NODE_TYPES)),
+                                              sorted(set(BG.NODE_TYPES) - schema_node)))
 
     longest = max([len(m["quote"]) for n in g["nodes"] for m in n.get("mentions", [])]
                   + [len(m["quote"]) for e in g["edges"] for m in e.get("evidence", [])] + [0])
