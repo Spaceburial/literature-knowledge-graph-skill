@@ -17,7 +17,7 @@
     {
      "source_id": "P2",
      "paragraph_id": "Par31",
-     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC",
      "attribution": "self"
     }
    ]
@@ -409,7 +409,7 @@
     {
      "source_id": "P2",
      "paragraph_id": "Par8",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "attribution": "self"
     }
    ]
@@ -852,7 +852,7 @@
     {
      "source_id": "P2",
      "paragraph_id": "Par8",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "attribution": "self"
     }
    ]
@@ -912,7 +912,7 @@
     {
      "source_id": "P2",
      "paragraph_id": "Par8",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "attribution": "self"
     }
    ]
