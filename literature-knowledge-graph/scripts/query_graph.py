@@ -246,15 +246,21 @@ class Graph:
             elif len(present) == 1:
                 exclusive[next(iter(present))].append(self.node_brief(n["id"]))
         conflicts = self.g.get("conflict_log", [])
+        # an "do the papers agree?" question is answered by the conflicts AND by what is explicitly
+        # left undetermined; returning only conflicts hides the second half of the answer
+        uncertainty = self.g.get("uncertainty", [])
         nodes = shared + [x for v in exclusive.values() for x in v[:50]]
         notes = [f"library has {len(sid_list)} sources: {sid_list}"]
         if len(sid_list) < 2:
             notes.append("fewer than two sources: cross-paper comparison is not possible")
+        if not conflicts and not uncertainty:
+            notes.append("no conflict or open question is recorded between the sources")
         status = "answered" if len(sid_list) >= 2 else "partial"
         return (status, _uniq(nodes), [], [],
                 {"shared_entities": shared,
                  "exclusive_entities": dict(exclusive),
-                 "conflicts": conflicts}, notes, [])
+                 "conflicts": conflicts,
+                 "undetermined": uncertainty}, notes, [])
 
     def q_evidence_trace(self, ident):
         if ident in self.nodes:
@@ -403,6 +409,12 @@ def _salient_term(line, G=None):
     return cands[0]
 
 
+VALUE_HINT = re.compile(r"\bwhat\b|\bhow much\b|\bhow many\b|\breport(s|ed)?\b|\bvalue|"
+                        r"\u591a\u5c11|\u51e0|\u6570\u503c|\u503c|\u591a\u5927")
+AGREE_HINT = re.compile(r"\bagree\b|\bconsistent\b|\bcontradict|\bconflict|\bdiffer\b|\bdisagree\b|"
+                        r"\u4e00\u81f4|\u77db\u76fe|\u76f8\u540c|\u5206\u6b67|\u5dee\u5f02")
+
+
 def task_queries(G, task_text):
     """Answer the questions the case asks, not only the structural ones we would pick ourselves."""
     if not task_text:
@@ -414,8 +426,13 @@ def task_queries(G, task_text):
                 surfaces.append((s, nid))
     surfaces.sort(key=lambda t: -len(t[0]))
     qs = []
+    seen_q = set()
     for i, line in enumerate(_candidate_questions(task_text), 1):
         low = line.lower()
+        key = canon(line)
+        if key in seen_q:            # the same sentence can arrive twice (line split, numbering)
+            continue
+        seen_q.add(key)
         hit = None
         for surf, nid in surfaces:
             if surf.lower() in low:
@@ -423,10 +440,19 @@ def task_queries(G, task_text):
                 break
         base = {"qid": f"T{i}", "derived_from": "task", "task_question": line[:240],
                 "purpose": "question taken from the case task text"}
+        if AGREE_HINT.search(line):
+            # "do the two papers agree on ...": the answer lives in the conflict and uncertainty
+            # records, and the alignment query is what surfaces them
+            qs.append(dict(base, type="cross_paper"))
+            continue
         if CROSS_HINT.search(line) and not hit:
             # "which material appears in both papers", "两篇共同…": that is the alignment question,
             # and answering it with a free-text miss would understate what the graph can do
             qs.append(dict(base, type="cross_paper"))
+            continue
+        if hit and VALUE_HINT.search(line) and G.nodes[hit[1]]["type"] == "metric":
+            # a question about a number wants the per-source values, never one pooled figure
+            qs.append(dict(base, type="metric_compare", name=G.nodes[hit[1]]["label"]))
             continue
         if hit:
             qs.append(dict(base, type="entity", name=G.nodes[hit[1]]["label"]))
