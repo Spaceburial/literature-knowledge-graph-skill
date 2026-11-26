@@ -47,6 +47,10 @@ Q1 metric_compare -> answered
     P1/d0056: “The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and…”
 ```
 
+`out/graph_report.md` opens with the run's own state (`status`, the reasons when it is not
+`success`, extraction mode, paragraphs kept, stage times), then the entities, relations, merge
+decisions, conflicts and queries — it is meant to be readable on its own.
+
 Command 1 writes `out/result.json` (the graded deliverable: `status`, `summary`,
 `evidence_index`, `uncertainty`, `validation`) plus `nodes.csv`, `edges.csv`, `evidence.csv`,
 `graph.mmd`, `graph.graphml` and `graph.svg`. The single-query form prints the answer; a whole query file
