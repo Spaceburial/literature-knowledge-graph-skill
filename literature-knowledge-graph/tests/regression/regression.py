@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the nine cases a change must not break before a submission.
+"""regression.py — the ten cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -13,13 +13,16 @@ R7 silent-failure gates        -> an empty corpus, missing annotations, node-les
                                   missing query file each exit non-zero with a reason (they used to
                                   report nothing and succeed)
 R8 one digit edited in a quote -> rejected as a numeric mismatch even at 0.95 string similarity
+R10 input shapes             -> JATS .xml is discovered, an aggregate material.json keeps its
+                                metadata, a dict-of-dicts corpus is counted once, and a nested
+                                record inherits its paper's source_id
 R9 no silent empty results   -> annotations that match no paragraph stop the build; an answer
                                 with no verified evidence is undetermined; a failed validation
                                 check cannot sit beside status="success"
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all nine
+    python3 tests/regression/regression.py          # all ten
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
@@ -371,8 +374,68 @@ def r9(work):
           page_check not in reasons2, reasons2)
 
 
+# ---------------------------------------------------------------- R10
+PA = ("Perovskite solar cells with a passivated absorber reached a power conversion efficiency of "
+      "21.3% under AM1.5G illumination, with an open-circuit voltage of 1.12 V.")
+PB = ("A control device without the passivation step reached 19.8% under the same measurement "
+      "conditions and lost a third of its efficiency over 500 hours.")
+
+
+def r10(work):
+    print("[R10] input shapes: JATS xml, aggregate metadata, keyed dicts, nested records")
+
+    # (1) JATS full text arrives as one .xml per paper and must be discovered
+    d = os.path.join(work, "jats"); os.makedirs(d)
+    for name, text in (("paper_one.xml", PA), ("paper_two.xml", PB)):
+        open(os.path.join(d, name), "w", encoding="utf-8").write(
+            f'<article><body><sec id="s1"><title>Results</title><p id="p1">{text}</p>'
+            f'</sec></body></article>')
+    b1 = os.path.join(work, "b1.json")
+    r = shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", d, "--out", b1])
+    bundle = jload(b1) if r.returncode == 0 else {"paragraphs": [], "sources": []}
+    check("JATS .xml files are discovered", r.returncode == 0 and len(bundle["paragraphs"]) == 2,
+          (r.returncode, len(bundle["paragraphs"])))
+
+    # (2) an aggregate material.json carries doi/title per source, without a manifest
+    d = os.path.join(work, "agg"); os.makedirs(d)
+    jdump({"P1": {"doi": "10.1/a", "title": "Paper A",
+                  "paragraphs": [{"source_id": "P1", "paragraph_id": "s1p1", "text": PA}]},
+           "P2": {"doi": "10.1/b", "title": "Paper B",
+                  "paragraphs": [{"source_id": "P2", "paragraph_id": "s1p1", "text": PB}]}},
+          os.path.join(d, "material.json"))
+    b2 = os.path.join(work, "b2.json")
+    shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", d, "--out", b2])
+    bundle = jload(b2)
+    dois = {s["source_id"]: s.get("doi") for s in bundle["sources"]}
+    check("aggregate material.json keeps its per-source metadata",
+          dois.get("P1") == "10.1/a" and dois.get("P2") == "10.1/b", dois)
+
+    # (3) {"p1": {"text": ...}} is read by two strategies and must be counted once
+    d = os.path.join(work, "keyed"); os.makedirs(d)
+    jdump({"p1": {"text": PA}, "p2": {"text": PB}},
+          os.path.join(d, "primary-material.json"))
+    b3 = os.path.join(work, "b3.json")
+    shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", d, "--out", b3])
+    bundle = jload(b3)
+    check("a keyed dict corpus is not double-counted", len(bundle["paragraphs"]) == 2,
+          [(p["source_id"], p["paragraph_id"]) for p in bundle["paragraphs"]])
+
+    # (4) a record nested under a paper object inherits that paper's source_id
+    d = os.path.join(work, "nested"); os.makedirs(d)
+    jdump({"papers": [{"source_id": "P1", "abstract": {"text": PA}},
+                      {"source_id": "P2", "abstract": {"text": PB}}]},
+          os.path.join(d, "material.json"))
+    b4 = os.path.join(work, "b4.json")
+    shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", d, "--out", b4])
+    bundle = jload(b4)
+    sids = sorted({p["source_id"] for p in bundle["paragraphs"]})
+    check("a nested record inherits its paper's source_id", sids == ["P1", "P2"], sids)
+    check("both nested paragraphs survive", len(bundle["paragraphs"]) == 2,
+          len(bundle["paragraphs"]))
+
+
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
-         "R9": r9}
+         "R9": r9, "R10": r10}
 
 
 def main(argv):
