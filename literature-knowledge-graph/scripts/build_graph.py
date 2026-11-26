@@ -479,6 +479,15 @@ def main():
             "edges_by_source": _by_source(edges),
         },
         "warnings": bundle.get("warnings", []),
+        # carried so query_graph can answer the questions the case actually asks; the graph stays
+        # self-contained, which is what makes a shipped graph.json queryable on its own
+        "task": (bundle.get("task") or "")[:4000],
+        # factual provenance of the extraction: "agent" when the annotator file was written by the
+        # model, "heuristic" when the deterministic fallback ran. A reader can see which it was.
+        "extraction_mode": ("heuristic"
+                            if (annotations.get("generator") or annotations.get("extractor") or
+                                os.path.basename(str(ann_path))).lower().startswith(("heuristic", "annotations.heuristic"))
+                            else "agent"),
         "runtime": {"build_seconds": round(time.time() - _t0, 3)},
     }
     n_verified_items = (sum(1 for n in nodes if n["evidence_status"] == "verified")
