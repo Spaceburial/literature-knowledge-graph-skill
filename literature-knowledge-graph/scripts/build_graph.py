@@ -26,7 +26,7 @@ import json
 import os
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from verify_evidence import verify_quote, is_acceptable, evidence_strength_from  # noqa: E402
@@ -72,14 +72,31 @@ def canon(s):
     return s
 
 
+# Types the annotation asked for that the schema does not have. Coercing them to "other" is
+# the right behaviour, doing it silently is not: the count ends up in graph["warnings"].
+TYPE_COERCIONS = Counter()
+
+
 def norm_type(t):
     t = (t or "other").strip().lower()
-    return NODE_TYPE_SYNONYMS.get(t, t if t in NODE_TYPES else "other")
+    if t in NODE_TYPES:
+        return t
+    if t in NODE_TYPE_SYNONYMS:
+        return NODE_TYPE_SYNONYMS[t]
+    if t and t != "other":
+        TYPE_COERCIONS[("node", t)] += 1
+    return "other"
 
 
 def norm_rel(t):
     t = (t or "other").strip().lower()
-    return REL_SYNONYMS.get(t, t if t in REL_TYPES else "other")
+    if t in REL_TYPES:
+        return t
+    if t in REL_SYNONYMS:
+        return REL_SYNONYMS[t]
+    if t and t != "other":
+        TYPE_COERCIONS[("edge", t)] += 1
+    return "other"
 
 
 def load_json(path, default=None):
@@ -168,7 +185,9 @@ def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_defaul
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--bundle", default="/app/work/case_bundle.json")
-    ap.add_argument("--annotations", default="/app/work/annotations.json")
+    ap.add_argument("--annotations", default=None,
+                    help="annotation file; defaults to annotations.json next to the bundle "
+                         "(never a fixed absolute path, which would silently reuse an earlier run)")
     ap.add_argument("--out", default="/app/work/graph.json")
     ap.add_argument("--report", default="/app/work/build_report.txt")
     ap.add_argument("--strict", action="store_true",
@@ -177,9 +196,22 @@ def main():
 
     bundle = load_json(args.bundle)
     if not bundle:
-        sys.stderr.write("FATAL: case_bundle.json missing. Run prepare_case.py first.\n")
+        sys.stderr.write(f"FATAL: case bundle missing at {args.bundle}. Run prepare_case.py first.\n")
         sys.exit(2)
-    annotations = load_annotations(args.annotations)
+    ann_path = args.annotations or os.path.join(
+        os.path.dirname(os.path.abspath(args.bundle)), "annotations.json")
+    if not os.path.exists(ann_path):
+        # A graph is built from the annotations, not from the bundle. Without them the build used
+        # to emit 0 nodes and exit 0, which reads as "the tool produced nothing" rather than
+        # "the reading step has not been done yet".
+        sys.stderr.write(
+            f"FATAL: annotations file not found: {ann_path}\n"
+            "  The graph is built from annotations, not from the bundle alone. Either\n"
+            "    * write annotations.json following SKILL.md step 2 and schema/graph.schema.json\n"
+            "      (start from templates/annotations.template.json), or\n"
+            "    * run `run.sh all` to use the deterministic heuristic extractor (baseline quality).\n")
+        sys.exit(2)
+    annotations = load_annotations(ann_path)
 
     paragraphs = bundle.get("paragraphs", [])
     para_index = {(p["source_id"], p["paragraph_id"]): p["text"] for p in paragraphs}
@@ -242,7 +274,21 @@ def main():
         keys = [canon(s) for s in surfaces]
         # distinct keys only: surfaces that canonicalise identically are already the same node
         present = list(dict.fromkeys([k for k in keys if k in by_key]))
-        if decision == "merged" and len(present) >= 2:
+        if decision == "merged" and len(present) < 2:
+            # The annotated merge still happened: either the surfaces share one canonical key, so
+            # the graph already holds a single node, or a surface was never annotated as a node.
+            # Both are outcomes a reviewer must be able to read off the log; logging only the
+            # two-node case made five of nine demo decisions invisible.
+            if present:
+                merge_log.append({
+                    "surfaces": surfaces, "decision": "merged",
+                    "basis": (mc.get("basis") or "annotated merge")
+                             + "; surfaces share one canonical key, so the graph holds one node",
+                    "type": by_key[present[0]]["type"]})
+            else:
+                merge_log.append({"surfaces": surfaces, "decision": "not_applicable",
+                                  "basis": "no annotated surface appears in the graph", "type": None})
+        elif decision == "merged":
             primary = by_key[present[0]]
             for k in present[1:]:
                 other = by_key[k]
@@ -399,6 +445,30 @@ def main():
         },
         "warnings": bundle.get("warnings", []),
     }
+    n_verified_items = (sum(1 for n in nodes if n["evidence_status"] == "verified")
+                        + sum(1 for e in edges if e["evidence_status"] == "verified"))
+    n_items = len(nodes) + len(edges)
+    if nodes and n_verified_items == 0 and n_items > 0:
+        # Every submitted quote failed against this bundle: the annotations almost certainly
+        # belong to a different corpus (or to a stale run). Reporting 0 verified with exit 0
+        # presented that as a finished graph.
+        sys.stderr.write(
+            f"FATAL: 0 of {n_items} node/edge items carry a quote found in this bundle.\n"
+            f"  {len(rejected_all)} quote(s) were rejected. The annotations do not match the\n"
+            "  paragraphs in this bundle (wrong corpus, wrong paragraph ids, or a stale file).\n"
+            "  Check that paragraph_id values come from this case, then re-run.\n")
+        sys.exit(4)
+    if not nodes:
+        sys.stderr.write(
+            f"FATAL: {ann_path} produced no nodes. Check that it has a non-empty \"nodes\"\n"
+            "  list of {label, type, mentions:[{source_id, paragraph_id, quote}]} objects.\n")
+        sys.exit(3)
+    for (kind_kind, raw), n in sorted(TYPE_COERCIONS.items()):
+        msg = (f"type coercion: {kind_kind} type \"{raw}\" is not in the schema and was stored "
+               f"as \"other\" ({n}x)")
+        graph["warnings"].append(msg)
+        sys.stderr.write("  ! " + msg + "\n")
+
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(graph, f, ensure_ascii=False, indent=1)
@@ -419,8 +489,10 @@ def main():
         lines.append(f"  {c.get('kind')}: {c}")
     with open(args.report, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
+    n_merged = sum(1 for m in merge_log if m["decision"] == "merged")
     print(f"[build_graph] {len(nodes)} nodes, {len(edges)} edges, "
-          f"{len(merge_log)} merge decisions, {len(conflict_log)} conflicts -> {args.out}")
+          f"{len(merge_log)} merge decisions ({n_merged} merged), "
+          f"{len(conflict_log)} conflicts <- {os.path.basename(ann_path)} -> {args.out}")
 
 
 def _count(items, field):
