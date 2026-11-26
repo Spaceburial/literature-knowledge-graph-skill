@@ -146,6 +146,25 @@ def load_annotations(path):
     return {"nodes": nodes, "edges": edges, "merge_candidates": [], "source_conflicts": []}
 
 
+QUOTE_LIMIT = 300          # schema/graph.schema.json and SKILL.md both state 8-300 characters
+
+
+def fit_quote(quote, limit=QUOTE_LIMIT):
+    """Keep a stored quote inside the documented limit without inventing text.
+
+    The full quote is what gets verified; the stored one is a prefix cut on a word boundary, so it
+    remains a verbatim substring. The original length is recorded so a reader can see the cut.
+    """
+    q = (quote or "").strip()
+    if len(q) <= limit:
+        return q, len(q), False
+    cut = q[:limit]
+    sp = cut.rfind(" ")
+    if sp > int(limit * 0.6):
+        cut = cut[:sp]
+    return cut.rstrip(" ,;:"), len(q), True
+
+
 def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_default="self"):
     """Verify each evidence item; return (kept, rejected)."""
     kept, rejected = [], []
@@ -167,11 +186,12 @@ def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_defaul
             continue
         attr = ev.get("attribution") or attribution_default
         meta = (para_meta or {}).get(key, {})
-        kept.append({
+        stored, orig_len, truncated = fit_quote(quote)
+        evidence = {
             "source_id": sid,
             "paragraph_id": pid,
             "paragraph_id_kind": "derived" if meta.get("id_derived") else "jats",
-            "quote": quote,
+            "quote": stored,
             "match": res["status"],
             "match_score": res["score"],
             "context": ev.get("context") or res["context"],
@@ -179,7 +199,11 @@ def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_defaul
             "attribution": attr,
             "strength": ev.get("strength") or evidence_strength_from(res["status"], attr),
             "section": ev.get("section") or meta.get("section") or "",
-        })
+        }
+        if truncated:
+            evidence["quote_chars"] = orig_len
+            evidence["quote_truncated"] = True
+        kept.append(evidence)
     return kept, rejected
 
 
@@ -340,6 +364,8 @@ def main():
     for i, n in enumerate(nodes, 1):
         n["id"] = f"N{i:04d}"
 
+    by_id = {n["id"]: n for n in nodes}
+
     # label/surface -> node id
     surface_to_id = {}
     for n in nodes:
@@ -369,6 +395,8 @@ def main():
         rec = {
             "source": s_id,
             "target": t_id,
+            "source_label": by_id[s_id]["label"] if s_id in by_id else str(s_lbl),
+            "target_label": by_id[t_id]["label"] if t_id in by_id else str(t_lbl),
             "type": rtype,
             "raw_type": raw.get("type"),
             "direction_note": raw.get("direction_note", ""),
