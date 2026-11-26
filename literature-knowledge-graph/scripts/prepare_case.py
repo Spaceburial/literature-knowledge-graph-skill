@@ -254,6 +254,13 @@ def iter_dicts(node):
             yield from iter_dicts(v)
 
 
+SHORT_DROPPED = []          # (origin_file, chars) for blocks under the 40-character minimum
+
+
+def note_short(origin, text):
+    SHORT_DROPPED.append((origin, len(norm_ws(text))))
+
+
 def looks_like_paragraph(d):
     if not isinstance(d, dict):
         return False
@@ -274,6 +281,9 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
     # (a) explicit paragraph records
     for d in iter_dicts(obj):
         if not looks_like_paragraph(d):
+            t = first_key(d, TEXT_KEYS) if isinstance(d, dict) else None
+            if isinstance(t, str) and 0 < len(norm_ws(t)) < 40:
+                note_short(os.path.basename(path_label), t)
             continue
         text = norm_ws(first_key(d, TEXT_KEYS))
         pid = first_key(d, ID_KEYS)
@@ -353,6 +363,7 @@ def extract_paragraphs_from_xml(xml_text, default_source, role):
         pid = pid_m.group(1) if pid_m else None
         text = norm_ws(re.sub(r"<[^>]+>", " ", inner))
         if len(text) < 40:
+            note_short("jats-xml", text)
             continue
         idx += 1
         out.append({
@@ -377,6 +388,7 @@ def extract_paragraphs_from_text(raw, default_source, role, origin, split_blank=
         b = re.sub(r"^#{1,6}\s*", "", b.strip())
         b = norm_ws(b)
         if len(b) < 40:
+            note_short(origin, b)
             continue
         # drop obvious page furniture
         if re.fullmatch(r"(page\s*)?\d+(\s*/\s*\d+)?", b, re.I):
@@ -469,10 +481,18 @@ def main():
 
     # role -> source_id map so per-paper files attach to the manifest's real source id
     role_to_sid = {}
+    file_to_sid = {}
     for s in sources:
         r = (s.get("role") or "").lower()
         if r in ("primary", "secondary") and r not in role_to_sid:
             role_to_sid[r] = s["source_id"]
+        # A manifest entry may name the file its text lives in; that file must bind to the
+        # manifest's source_id, otherwise the same paper appears twice (as the manifest source
+        # and again as a stub built from the file name) and its metadata is stranded.
+        for key in ("file", "filename", "path", "source_file"):
+            f = (s.get("raw") or {}).get(key) or s.get(key)
+            if isinstance(f, str) and f:
+                file_to_sid[os.path.basename(f)] = s["source_id"]
     if not output_contract:
         warnings.append("No output_contract declared; using the default field set from schema.")
     if "primary" not in role_to_sid and len(sources) == 2:
@@ -495,6 +515,10 @@ def main():
         if low.endswith(".pdf") and f not in [m[0] for m in material_files]:
             role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
             material_files.append((f, role))
+        elif low.endswith(".txt") and not re.match(r"(requirements|license|licence|readme)\.txt$", low) \
+                and f not in [m[0] for m in material_files]:
+            role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
+            material_files.append((f, role))
         elif low.endswith(".md") and low != "task.md" and f not in [m[0] for m in material_files]:
             role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
             material_files.append((f, role))
@@ -506,7 +530,10 @@ def main():
             continue
         loaded_any = True
         role = ROLE_BY_NAME.get(fname, role_hint or "unknown")
-        default_sid = role_to_sid.get(role, role)
+        # A source id of "unknown" is unusable downstream (it cannot carry metadata and every
+        # citation from that file reads the same); fall back to the file stem instead.
+        default_sid = (file_to_sid.get(fname) or role_to_sid.get(role)
+                       or re.sub(r"[^A-Za-z0-9_.-]+", "_", os.path.splitext(fname)[0]))
         if fname.endswith(".xml"):
             with open(path, "r", encoding="utf-8", errors="replace") as f:
                 paragraphs += extract_paragraphs_from_xml(f.read(), default_sid, role)
@@ -522,7 +549,10 @@ def main():
             with open(path, "r", encoding="utf-8", errors="replace") as f:
                 blocks = [b for b in re.split(r"\n\s*\n", f.read()) if norm_ws(b)]
             for i, b in enumerate(blocks):
-                paragraphs.append({"source_id": default_sid, "paragraph_id": f"t{i+1:04d}",
+                if len(norm_ws(b)) < 40:      # same minimum as the JATS/Markdown paths
+                    note_short(fname, b)
+                    continue
+                paragraphs.append({"source_id": default_sid, "paragraph_id": f"d{i+1:04d}",
                                    "section": "", "text": norm_ws(b), "role": role,
                                    "id_derived": True, "origin_file": fname, "order_in_source": i + 1})
             continue
@@ -656,6 +686,24 @@ def main():
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(bundle, f, ensure_ascii=False, indent=1)
+
+    if not paragraphs:
+        sys.stderr.write(
+            f"FATAL: no readable paragraphs in {case_dir}\n"
+            "  Paper text must be in material.json / primary-material.json /\n"
+            "  secondary-material.json / material.txt, or in any *.md, *.txt, *.pdf, *.xml\n"
+            "  in that directory. corpus-manifest.json is metadata only: the files it lists\n"
+            "  are NOT parsed for text.\n")
+        if SHORT_DROPPED:
+            sys.stderr.write(
+                f"  {len(SHORT_DROPPED)} block(s) were found but skipped: paragraph text shorter\n"
+                f"  than 40 characters is ignored (longest skipped: {max(c for _, c in SHORT_DROPPED)}\n"
+                "  chars). Split or join the text so each paragraph is a full sentence.\n")
+        sys.exit(2)
+    if SHORT_DROPPED:
+        warnings.append(
+            f"{len(SHORT_DROPPED)} short block(s) (<40 chars) were skipped and are not in the graph; "
+            f"origins: {sorted({o for o, _ in SHORT_DROPPED})}")
 
     print(f"[prepare_case] case_id={case_id} sources={len(sources)} paragraphs={len(paragraphs)} "
           f"derived_ids={bundle['stats']['n_id_derived']} warnings={len(warnings)}")
