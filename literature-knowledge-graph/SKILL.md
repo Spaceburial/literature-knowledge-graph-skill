@@ -232,7 +232,7 @@ summary, the 3+ query results and the uncertainty items.
 
 ## Self-check before finishing
 
-1. `python $SKILL_DIR/tests/regression/regression.py` passes: nine cases covering the full run,
+1. `python $SKILL_DIR/tests/regression/regression.py` passes: ten cases covering the full run,
    a single paper with no `case.json`, an altered quote, same-label different objects, missing
    paragraph ids, budget truncation, the silent-failure gates (empty corpus, missing annotations,
    missing query file each exit non-zero), a single edited digit inside a quote, and the rule
