@@ -14,8 +14,9 @@ R7 silent-failure gates        -> an empty corpus, missing annotations, node-les
                                   report nothing and succeed)
 R8 one digit edited in a quote -> rejected as a numeric mismatch even at 0.95 string similarity
 R10 input shapes             -> JATS .xml is discovered, an aggregate material.json keeps its
-                                metadata, a dict-of-dicts corpus is counted once, and a nested
-                                record inherits its paper's source_id
+                                metadata, a dict-of-dicts corpus is counted once, inline markup
+                                does not split tokens, back matter stays out of the body, and a
+                                nested record inherits its paper's source_id
 R9 no silent empty results   -> annotations that match no paragraph stop the build; an answer
                                 with no verified evidence is undetermined; a failed validation
                                 check cannot sit beside status="success"
@@ -420,7 +421,30 @@ def r10(work):
     check("a keyed dict corpus is not double-counted", len(bundle["paragraphs"]) == 2,
           [(p["source_id"], p["paragraph_id"]) for p in bundle["paragraphs"]])
 
-    # (4) a record nested under a paper object inherits that paper's source_id
+    # (4) real JATS: inline markup must not split a token, and back matter is not body text
+    d = os.path.join(work, "jats_inline"); os.makedirs(d)
+    xml = ('<article><body>'
+           '<sec id="s1"><title>Results</title>'
+           f'<p id="p1">Films of MAPbI<sub>3</sub> passivated with PEAI reached 21.3% and the '
+           'TiO<sub>2</sub> layer thickness was 120 nm.</p></sec>'
+           '<sec id="notes1"><title>Author Contributions</title>'
+           '<p>Conceptualization, A.B.; methodology, C.D.; supervision, E.F.; funding, G.H.</p></sec>'
+           '<sec id="s2"><title>Funding Statement</title>'
+           '<p>This work was supported by grant number 123456 from the example foundation.</p></sec>'
+           '</body></article>')
+    open(os.path.join(d, "paper.xml"), "w", encoding="utf-8").write(xml)
+    b5 = os.path.join(work, "b5.json")
+    shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", d, "--out", b5])
+    bundle = jload(b5)
+    texts = " ".join(p["text"] for p in bundle["paragraphs"])
+    check("inline sub/sup markup does not split MAPbI3", "MAPbI3" in texts and "MAPbI 3" not in texts,
+          texts[:120])
+    check("back-matter sections are not body paragraphs",
+          "Conceptualization" not in texts and "supported by grant" not in texts, texts[:200])
+    check("the omission is reported, not silent",
+          any("back-matter" in w for w in bundle["warnings"]), bundle["warnings"][:3])
+
+    # (5) a record nested under a paper object inherits that paper's source_id
     d = os.path.join(work, "nested"); os.makedirs(d)
     jdump({"papers": [{"source_id": "P1", "abstract": {"text": PA}},
                       {"source_id": "P2", "abstract": {"text": PB}}]},
