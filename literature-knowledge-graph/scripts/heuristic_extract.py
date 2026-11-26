@@ -23,7 +23,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\[])|(?<=[;])\s+(?=[a-z])")
+SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\[])|(?<=[;])\s+(?=[a-z])|(?<=[。！？；])")
 
 CHEM = re.compile(r"\b(?:[A-Z][a-z]?\d*(?:[A-Z][a-z]?\d*){1,}|[A-Z][a-z]?[A-Z][a-z]?\d*|"
                   r"[A-Z][a-z]+(?:O|N|S|P|C)\d?)\b")
@@ -133,6 +133,31 @@ def find_chem(sent):
             if len(m.group(0)) >= 3 and re.search(r"\d", m.group(0))]
 
 
+CJK = re.compile(r"[\u4e00-\u9fff]")
+CJK_CAND = re.compile(r"[\u4e00-\u9fff]{2,12}")
+CJK_STOP = ("的", "了", "和", "与", "在", "是", "为", "对", "从", "将", "并", "而", "其", "这", "那",
+            "我们", "本文", "表明", "显示", "结果", "可以", "进行", "通过", "以及", "其中")
+
+
+def has_cjk(text):
+    return bool(CJK.search(text or ""))
+
+
+def find_cjk_np(sent):
+    """Punctuation-delimited CJK runs, filtered to content-looking phrases."""
+    out, seen = [], set()
+    for chunk in re.split(r"[，,。.;；:：、（）()《》\s]+", sent):
+        for m in CJK_CAND.finditer(chunk):
+            t = m.group(0)
+            if any(t.startswith(w) or t == w for w in CJK_STOP):
+                continue
+            if t in seen:
+                continue
+            seen.add(t)
+            out.append(t)
+    return out[:6]
+
+
 def find_np(sent):
     """Capitalised multi-word noun phrases (2-4 tokens), not sentence-initial single words."""
     out = []
@@ -208,6 +233,9 @@ def main():
                 if re.search(r"\d", np):
                     continue
                 ents.append((np, "other"))
+            if has_cjk(sent):
+                for np in find_cjk_np(sent)[:4]:
+                    ents.append((np, "other"))
             # dedup by canonical
             ded, seen = [], set()
             for lbl, t in ents:
