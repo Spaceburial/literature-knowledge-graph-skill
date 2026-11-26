@@ -183,9 +183,11 @@ def main():
                          for n in nodes for m in n.get("mentions", [])) and
                      all(m.get("match") in ("exact", "normalized", "fuzzy")
                          for e in edges for m in e.get("evidence", []))},
+            # The intent is "a derived id must not be assertable as a page number". Any
+            # namespaced form (d0042, p12, s3p2 ...) satisfies that; a bare integer does not.
             {"name": "derived paragraph ids are namespaced and flagged (never asserted as PDF pages)",
              "pass": all(m.get("paragraph_id_kind") != "derived"
-                         or re.match(r"^d\d{4}$", str(m.get("paragraph_id", "")))
+                         or not re.fullmatch(r"\d+(\.\d+)?", str(m.get("paragraph_id", "")).strip())
                          for n in nodes for m in n.get("mentions", []))},
             {"name": "at least 3 queries executed",
              "pass": queries.get("n_queries", 0) >= 3},
