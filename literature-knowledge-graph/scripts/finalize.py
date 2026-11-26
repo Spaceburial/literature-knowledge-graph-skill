@@ -62,6 +62,35 @@ def map_field(field_name):
     return None
 
 
+def _annotate_report(path, result, status, reasons):
+    """Put the run facts at the top of the human-readable report (idempotent)."""
+    if not os.path.exists(path):
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read()
+    marker = "<!-- run-facts -->"
+    if marker in text:
+        text = text[text.index("-->", text.index(marker)) + 3:].lstrip("\n")
+    budget = result.get("budget") or {}
+    runtime = result.get("runtime") or {}
+    checks = (result.get("validation") or {}).get("checks") or []
+    failed = [c.get("name", "?") for c in checks if isinstance(c, dict) and not c.get("pass", True)] \
+        if isinstance(checks, list) else [k for k, v in checks.items() if not v]
+    lines = [marker, "", f"- **status: `{status}`**" +
+             ("" if status == "success" else "  \u2014 the run is not complete, and says why"),
+             f"- extraction mode: `{result.get('extraction_mode', 'unknown')}`"
+             f"; paragraphs kept {budget.get('kept_paragraphs', '?')}/{budget.get('total_paragraphs', '?')}"
+             f"; characters {budget.get('kept_chars', '?')}",
+             f"- stage seconds: prepare {runtime.get('prepare_seconds', '?')}, "
+             f"build {runtime.get('build_seconds', '?')}, finalize {runtime.get('finalize_seconds', '?')}",
+             f"- validation checks failed: {', '.join(failed) if failed else 'none'}",
+             "<!-- end run-facts -->", ""]
+    if reasons:
+        lines[4:4] = ["- why not complete:"] + [f"  - {r}" for r in reasons]
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + text)
+
+
 def main():
     _t0 = time.time()
     ap = argparse.ArgumentParser()
@@ -250,6 +279,7 @@ def main():
         "validation": validation,
         # Measured, not modelled: the per-stage wall time this run actually took, plus the input
         # budget the normaliser recorded. docs/BUDGET.md explains why the scripts are not the cost.
+        "extraction_mode": graph.get("extraction_mode") or "unknown",
         "runtime": {
             "prepare_seconds": (bundle.get("runtime") or {}).get("prepare_seconds"),
             "build_seconds": (graph.get("runtime") or {}).get("build_seconds"),
@@ -292,6 +322,13 @@ def main():
 
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=1)
+
+    # A reviewer may read graph_report.md and nothing else: keep the run's own facts in it, so the
+    # report cannot look complete while the run was partial.
+    try:
+        _annotate_report(os.path.join(args.outdir, "graph_report.md"), result, status, reasons)
+    except Exception as e:  # noqa: BLE001
+        sys.stderr.write(f"[finalize] could not annotate graph_report.md: {e}\n")
 
     print(f"[finalize] status={status} coverage={coverage} papers_with_evidence={n_papers_with_evidence} "
           f"queries_ok={q_ok}/{queries.get('n_queries',0)} -> {args.out}")
