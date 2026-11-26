@@ -6631,6 +6631,42 @@
  "merge_log": [
   {
    "surfaces": [
+    "Spiro-OMeTAD",
+    "spiro-OMeTAD"
+   ],
+   "decision": "merged",
+   "basis": "same chemical species (2,2',7,7'-tetrakis[N,N-di(4-methoxyphenyl)amino]-9,9'-spirobifluorene) used as hole-transport layer in both papers; name differs only in capitalisation; surfaces share one canonical key, so the graph holds one node",
+   "type": "material"
+  },
+  {
+   "surfaces": [
+    "power conversion efficiency",
+    "PCE"
+   ],
+   "decision": "merged",
+   "basis": "explicit abbreviation defined in both texts; surfaces share one canonical key, so the graph holds one node",
+   "type": "metric"
+  },
+  {
+   "surfaces": [
+    "time-resolved photoluminescence",
+    "TrPL"
+   ],
+   "decision": "merged",
+   "basis": "explicit abbreviation in P2; surfaces share one canonical key, so the graph holds one node",
+   "type": "method"
+  },
+  {
+   "surfaces": [
+    "covalent organic frameworks",
+    "COFs"
+   ],
+   "decision": "merged",
+   "basis": "explicit abbreviation in P1; surfaces share one canonical key, so the graph holds one node",
+   "type": "material"
+  },
+  {
+   "surfaces": [
     "covalent organic frameworks",
     "DMTH-COF"
    ],
@@ -6664,6 +6700,15 @@
    "decision": "kept_separate",
    "basis": "different chemical compositions (MA-only vs FA/MA/Cs mixed-cation, I/Br mixed-halide)",
    "type": null
+  },
+  {
+   "surfaces": [
+    "non-radiative recombination",
+    "nonradiative recombination"
+   ],
+   "decision": "merged",
+   "basis": "same concept, hyphenation variant; surfaces share one canonical key, so the graph holds one node",
+   "type": "other"
   }
  ],
  "conflict_log": [
@@ -6864,14 +6909,14 @@
   }
  },
  "artifacts": [
-  "/app/output/graph.json",
-  "/app/output/graph.mmd",
-  "/app/output/graph.graphml",
-  "/app/output/nodes.csv",
-  "/app/output/edges.csv",
-  "/app/output/evidence.csv",
-  "/app/output/graph_report.md",
-  "/app/output/result.json"
+  "examples/demo_perovskite/output/graph.json",
+  "examples/demo_perovskite/output/graph.mmd",
+  "examples/demo_perovskite/output/graph.graphml",
+  "examples/demo_perovskite/output/nodes.csv",
+  "examples/demo_perovskite/output/edges.csv",
+  "examples/demo_perovskite/output/evidence.csv",
+  "examples/demo_perovskite/output/graph_report.md",
+  "examples/demo_perovskite/output/result.json"
  ],
  "entities": [
   {
