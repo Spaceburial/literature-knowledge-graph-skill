@@ -164,7 +164,10 @@ Otherwise `query_graph.py` auto-generates at least four. Query types: `entity`, 
 
 `build_graph.py` verifies every quote against the cited paragraph. A quote that cannot be found
 is rejected and listed; the node/edge is kept but labelled `evidence_status="unverified"` and
-added to `uncertainty`. Fix rejections by re-reading the paragraph — do not loosen the check.
+added to `uncertainty`. A near-verbatim quote whose numbers disagree with the paragraph is
+rejected too (`numeric mismatch`): one edited digit in a long sentence still scores ~0.95 on
+string similarity, so similarity alone never certifies a quote. Fix rejections by re-reading the
+paragraph — do not loosen the check.
 
 ### Adding a paper later (incremental update)
 
@@ -229,9 +232,11 @@ summary, the 3+ query results and the uncertainty items.
 
 ## Self-check before finishing
 
-1. `python $SKILL_DIR/tests/regression/regression.py` passes: six cases covering the full run,
+1. `python $SKILL_DIR/tests/regression/regression.py` passes: nine cases covering the full run,
    a single paper with no `case.json`, an altered quote, same-label different objects, missing
-   paragraph ids, and budget truncation.
+   paragraph ids, budget truncation, the silent-failure gates (empty corpus, missing annotations,
+   missing query file each exit non-zero), a single edited digit inside a quote, and the rule
+   that a graph with no verified evidence, or a failed validation check, is never `success`.
 2. `python $SKILL_DIR/tests/selftest.py` passes (checks schema, evidence, merge, query).
 3. `result.json.validation.checks` are all `true`.
 4. Every `output_contract` key is present in `result.json` (see `output_contract_mapping`).
@@ -256,8 +261,8 @@ python $SKILL_DIR/scripts/query_graph.py --graph /tmp/work/graph.json \
 ```
 
 Abridged output (`$SKILL_DIR/examples/demo_perovskite/output/result.json` is the full worked example):
-`status="success"`, 35 nodes, 34 edges, 100% evidenced, 4 merge decisions, 4 recorded
-cross-paper conflicts, 6/6 queries answered. One query answer:
+`status="success"`, 35 nodes, 34 edges, 100% evidenced, 9 merge decisions (5 merged, 4 kept
+separate), 4 recorded cross-paper conflicts, 6/6 queries answered. One query answer:
 
 ```
 Q5 metric_compare "power conversion efficiency"
