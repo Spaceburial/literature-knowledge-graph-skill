@@ -330,8 +330,13 @@ def main():
     except Exception as e:  # noqa: BLE001
         sys.stderr.write(f"[finalize] could not annotate graph_report.md: {e}\n")
 
+    # queries.json is a list in some inputs and a dict with counters in others; report either shape
+    if isinstance(queries, dict):
+        n_q = queries.get("n_queries", len(queries.get("queries") or []))
+    else:
+        n_q = len(queries)
     print(f"[finalize] status={status} coverage={coverage} papers_with_evidence={n_papers_with_evidence} "
-          f"queries_ok={q_ok}/{queries.get('n_queries',0)} -> {args.out}")
+          f"queries_ok={q_ok}/{n_q} -> {args.out}")
     for r in reasons:
         print("  - " + r)
     if status != "success":
