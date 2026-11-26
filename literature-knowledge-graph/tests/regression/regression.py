@@ -107,6 +107,12 @@ def r1(work):
     check("evidence coverage 100%", r["validation"]["evidence_coverage"] == 1.0)
     check(">=3 queries answered", q["n_answered"] >= 3, q.get("n_answered"))
     check("no undetermined queries", q["n_undetermined"] == 0)
+    rt = r.get("runtime") or {}
+    check("result.json records measured stage times",
+          all(isinstance(rt.get(k), (int, float)) for k in
+              ("prepare_seconds", "build_seconds", "finalize_seconds")), rt)
+    check("result.json echoes the input budget",
+          (r.get("budget") or {}).get("kept_paragraphs") == 141, r.get("budget"))
 
 
 # ---------------------------------------------------------------- R2
