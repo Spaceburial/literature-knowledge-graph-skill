@@ -1,5 +1,57 @@
 # Changelog
 
+## 1.2 — auditability and first-contact failures
+
+Two rounds of a usability test by an unassisted reader (`docs/USABILITY.md`) found that the
+pipeline's worst failures were silent successes. This release makes each of them speak, and
+closes one hole in the evidence gate.
+
+- `verify_evidence.py`: a near-verbatim quote whose **numbers** disagree with the paragraph is
+  rejected as `numeric mismatch`. A single edited digit inside a 200-character sentence still
+  scores ~0.95 on string similarity, so similarity alone was certifying quotes the paper never
+  makes. (Found by the usability test: `21.8%` where the text says `21.3%` came back `verified`.)
+- `build_graph.py`: `--annotations` no longer defaults to a fixed `/app/work/annotations.json`,
+  where a stale file from an earlier run could be read as this run's extraction. It now defaults
+  to `annotations.json` next to the bundle, prints which file it used, and stops with both routes
+  named when the file is absent (it used to write a 0-node graph and exit 0). Annotations that
+  yield no node exit non-zero.
+- `build_graph.py`: the merge log now records an annotated `merged` decision even when the
+  surfaces already share one canonical key, and `not_applicable` when no surface is in the graph.
+  Five of the demo's nine decisions were applied but never logged, so `merge_log` showed only the
+  four non-merges.
+- `build_graph.py`: a node/edge type outside the schema is still stored as `other`, but the
+  coercion is counted in `graph["warnings"]` and on stderr instead of happening silently.
+- `prepare_case.py`: a directory with no readable paragraph exits non-zero; when short blocks are
+  the cause, the message says how many were skipped and the 40-character minimum. The same
+  minimum now applies to `*.txt` input, which was exempt. `*.txt` files other than `material.txt`
+  are discovered, and a source without manifest metadata gets its id from the file stem rather
+  than the literal string `unknown`.
+- `query_graph.py`: `-v` (and any single `--type` query) prints the answer — nodes, per-paragraph
+  values, notes, and the first quotes — instead of a bare count. A `--queries` path that does not
+  exist is an error; it used to fall back to the built-in set silently. Duplicate value rows for
+  one paragraph are collapsed.
+- `run_all.py`: `--case-dir` is required (without it the normaliser could read the package's own
+  `README.md` and `SKILL.md` as the corpus) and a failed stage aborts instead of leaving an empty
+  `result.json`.
+- `tests/regression/regression.py`: R7 (empty corpus, missing annotations, node-less annotations
+  and missing query file each exit non-zero), R8 (one edited digit in a quote) and R9 (a build
+  whose quotes match no paragraph stops; a query with no verified evidence is not `answered`;
+  a failed validation check cannot sit beside `success`). 40 checks.
+- `build_graph.py`: a graph in which **no** item's quote was found in the bundle exits
+  non-zero. All-rejected evidence used to be printed as `0 verified` with exit 0, which read
+  as a finished graph; in the default layout a stale `/app/work/annotations.json` could
+  trigger exactly that. `finalize.py` moves the status to `partial` and names the check when
+  any entry of `validation.checks` fails.
+- `prepare_case.py`: plain-text paragraph ids are `d####` (they were `t####`, which contradicted
+  the documented derived-id form and failed the derived-id validation check), and a manifest
+  entry's `file` field now binds that file's text to the manifest's `source_id` instead of
+  producing a second, metadata-less source.
+- `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
+  contract with a verified minimal `primary-material.json` and `annotations.json`, the seven query
+  types, and the `success`/`partial`/`undetermined` vocabulary.
+- `docs/USABILITY.md`: both test rounds, the frictions that remain, and what a single reader
+  needed.
+
 ## 1.1 — stability and honest truncation
 - `prepare_case.py`: `--max-paragraphs` / `--max-chars` budget guard. Truncation is recorded in
   `bundle.budget` (kept/total, dropped per paper) and warned, never silent.
