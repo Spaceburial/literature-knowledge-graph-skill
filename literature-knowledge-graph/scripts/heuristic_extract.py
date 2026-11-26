@@ -158,12 +158,73 @@ def find_cjk_np(sent):
     return out[:6]
 
 
+# Suffix-based typing for candidates that no lexicon matched. A capitalised phrase with no type is
+# not an entity of unknown kind, it is usually noise (a sentence-initial word, a verb phrase, a
+# heading). Typing them, and dropping the ones that stay untyped and occur once, is what keeps the
+# deterministic fallback from producing a graph of anonymous `other` nodes.
+TYPE_RULES = [
+    ("metric", r"efficienc|stabilit|voltage|current|\bfactor\b|density|mobilit|conductivit|lifetime|"
+               r"retention|accura|precision|recall|\berror\b|\byield\b|bandgap|transmittance|"
+               r"capacity|\bpce\b|\bff\b|\bvoc\b|\bjsc\b|\brmse\b|\bmae\b|\br2\b"),
+    ("material", r"layer|film\b|oxide|perovskite|polym|organic framework|\bcofs?\b|crystal|nanoparticle|"
+                 r"-based\b|pb-i|"
+                 r"electrode|absorber|molecule|\bsalt\b|solvent|cation|anion|additive|\bmapbi|\bfama\b|"
+                 r"\bcspbi|\bpbi\b|polymer|composite|\bgraphene\b|\bmo\w*\b(?=\s)"),
+    ("method", r"method|model|framework|algorithm|network|approach|technique|analysis|spectroscop|"
+               r"microscop|diffraction|inference|learning|regression|classifier|\bcvd\b|\bald\b|"
+               r"coating|annealing|sputtering|passivation|simulation"),
+    ("researcher", r"et al\.|^[A-Z][a-z]+ (and|&) [A-Z][a-z]+$"),
+    ("metric", r"效率|稳定性|电压|电流|因子|寿命|迁移率|电导率|精度|产率|容量"),
+    ("material", r"膜|层$|氧化物|钙钛矿|材料|分子|电极|晶体|聚合物|添加剂|溶剂|复合"),
+    ("method", r"方法|模型|算法|网络|光谱|衍射|显微|退火|旋涂|钝化|沉积|模拟|学习"),
+]
+
+
+DISCOURSE = {"among", "importantly", "under", "such", "however", "therefore", "here", "this",
+             "these", "those", "both", "each", "recent", "finally", "moreover", "thus", "hence",
+             "since", "while", "when", "after", "before", "because", "although", "notably",
+             "overall", "consequently", "furthermore", "additionally", "typically", "generally",
+             "interestingly", "first", "second", "third", "next", "then", "also", "yet", "still",
+             "their", "despite", "even", "similarly", "accordingly", "report", "reports", "figure",
+             "fig", "table", "scheme", "section", "result", "results", "study", "studies", "work",
+             "paper", "papers", "article", "articles", "herein", "thereby", "whereas", "whose",
+             "which", "what", "when", "where", "why", "how", "our", "its", "his", "her"}
+ACRONYM = {
+    "task": {"psc", "pscs", "pv", "opv", "ds sc", "dssc"},
+    "metric": {"pce", "pces", "ff", "voc", "jsc", "eqe", "iqe", "plqy", "rmse", "mae", "r2",
+               "t80", "vbi", "jv"},
+}
+
+
+def infer_type(label):
+    """Type a candidate from its surface. Cheap, deterministic, and right more often than 'other'."""
+    raw = (label or "").strip()
+    low = raw.lower()
+    bare = low.rstrip("s") if len(low) > 3 else low
+    if bare in ACRONYM["task"] or low in ACRONYM["task"]:
+        return "task"
+    if bare in ACRONYM["metric"] or low in ACRONYM["metric"]:
+        return "metric"
+    if low in {m.lower() for m in METRIC_LEX}:
+        return "metric"
+    if low in {m.lower() for m in METHOD_LEX}:
+        return "method"
+    if low in {m.lower() for m in TASK_LEX}:
+        return "task"
+    for ntype, pattern in TYPE_RULES:
+        if re.search(pattern, low):
+            return ntype
+    return "other"
+
+
 def find_np(sent):
     """Capitalised multi-word noun phrases (2-4 tokens), not sentence-initial single words."""
     out = []
     for m in re.finditer(r"\b([A-Z][A-Za-z0-9\-]+(?:\s+[A-Z][A-Za-z0-9\-]+){0,2})\b", sent):
         t = m.group(1)
         if any(ch.isdigit() for ch in t) and not re.match(r"^[A-Z][a-z]?\d", t):
+            continue
+        if " " not in t and t.lower() in DISCOURSE:
             continue
         if t.lower() in ("the", "this", "these", "we", "however", "therefore"):
             continue
@@ -229,13 +290,15 @@ def main():
                 ents.append((m, "method"))
             for m in find_lexicon(sent, TASK_LEX):
                 ents.append((m, "task"))
+            for m in re.finditer(r"\b([A-Z][a-z]+ et al\.)", sent):
+                ents.append((m.group(1), "researcher"))
             for np in find_np(sent)[:4]:
                 if re.search(r"\d", np):
                     continue
-                ents.append((np, "other"))
+                ents.append((np, infer_type(np)))
             if has_cjk(sent):
                 for np in find_cjk_np(sent)[:4]:
-                    ents.append((np, "other"))
+                    ents.append((np, infer_type(np)))
             # dedup by canonical
             ded, seen = [], set()
             for lbl, t in ents:
@@ -250,6 +313,10 @@ def main():
                 continue
             a, bb = labels[0], labels[1]
 
+            # An edge between two untyped phrases is a co-occurrence, not a relation. Requiring one
+            # typed endpoint keeps the fallback's edge set honest about what it actually knows.
+            if all(t == "other" for _, t in ded[:2]):
+                continue
             s = sent.lower()
             if any(re.search(c, s) for c in CONTRA_CUES):
                 add_edge(a, bb, "contradicts", sid, pid, sent, attr)
@@ -264,9 +331,17 @@ def main():
             elif any(re.search(c, s) for c in REPORT_CUES):
                 add_edge(a, bb, "reports", sid, pid, sent, attr)
 
+    # drop untyped candidates seen once: kept, they would dominate the graph with anonymous nodes
+    keep = {k for k, v in nodes.items() if v["type"] != "other" or len(v["mentions"]) >= 2}
+    dropped_other = len(nodes) - len(keep)
+    nodes = {k: v for k, v in nodes.items() if k in keep}
+    edges = [e for e in edges
+             if canon(e["source_label"]) in keep and canon(e["target_label"]) in keep]
+
     ann = {"nodes": list(nodes.values()), "edges": edges,
            "merge_candidates": [], "source_conflicts": [],
            "extractor": "heuristic_extract.py (deterministic fallback)",
+           "dropped_untyped_singletons": dropped_other,
            "note": "First-pass baseline. The agent-quality path is a close reading that writes "
                    "this file directly; see SKILL.md."}
     with open(args.out, "w", encoding="utf-8") as f:
