@@ -55,7 +55,7 @@ not be quoted as that. For an agent-level comparison, point either condition at 
 python3 bench/run_ab.py ab --case-dir /input \
         --baseline-cmd  'python3 my_base_agent.py  --bundle {bundle} --out {out}' \
         --treatment-cmd 'python3 my_skill_agent.py --bundle {bundle} --out {out}' \
-        --queries /input/queries.json --repeats 3 --out /tmp/ab_agent
+        --queries /input/queries.json --repeats 3 --out $WORK/ab_agent
 ```
 
 ## Reproduce
@@ -65,8 +65,8 @@ python3 bench/run_ab.py ab \
     --case-dir examples/demo_perovskite/input \
     --annotations examples/demo_perovskite/annotations.example.json \
     --queries examples/demo_perovskite/queries.example.json \
-    --repeats 3 --out /tmp/ab
-python3 bench/metrics.py --run-dir /tmp/ab/treatment/rep1/out --work-dir /tmp/ab/treatment/rep1/work
+    --repeats 3 --out $WORK/ab
+python3 bench/metrics.py --run-dir $WORK/ab/treatment/rep1/out --work-dir $WORK/ab/treatment/rep1/work
 ```
 
 ## Method improvement, measured: the quote gate against plain matching
