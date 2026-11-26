@@ -105,8 +105,11 @@ def verify_quote(quote, paragraph_text, min_len=12, fuzzy_threshold=0.90):
                     "note": f"numeric mismatch in a {best:.2f}-similar window: "
                             f"quote has {changed or '-'}, paragraph has {found or '-'}"}
         a, b = _sentence_bounds(paragraph_text, best_span)
+        # The submitted quote is not verbatim here, so hand back the paragraph's own words at the
+        # matched span; a reviewer must be able to see the difference.
         return {"status": "fuzzy", "score": round(best, 3), "span": best_span,
-                "context": paragraph_text[a:b], "note": "fuzzy match; treat as weak evidence"}
+                "matched": window, "context": paragraph_text[a:b],
+                "note": "fuzzy match; treat as weak evidence, the quote is not verbatim"}
     return {"status": "not_found", "score": round(best, 3), "span": None, "context": "",
             "note": f"best fuzzy {best:.2f} < {fuzzy_threshold}"}
 
