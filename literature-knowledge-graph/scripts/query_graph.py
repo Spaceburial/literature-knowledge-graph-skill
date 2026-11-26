@@ -346,6 +346,48 @@ def default_queries(G):
     return qs
 
 
+def _short(s, n=110):
+    s = " ".join(str(s).split())
+    return s if len(s) <= n else s[: n - 1] + "…"
+
+
+def format_answer(r, max_nodes=8):
+    """Human-readable answer for one query record; the JSON output stays the source of truth."""
+    lines = [f"{r['qid']} {r['query'].get('type')} -> {r['status']}"]
+    a = r["answer"]
+    nodes = a.get("nodes") or []
+    for n in nodes[:max_nodes]:
+        if not isinstance(n, dict):
+            lines.append(f"  node {n}")
+            continue
+        srcs = ",".join(n.get("source_ids") or [])
+        lines.append(f"  node {n.get('label')} [{n.get('type')}] {srcs}")
+    if len(nodes) > max_nodes:
+        lines.append(f"  … {len(nodes) - max_nodes} more nodes")
+    seen_values = set()
+    for rv in (a.get("extra") or {}).get("reported_values") or []:
+        where = f"{rv.get('source_id')}/{rv.get('paragraph_id')}"
+        if where in seen_values:      # two edges can cite the same paragraph
+            continue
+        seen_values.add(where)
+        pct = rv.get("percent_values") or []
+        other = rv.get("other_numbers") or []
+        if pct:
+            lines.append(f"  value {where}: {', '.join(pct)}")
+        else:
+            lines.append(f"  value {where}: no % value in the text"
+                         + (f" (other numbers: {', '.join(map(str, other))})" if other else ""))
+    for note in a.get("notes") or []:
+        lines.append(f"  note {_short(note)}")
+    if r.get("n_evidence"):
+        lines.append(f"  evidence {r['n_evidence']} quote(s)")
+        for ev in r["evidence"][:2]:
+            if isinstance(ev, dict):
+                lines.append(f"    {ev.get('source_id')}/{ev.get('paragraph_id')}: "
+                             f"“{_short(ev.get('quote'), 90)}”")
+    return "\n".join(lines)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--graph", default="/app/work/graph.json")
@@ -353,13 +395,21 @@ def main():
     ap.add_argument("--out", default="/app/work/queries_result.json")
     ap.add_argument("--type", default=None)
     ap.add_argument("--name", default=None)
+    ap.add_argument("-v", "--verbose", action="store_true",
+                    help="print each answer's nodes, reported values, notes and evidence")
     args = ap.parse_args()
 
     with open(args.graph, "r", encoding="utf-8") as f:
         g = json.load(f)
     G = Graph(g)
 
-    if args.queries and os.path.exists(args.queries):
+    if args.queries and not os.path.exists(args.queries):
+        sys.stderr.write(
+            f"FATAL: query file not found: {args.queries}\n"
+            "  Omit --queries to run the built-in default set (entity, relation_search,\n"
+            "  cross_paper, evidence_trace), or use --type/--name for a single query.\n")
+        sys.exit(2)
+    if args.queries:
         with open(args.queries, "r", encoding="utf-8") as f:
             qs = json.load(f)
         if isinstance(qs, dict):
@@ -372,6 +422,12 @@ def main():
     results = []
     for q in qs:
         status, nodes, edges, ev, extra, notes, cands = run_one(G, q)
+        # An answer whose every node is rejected evidence, and which quotes nothing, is not an
+        # answer: it used to come back "answered" with n_evidence=0.
+        if status == "answered" and not ev and nodes and \
+                all(isinstance(n, dict) and n.get("evidence_status") == "rejected" for n in nodes):
+            status = "undetermined"
+            notes = list(notes) + ["every matching node has rejected evidence; nothing to answer from"]
         rec = {
             "qid": q.get("qid"),
             "query": q,
@@ -400,10 +456,13 @@ def main():
         json.dump(out, f, ensure_ascii=False, indent=1)
     print(f"[query_graph] {len(results)} queries: {out['n_answered']} answered, "
           f"{out['n_partial']} partial, {out['n_undetermined']} undetermined -> {args.out}")
+    verbose = args.verbose or bool(args.type)
     for r in results:
         print(f"  {r['qid']} {r['query'].get('type')}: {r['status']} "
               f"({len(r['answer']['nodes'])} nodes, {len(r['answer']['edges'])} edges, "
               f"{r['n_evidence']} evidence)")
+        if verbose:
+            print("\n" + format_answer(r))
 
 
 if __name__ == "__main__":
