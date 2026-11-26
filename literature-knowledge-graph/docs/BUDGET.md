@@ -56,7 +56,7 @@ Reproduce any row:
 
 ```bash
 python3 bench/run_ab.py budget --case-dir examples/demo_perovskite/input \
-        --seconds-per-request 45 --json-out /tmp/budget.json
+        --seconds-per-request 45 --json-out "$WORK/budget.json"
 ```
 
 ## The rule
