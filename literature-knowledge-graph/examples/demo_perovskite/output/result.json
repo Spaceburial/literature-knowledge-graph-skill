@@ -7010,8 +7010,8 @@
   ]
  },
  "runtime": {
-  "prepare_seconds": 0.158,
-  "build_seconds": 0.132,
+  "prepare_seconds": 0.243,
+  "build_seconds": 0.037,
   "finalize_seconds": 0.008
  },
  "budget": {
@@ -7062,11 +7062,12 @@
   "examples/demo_perovskite/output/graph.json",
   "examples/demo_perovskite/output/graph.mmd",
   "examples/demo_perovskite/output/graph.graphml",
+  "examples/demo_perovskite/output/graph.svg",
   "examples/demo_perovskite/output/nodes.csv",
   "examples/demo_perovskite/output/edges.csv",
   "examples/demo_perovskite/output/evidence.csv",
   "examples/demo_perovskite/output/graph_report.md",
-  "examples/demo_perovskite/output/result.json"
+  "/run/csi/mount-root/oss/57ba86a755ddc257a8513ba861643acd/user-files/compitition/submission/examples/demo_perovskite/output/result.json"
  ],
  "entities": [
   {
