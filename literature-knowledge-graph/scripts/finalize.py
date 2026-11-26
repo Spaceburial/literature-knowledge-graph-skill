@@ -75,9 +75,22 @@ def main():
     queries = json.load(open(args.queries, encoding="utf-8")) if os.path.exists(args.queries) else {}
 
     if not graph:
-        result = {"case_id": bundle.get("case_id"), "status": "undetermined",
+        result = {"schema_version": "1.0",
+                  "case_id": bundle.get("case_id"), "status": "undetermined",
+                  "status_reasons": ["no graph: build_graph.py did not produce graph.json"],
                   "summary": "Graph could not be built: missing graph.json.",
-                  "uncertainty": [{"kind": "no_graph", "detail": "build_graph.py did not produce graph.json"}]}
+                  "sources": bundle.get("sources", []),
+                  "graph": {"nodes": [], "edges": []}, "nodes": [], "edges": [],
+                  "queries": [], "evidence_index": {},
+                  "validation": {"n_nodes": 0, "n_edges": 0, "n_nodes_verified": 0,
+                                 "n_edges_verified": 0, "evidence_coverage": 0.0,
+                                 "n_evidence_records": 0, "n_paragraphs_cited": 0,
+                                 "sources_with_evidence": [], "n_papers_with_evidence": 0,
+                                 "queries_answered_or_partial": 0, "queries_undetermined": 0,
+                                 "all_nodes_have_quote": False, "all_edges_have_quote": False,
+                                 "checks": [{"name": "graph exists", "pass": False}]},
+                  "uncertainty": [{"kind": "no_graph",
+                                   "detail": "build_graph.py did not produce graph.json"}]}
         os.makedirs(os.path.dirname(args.out), exist_ok=True)
         json.dump(result, open(args.out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print("[finalize] wrote minimal undetermined result (no graph).")
