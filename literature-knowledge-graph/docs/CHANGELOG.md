@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.3 — deduction pass: read the delivery contract, then fix what it exposes
+
+Each change below answers a line of the challenge's delivery requirements rather than a hunch.
+
+- **PDF input is now paragraph-located.** A text PDF used to normalise to a single 500-character
+  block, so a PDF-based case would have bound every node and edge to one derived `d0001` — legal,
+  and useless to review. Blocks are inferred (blank line, heading, sentence end followed by a new
+  sentence, form feed), hyphenated line breaks are joined, back matter stops the body, and each
+  block records `pdf_page` as a reading aid while the id stays a derived `d####`. References no
+  longer become body text. R12 covers this on a real generated PDF.
+- **Task questions are answered, not only structural ones.** `query_graph.py` reads the case task
+  text, turns its questions into queries (`derived_from: "task"`, each recording the original
+  question), routes "both papers"/"两篇" phrasing to the alignment query, and fills up with the four
+  structural queries afterwards. A question the graph cannot ground comes back `undetermined` with
+  the reason — the challenge asks for exactly that.
+- **`keyword` is implemented.** It was listed among the query types and had no handler, so any
+  keyword query returned "unknown query type". It now searches node names, relation conditions and
+  the verified quotes, so a question about a term that never became a node still returns the
+  passages that discuss it.
+- **A rendered preview always exists.** `render_svg.py` draws `graph.svg` with the standard library
+  and a deterministic layout; `render_png.py` remains the optional bitmap. The delivery contract
+  asks for a rendered preview of the diagram, and producing one only when matplotlib happens to be
+  installed was a gamble.
+- **`extraction_mode` is recorded.** `graph.json` and `result.json` state whether the annotations
+  came from the model or from the deterministic fallback, so a report cannot imply that the agent
+  read the papers when it did not.
+- **The manifest's `root` block no longer becomes a phantom source.** `corpus-manifest.json` carries
+  a `root`/`manuscript` object describing the FIRST paper; read as a separate record it produced a
+  third source holding the first paper's DOI — the exact mix-up the input revision forbids. It is
+  merged into the matching source with a warning, and an orphan DOI is reported rather than silently
+  attached.
+- **`result.json.artifacts` lists files that exist.** `graph.json` was listed before it was written,
+  so the field could claim a file that was missing; the list is resolved after the writes and now
+  includes `graph.svg`.
+- `SKILL.md` now tells the agent to start from the deterministic draft and improve it (≤12 requests
+  per case against a budget of 64), and its description carries the Chinese task vocabulary
+  (文献知识图谱、实体关系抽取、证据绑定) so the harness can match a Chinese task text.
+- Regression set: **R1–R13, 68 checks** (R12 PDF blocks, R13 task-driven queries); `run.sh verify`
+  runs both suites in 14.7 s.
+
 ## 1.2 — auditability and first-contact failures
 
 Two rounds of a usability test by an unassisted reader (`docs/USABILITY.md`) found that the
