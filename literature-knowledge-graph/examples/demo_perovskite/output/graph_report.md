@@ -104,10 +104,15 @@
 
 | surfaces | decision | basis |
 |---|---|---|
+| Spiro-OMeTAD / spiro-OMeTAD | merged | same chemical species (2,2',7,7'-tetrakis[N,N-di(4-methoxyphenyl)amino]-9,9'-spirobifluorene) used as hole-transport layer in both papers; name differs only in capitalisation; surfaces share one canonical key, so the graph holds one node |
+| power conversion efficiency / PCE | merged | explicit abbreviation defined in both texts; surfaces share one canonical key, so the graph holds one node |
+| time-resolved photoluminescence / TrPL | merged | explicit abbreviation in P2; surfaces share one canonical key, so the graph holds one node |
+| covalent organic frameworks / COFs | merged | explicit abbreviation in P1; surfaces share one canonical key, so the graph holds one node |
 | covalent organic frameworks / DMTH-COF | kept_separate | generic framework class vs one specific framework; merging would erase the distinction |
 | perovskite absorber / MAPbI3 | kept_separate | MAPbI3 is one specific composition; the generic absorber term also covers P2 compositions |
 | perovskite absorber / FA0.9MA0.1PbI2.85Br0.15 | kept_separate | different absorber composition and deposition; not the same physical sample as P1 |
 | MAPbI3 / FA0.9MA0.1PbI2.85Br0.15 | kept_separate | different chemical compositions (MA-only vs FA/MA/Cs mixed-cation, I/Br mixed-halide) |
+| non-radiative recombination / nonradiative recombination | merged | same concept, hyphenation variant; surfaces share one canonical key, so the graph holds one node |
 
 ## Conflicts
 
