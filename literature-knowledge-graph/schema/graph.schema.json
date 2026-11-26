@@ -179,6 +179,8 @@
       "measures",
       "evaluated_on",
       "reports",
+      "increases",
+      "decreases",
       "improves",
       "part_of",
       "produces",
