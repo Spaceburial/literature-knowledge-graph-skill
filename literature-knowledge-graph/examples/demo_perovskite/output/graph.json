@@ -2502,5 +2502,8 @@
    "P2": 17
   }
  },
- "warnings": []
+ "warnings": [],
+ "runtime": {
+  "build_seconds": 0.132
+ }
 }
