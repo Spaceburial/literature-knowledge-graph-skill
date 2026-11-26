@@ -70,3 +70,18 @@ The alternative to a recorded cap is an unrecorded overrun. In the same challeng
 attempts never produced a score because execution failed; a run that dies at 900 s leaves nothing to
 grade. A capped run that says which paragraphs it did not read is worth more than an uncapped run
 that produces nothing.
+
+## The warning you get without asking
+
+`prepare_case.py` estimates the reading cost at normalisation time and warns when the corpus needs
+more than 56 six-thousand-character windows (64 requests minus ~5 of overhead):
+
+```
+! reading budget: 2831940 characters is about 472 windows of 6,000 chars (plus ~5 requests of
+  overhead) against a limit of 64 requests / 900 s. Pass --max-paragraphs or --max-chars to cap
+  the reading, and report the truncation.
+```
+
+The demo (166,815 characters, 28 windows) stays silent. The warning is a reason to choose a cap
+deliberately, not a truncation: the input is kept whole unless `--max-paragraphs`/`--max-chars`
+is passed, and a truncated run reports `partial` with the cap in `status_reasons`.
