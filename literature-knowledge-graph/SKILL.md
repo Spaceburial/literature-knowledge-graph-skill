@@ -128,7 +128,9 @@ Extraction rules that determine the score:
 - **Entity types**: `researcher`, `material`, `method`, `task`, `metric`, `conclusion` (plus
   `dataset`, `model`, `other`). A conclusion is one atomic claim, phrased as a sentence.
 - **Relation types**: `uses`, `compares`, `outperforms`, `supports`, `contradicts`, `measures`,
-  `evaluated_on`, `reports`, `improves`, `part_of`, `produces`, `based_on`. Direction is
+  `evaluated_on`, `reports`, `improves`, `increases`, `decreases`, `part_of`, `produces`,
+  `based_on`. Use `increases`/`decreases` when the paper states a directional effect on a
+  quantity (activation lowers the first-cycle efficiency); say which quantity in `condition`. Direction is
   source→target; state it in `direction_note` when it could be read either way.
 - **Only assert what the sentence asserts.** Co-occurrence is not a relation. A review sentence
   that summarises someone else's result is `attribution: "other"`, not the authors' own result.
