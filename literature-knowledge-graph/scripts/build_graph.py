@@ -175,6 +175,7 @@ def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_defaul
             "match": res["status"],
             "match_score": res["score"],
             "context": ev.get("context") or res["context"],
+            **({"matched_text": res["matched"]} if res.get("matched") else {}),
             "attribution": attr,
             "strength": ev.get("strength") or evidence_strength_from(res["status"], attr),
             "section": ev.get("section") or meta.get("section") or "",
@@ -189,11 +190,15 @@ def main():
                     help="annotation file; defaults to annotations.json next to the bundle "
                          "(never a fixed absolute path, which would silently reuse an earlier run)")
     ap.add_argument("--out", default="/app/work/graph.json")
-    ap.add_argument("--report", default="/app/work/build_report.txt")
+    ap.add_argument("--report", default=None,
+                    help="audit report; defaults to build_report.txt next to --out")
     ap.add_argument("--strict", action="store_true",
                     help="drop nodes/edges with no verified evidence instead of flagging them")
     args = ap.parse_args()
 
+    if args.report is None:
+        args.report = os.path.join(os.path.dirname(os.path.abspath(args.out)) or ".",
+                                   "build_report.txt")
     bundle = load_json(args.bundle)
     if not bundle:
         sys.stderr.write(f"FATAL: case bundle missing at {args.bundle}. Run prepare_case.py first.\n")
