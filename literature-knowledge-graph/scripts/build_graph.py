@@ -32,21 +32,24 @@ from collections import Counter, defaultdict
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from verify_evidence import verify_quote, is_acceptable, evidence_strength_from  # noqa: E402
 
+# The published vocabulary is the one in schema/graph.schema.json and in SKILL.md. "finding" used to
+# live here only, so a node typed that way left build_graph valid and the artifact out of schema.
 NODE_TYPES = {"researcher", "material", "method", "task", "metric", "conclusion",
-              "dataset", "model", "finding", "other"}
+              "dataset", "model", "other"}
 NODE_TYPE_SYNONYMS = {
     "author": "researcher", "people": "researcher", "person": "researcher", "team": "researcher",
     "compound": "material", "chemical": "material", "sample": "material", "film": "material",
     "technique": "method", "approach": "method", "procedure": "method", "protocol": "method",
     "benchmark_task": "task", "application": "task",
     "indicator": "metric", "measure": "metric", "performance": "metric",
-    "claim": "conclusion", "result": "conclusion", "finding_text": "conclusion",
+    "claim": "conclusion", "result": "conclusion", "finding": "conclusion",
+    "finding_text": "conclusion", "observation": "conclusion",
     "corpus": "dataset", "data": "dataset",
     "architecture": "model", "system": "model",
 }
 REL_TYPES = {"uses", "compares", "outperforms", "supports", "contradicts", "measures",
-             "evaluated_on", "reports", "part_of", "produces", "improves", "based_on",
-             "cites", "other"}
+             "evaluated_on", "reports", "part_of", "produces", "improves", "increases",
+             "decreases", "based_on", "cites", "other"}
 REL_SYNONYMS = {
     "use": "uses", "utilize": "uses", "utilizes": "uses", "employ": "uses", "adopt": "uses",
     "compare": "compares", "compared_with": "compares", "vs": "compares",
@@ -60,6 +63,9 @@ REL_SYNONYMS = {
     "part_of": "part_of", "component_of": "part_of", "include": "part_of",
     "produce": "produces", "yield": "produces", "yields": "produces",
     "improve": "improves", "enhance": "improves",
+    "increase": "increases", "increases": "increases", "raise": "increases", "raises": "increases",
+    "decrease": "decreases", "decreases": "decreases", "reduce": "decreases", "reduces": "decreases",
+    "lower": "decreases", "lowers": "decreases", "diminish": "decreases",
     "based_on": "based_on", "build_on": "based_on", "derived_from": "based_on",
     "cite": "cites", "cite_by": "cites",
 }
@@ -509,8 +515,9 @@ def main():
             "  list of {label, type, mentions:[{source_id, paragraph_id, quote}]} objects.\n")
         sys.exit(3)
     for (kind_kind, raw), n in sorted(TYPE_COERCIONS.items()):
+        allowed = sorted(REL_TYPES if kind_kind == "edge" else NODE_TYPES)
         msg = (f"type coercion: {kind_kind} type \"{raw}\" is not in the schema and was stored "
-               f"as \"other\" ({n}x)")
+               f"as \"other\" ({n}x); allowed {kind_kind} types: " + ", ".join(allowed))
         graph["warnings"].append(msg)
         sys.stderr.write("  ! " + msg + "\n")
 
