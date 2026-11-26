@@ -20,6 +20,9 @@ returns the surrounding original sentence, which is what the reader actually nee
 import difflib
 import re
 import unicodedata
+from collections import Counter
+
+NUM_RE = re.compile(r"\d+(?:\.\d+)?")
 
 FOLD_MAP = {
     "\u2018": "'", "\u2019": "'", "\u201c": '"', "\u201d": '"',
@@ -90,6 +93,17 @@ def verify_quote(quote, paragraph_text, min_len=12, fuzzy_threshold=0.90):
             best = r
             best_span = (start, start + win)
     if best >= fuzzy_threshold:
+        # A paraphrase may reorder words; it may not change a number. One edited digit in a
+        # 200-character sentence still scores >0.90, so similarity alone would certify a quote
+        # the paper never makes. Numbers must agree exactly, or the quote is rejected.
+        window = hay[best_span[0]:best_span[1]]
+        qn, wn = Counter(NUM_RE.findall(q)), Counter(NUM_RE.findall(window))
+        if qn != wn:
+            changed = sorted((qn - wn).elements())
+            found = sorted((wn - qn).elements())
+            return {"status": "not_found", "score": round(best, 3), "span": None, "context": "",
+                    "note": f"numeric mismatch in a {best:.2f}-similar window: "
+                            f"quote has {changed or '-'}, paragraph has {found or '-'}"}
         a, b = _sentence_bounds(paragraph_text, best_span)
         return {"status": "fuzzy", "score": round(best, 3), "span": best_span,
                 "context": paragraph_text[a:b], "note": "fuzzy match; treat as weak evidence"}
