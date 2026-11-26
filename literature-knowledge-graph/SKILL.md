@@ -236,6 +236,10 @@ summary, the 3+ query results and the uncertainty items.
 3. `result.json.validation.checks` are all `true`.
 4. Every `output_contract` key is present in `result.json` (see `output_contract_mapping`).
 5. `evidence.csv` rows all have non-empty `quote` and a `match` in {exact, normalized, fuzzy}.
+6. `result.json.status` is `partial` or better, and every `status_reasons` entry is one you can
+   defend from the material (budget truncation, dropped endpoints, a paper that failed to parse).
+7. If you need a measured statement about quality, run `bench/run_ab.py` rather than asserting one;
+   `docs/GAIN.md` shows the shape and the claim limit.
 6. `uncertainty` names every unreported value and every undetermined relation you met.
 
 ## Minimal example (illustrative, not a graded answer)
