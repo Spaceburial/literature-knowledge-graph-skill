@@ -92,7 +92,7 @@ closes one hole in the evidence gate.
 - `tests/regression/regression.py`: R11 validates the shipped annotations, the shipped example
   graph and a freshly built graph against the schema, rejects a graph with an out-of-schema
   relation type, and asserts no stored quote exceeds 300 characters. Works with `jsonschema` when
-  installed and with a stdlib subset otherwise. 55 checks.
+  installed and with a stdlib subset otherwise. 55 checks plus two runtime/budget assertions in R1.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
   contract with a verified minimal `primary-material.json` and `annotations.json`, the seven query
   types, and the `success`/`partial`/`undetermined` vocabulary.
