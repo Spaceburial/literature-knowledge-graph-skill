@@ -20,7 +20,10 @@
   merged; chemically distinct names and generic-vs-instance pairs are deliberately left
   separate, so the graph may contain two nodes a domain expert would merge. The merge log
   makes each case visible and correctable.
-- **Language.** Rules are written for English papers; Chinese surface forms are accepted as
-  strings but abbreviation/normalisation heuristics are English-oriented.
+- **Language.** Entity and relation rules are written for English papers. Chinese text is parsed,
+  quoted and verified like any other string, and the fallback extractor now proposes CJK phrase
+  candidates (punctuation-delimited runs, stop-word filtered) instead of returning nothing — but
+  relation detection in the fallback stays English-lexicon based, so a Chinese corpus read by the
+  fallback yields nodes with few edges. The agent reading path is language-agnostic.
 - **Not a truth judgement.** `supports`/`contradicts` record what the papers assert, not which
   claim is correct.
