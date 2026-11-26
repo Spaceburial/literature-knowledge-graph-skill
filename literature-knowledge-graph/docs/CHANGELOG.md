@@ -60,6 +60,16 @@ closes one hole in the evidence gate.
 - `prepare_case.py`: warns at normalisation time when the corpus exceeds ~56 reading windows
   (the 64-request / 900 s contract), so a cap is chosen deliberately instead of discovered
   mid-run. The input is untouched unless the flag is passed.
+- Input coverage, found by running ten corpus shapes through the pipeline: JATS `*.xml` files are
+  discovered at all (a directory of PMC XML used to yield zero paragraphs); metadata carried by an
+  aggregate `material.json` reaches `sources[]` instead of a metadata-less stub; a
+  `{"p1": {"text": ...}}` corpus is counted once, not twice with a derived id; a record nested
+  under a paper object inherits its `source_id`; and id-less paragraphs are given their derived id
+  *before* de-duplication, so two distinct records can no longer collide on `(source, None)` and
+  overwrite each other. `heuristic_extract.py` proposes CJK phrase candidates, so a Chinese corpus
+  no longer produces an empty graph. R10 covers the four input-shape fixes.
+- `finalize.py`: the no-graph result keeps the full `result.json` shape (empty `nodes`/`edges`,
+  `validation` keys) instead of a three-key stub.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
   contract with a verified minimal `primary-material.json` and `annotations.json`, the seven query
   types, and the `success`/`partial`/`undetermined` vocabulary.
