@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1 — stability and honest truncation
+- `prepare_case.py`: `--max-paragraphs` / `--max-chars` budget guard. Truncation is recorded in
+  `bundle.budget` (kept/total, dropped per paper) and warned, never silent.
+- `finalize.py`: a truncated input can no longer report `status="success"`; the reason is the first
+  entry of `status_reasons`, so a partial graph cannot be presented as a complete one.
+- `build_graph.py`: a `kept_separate` decision whose surfaces share one canonical key is reported as
+  `kept_separate_single_key` (plus `keep_separate_not_applied` in `uncertainty`) instead of being
+  logged as if it had been applied. Keeping two same-label objects apart now requires giving each
+  its own `canonical_key`, documented in `SKILL.md` and `templates/annotations.template.json`.
+- `tests/regression/regression.py`: six-case suite (R1–R6), 23 assertions, run before every
+  submission. Covers the full run, a single paper with no `case.json`, an altered quote,
+  same-label different objects, a missing paragraph id, and budget truncation.
+- `docs/ATTEMPTS.md`: submission ledger written by `tools/poll_attempt.py`.
+
 ## 1.0 — initial release
 - Input normaliser for JSON paragraph lists, id-keyed dicts, JATS XML, and aggregate +
   per-paper material files; role→source_id mapping; duplicate handling.
