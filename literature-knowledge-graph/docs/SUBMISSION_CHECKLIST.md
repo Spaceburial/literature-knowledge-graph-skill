@@ -17,13 +17,17 @@
 | Incremental/new-paper handling | `scripts/add_paper.py` preserves all existing `N/E` ids, merges by canonical key+type, unions evidence, logs added/merged/conflicts; self-test asserts incremental == full build | `python tests/selftest.py` section [3] |
 | Robustness: missing files, unparseable PDF, same-name, evidence conflict, empty query | `prepare_case.py` warnings; `finalize.py` status; `query_graph.py` `undetermined` | run the PDF/Markdown and single-paper cases in `docs/METHOD.md` |
 | Documentation completeness / reuse | `README.md`, `docs/`, `schema/`, `templates/` | — |
+| Measured gain (two conditions, same input, 3 repeats) | `bench/run_ab.py` + `bench/metrics.py` → `docs/GAIN.md` | `python3 bench/run_ab.py ab --case-dir examples/demo_perovskite/input --annotations examples/demo_perovskite/annotations.example.json --queries examples/demo_perovskite/queries.example.json --repeats 3 --out /tmp/ab` |
+| Budget guard against 64 requests / 900 s | `prepare_case.py --max-paragraphs/--max-chars` → `finalize.py` partial + reason; threshold derivation in `docs/BUDGET.md` | `python3 bench/run_ab.py budget --case-dir examples/demo_perovskite/input` |
 | GitHub public link (bonus 5) | `GITHUB_URL.txt` — first line `https://github.com/Spaceburial/literature-knowledge-graph-skill/tree/main/literature-knowledge-graph`, second line `literature-knowledge-graph`; the same directory is published in that public repository | open the link in a logged-out browser, or `curl -s https://api.github.com/repos/Spaceburial/literature-knowledge-graph-skill` → `"visibility": "public"` |
 
 ## Honest limits of this submission
 
 - The three official cases are provided by the platform at evaluation time; the worked example
   here is a real two-paper case used for validation, not a stand-in for them.
-- The quantitative comparison in `docs/GAIN.md` is curated-vs-heuristic on the same example,
-  not curated-vs-base-agent on the hidden cases; the platform measures the latter.
+- The quantitative comparison in `docs/GAIN.md` is a pipeline-level control — same input, same
+  scripts, only the extraction step differs (deterministic baseline vs Skill rules) — not a
+  base-agent vs skill-agent comparison on the hidden cases. `bench/run_ab.py` accepts two commands
+  so such a comparison can be run wherever the models are available; the platform measures it there.
 - The public repository holds exactly this directory; anonymous access to the link was checked at
   submission time, and the 5-point bonus depends on it staying open.
