@@ -263,6 +263,20 @@ def main():
         elif decision == "kept_separate":
             merge_log.append({"surfaces": surfaces, "decision": "kept_separate",
                               "basis": mc.get("basis", "annotated non-merge"), "type": None})
+            # A non-merge decision only means something if the surfaces are able to be apart.
+            # When they canonicalise to one key the graph necessarily holds a single node, so the
+            # decision and the graph would contradict each other; say so instead of logging a
+            # decision that was never applied.
+            distinct_keys = {canon(s) for s in surfaces if canon(s)}
+            if len(distinct_keys) == 1:
+                conflict_log.append({"kind": "kept_separate_single_key", "surfaces": surfaces,
+                                     "reason": "all surfaces canonicalise to one key, so the graph holds a "
+                                               "single node; give each distinct object its own "
+                                               "canonical_key to keep them apart"})
+                uncertainty.append({"kind": "keep_separate_not_applied",
+                                    "detail": "kept_separate declared for surfaces that share one "
+                                              "canonical key; the graph keeps one node",
+                                    "items": surfaces})
     nodes = [n for n in nodes if not n.get("_dropped")]
 
     # stable N-ids by first appearance (bundle order, then node order)
