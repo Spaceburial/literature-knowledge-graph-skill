@@ -1,0 +1,70 @@
+flowchart LR
+    N0001["N0001: perovskite solar cells [task]"]
+    N0002["N0002: power conversion efficiency [metric]"]
+    N0003["N0003: stability [metric]"]
+    N0004["N0004: MAPbI3 [material]"]
+    N0005["N0005: time-resolved photoluminescence [method]"]
+    N0006["N0006: rate-equation models [method]"]
+    N0007["N0007: Bayesian inference [method]"]
+    N0008["N0008: carrier kinetics [other]"]
+    N0009["N0009: photoluminescence quantum yield [metric]"]
+    N0010["N0010: PLQY provides an orthogonal constraint against parameter non-uniqueness [conclusion]"]
+    N0011["N0011: TrPL alone is insufficient to determine carrier kinetics [conclusion]"]
+    N0012["N0012: coefficient of determination [metric]"]
+    N0013["N0013: covalent organic frameworks [material]"]
+    N0014["N0014: deep learning framework [method]"]
+    N0015["N0015: perovskite absorber [material]"]
+    N0016["N0016: bimolecular recombination coefficient [metric]"]
+    N0017["N0017: non-radiative recombination [other]"]
+    N0018["N0018: spin-coating [method]"]
+    N0019["N0019: mesoscopic device architecture [model]"]
+    N0020["N0020: Spiro-OMeTAD [material]"]
+    N0021["N0021: Cs0.05FA0.90MA0.05PbI2.85Br0.15 [material]"]
+    N0022["N0022: FA0.9MA0.1PbI2.85Br0.15 [material]"]
+    N0023["N0023: trap density [metric]"]
+    N0024["N0024: passivation [method]"]
+    N0025["N0025: photoluminescence spectroscopy [method]"]
+    N0026["N0026: Boc-PDA-COF [material]"]
+    N0027["N0027: Tp-COF [material]"]
+    N0028["N0028: DMTH-COF [material]"]
+    N0029["N0029: PCE retention after 500 h [metric]"]
+    N0030["N0030: efficiencies from different studies are not directly comparable [conclusion]"]
+    N0031["N0031: triazine-based COF additive [material]"]
+    N0032["N0032: fill factor [metric]"]
+    N0033["N0033: open-circuit voltage [metric]"]
+    N0034["N0034: bulk additive engineering [method]"]
+    N0035["N0035: COFs act as crystallization regulators and defect passivators [conclusion]"]
+    N0028 -->|"uses<br/>MAPbI3 precursor solution, single solution-processing step"| N0034
+    N0035 -->|"supports<br/>three COFs as bulk additives in MAPbI3 films"| N0004
+    N0013 -->|"supports<br/>COF functional groups passivate defects"| N0024
+    N0028 -->|"reports<br/>MAPbI3, mesoscopic, 0.50 cm2, champion 20.78% vs pristine 14.7%"| N0002
+    N0028 -->|"reports<br/>Voc 1.183 V; pristine 1.142 V"| N0033
+    N0028 -->|"reports<br/>FF 76.46%, below 79.4% and 81.2% of prior additive studies"| N0032
+    N0028 -->|"improves<br/>500 h aging; normalized retention ~0.50 vs ~0.20 pristine"| N0029
+    N0028 -->|"improves<br/>film PL intensity, bulk"| N0017
+    N0028 -->|"compares<br/>PCE 20.78% vs 20.04% in MAPbI3; margin small"| N0031
+    N0026 -->|"reports<br/>MAPbI3, champion 18.88%"| N0002
+    N0027 -->|"reports<br/>MAPbI3, champion 15.88%"| N0002
+    N0004 -->|"uses<br/>two-step spin-coating on m-TiO2/FTO"| N0018
+    N0019 -->|"uses<br/>HTL in FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au"| N0020
+    N0002 -->|"evaluated_on<br/>0.50 cm2 active area, AM1.5G"| N0019
+    N0025 -->|"measures<br/>steady-state PL, 532 nm excitation"| N0017
+    N0029 -->|"measures<br/>500 h degradation tracking"| N0003
+    N0030 -->|"other<br/>methodological caution"| N0002
+    N0014 -->|"uses<br/>TrPL decay profiles as input"| N0005
+    N0014 -->|"uses<br/>excitation-dependent PLQY as orthogonal constraint"| N0009
+    N0014 -->|"reports<br/>six kinetic parameters, all R2 > 0.9, simulated pool"| N0012
+    N0014 -->|"measures<br/>NT among six extracted parameters"| N0023
+    N0014 -->|"measures<br/>extracts six kinetic parameters from TrPL+PLQY"| N0008
+    N0009 -->|"supports<br/>simulation + experiment"| N0010
+    N0011 -->|"reports<br/>non-unique solutions when TrPL is the only input"| N0005
+    N0010 -->|"improves<br/>alleviates parameter non-uniqueness"| N0008
+    N0014 -->|"outperforms<br/>computational cost of inversion"| N0007
+    N0022 -->|"uses<br/>deposited films; passivation layer spin-coated"| N0018
+    N0022 -->|"uses<br/>HTL in device stack"| N0020
+    N0022 -->|"reports<br/>15 devices, box/distribution plot only (no single value in text)"| N0002
+    N0021 -->|"reports<br/>part of 15-device PCE comparison"| N0002
+    N0008 -->|"measures<br/>γhc and γAug describe nonradiative pathways"| N0017
+    N0006 -->|"uses<br/>mechanistic description of recombination"| N0008
+    N0007 -->|"uses<br/>invert kinetic behaviour"| N0008
+    N0024 -->|"improves<br/>passivated FAMA/CsFAMA films (P2); COF bulk passivation (P1)"| N0002

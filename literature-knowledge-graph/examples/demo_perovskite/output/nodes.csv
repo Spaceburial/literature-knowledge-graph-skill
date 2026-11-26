@@ -1,0 +1,36 @@
+id,label,type,aliases,source_ids,evidence_status,n_evidence
+N0001,perovskite solar cells,task,PSCs|perovskite photovoltaics,P1|P2,verified,2
+N0002,power conversion efficiency,metric,PCE,P1|P2,verified,2
+N0003,stability,metric,long-term stability|operational stability,P1|P2,verified,2
+N0004,MAPbI3,material,MAPbI3 perovskite|methylammonium lead iodide,P1,verified,2
+N0005,time-resolved photoluminescence,method,TrPL,P2,verified,2
+N0006,rate-equation models,method,rate equations,P2,verified,1
+N0007,Bayesian inference,method,,P2,verified,1
+N0008,carrier kinetics,other,charge carrier recombination dynamics,P2,verified,1
+N0009,photoluminescence quantum yield,metric,PLQY,P2,verified,1
+N0010,PLQY provides an orthogonal constraint against parameter non-uniqueness,conclusion,,P2,verified,1
+N0011,TrPL alone is insufficient to determine carrier kinetics,conclusion,,P2,verified,1
+N0012,coefficient of determination,metric,R2|R²,P2,verified,1
+N0013,covalent organic frameworks,material,COF|COFs,P1,verified,1
+N0014,deep learning framework,method,DL|DL framework,P2,verified,1
+N0015,perovskite absorber,material,perovskite film|perovskite films,P1|P2,verified,2
+N0016,bimolecular recombination coefficient,metric,γeh,P2,verified,1
+N0017,non-radiative recombination,other,nonradiative recombination,P1|P2,verified,2
+N0018,spin-coating,method,spin-coated,P1,verified,1
+N0019,mesoscopic device architecture,model,FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au,P1,verified,1
+N0020,Spiro-OMeTAD,material,,P1|P2,verified,2
+N0021,Cs0.05FA0.90MA0.05PbI2.85Br0.15,material,CsFAMA,P2,verified,1
+N0022,FA0.9MA0.1PbI2.85Br0.15,material,FAMA,P2,verified,1
+N0023,trap density,metric,NT,P2,verified,1
+N0024,passivation,method,defect passivation|passivated,P1|P2,verified,2
+N0025,photoluminescence spectroscopy,method,PL,P1,verified,1
+N0026,Boc-PDA-COF,material,Boc-PDA,P1,verified,1
+N0027,Tp-COF,material,Tp,P1,verified,1
+N0028,DMTH-COF,material,DMTH,P1,verified,2
+N0029,PCE retention after 500 h,metric,normalized PCE retention,P1,verified,1
+N0030,efficiencies from different studies are not directly comparable,conclusion,,P1,verified,1
+N0031,triazine-based COF additive,material,,P1,verified,1
+N0032,fill factor,metric,FF,P1,verified,1
+N0033,open-circuit voltage,metric,Voc,P1,verified,1
+N0034,bulk additive engineering,method,bulk additives|bulk dopants,P1,verified,1
+N0035,COFs act as crystallization regulators and defect passivators,conclusion,,P1,verified,1

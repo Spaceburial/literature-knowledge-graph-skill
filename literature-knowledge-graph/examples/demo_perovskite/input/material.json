@@ -1,0 +1,991 @@
+{
+ "paragraphs": [
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0001",
+   "section": "1. Introduction",
+   "text": "Organic–inorganic halide perovskite solar cells (PSCs) have emerged as one of the most promising photovoltaic technologies, driven by their rapid increase in power conversion efficiency (PCE) and compatibility with low-cost solution processing [1,2]. The archetypal perovskite absorber adopts the general formula ABX3, where A is an organic cation, B is a divalent metal cation, and X is a halide anion [3]. Among these, methylammonium lead triiodide (MAPbI3, MA+ = CH3NH3+) has been extensively studied due to its favorable tetragonal phase at room temperature, strong visible-light absorption, long carrier diffusion lengths, and suitable bandgap for single-junction photovoltaic architectures [4]. As a result, single-junction PSCs have achieved certified PCEs of up to 26.1%, positioning them as competitive alternatives to conventional silicon-based solar cells [5].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0002",
+   "section": "1. Introduction",
+   "text": "The outstanding efficiencies of PSCs are rooted in several intrinsic advantages of the perovskite absorber: large absorption coefficients, high charge-carrier mobilities, weakly bound excitons that readily dissociate into free carriers, and long minority carrier diffusion lengths [6]. However, these benefits are severely compromised by structural imperfections that arise during film formation. MAPbI3 films typically contain a range of defects including undercoordinated halide ions, undercoordinated Pb2+ centers, Pb clusters, Pb–I antisite defects (PbI3), and vacancies of I− or MA+, which act as non-radiative recombination centers and accelerate degradation [7,8,9]. In polycrystalline films, small grain sizes and high densities of grain boundaries exacerbate recombination losses, impede charge transport, and ultimately limit both PCE and operational stability [10]. Importantly, the density and distribution of these defects are closely linked to the nucleation and crystal-growth dynamics during solution processing [11]. The rapid and often uncontrolled crystallization of MAPbI3 from precursor solutions tends to generate heterogeneous nucleation, mosaic domains, and abundant grain boundaries [12]. These microstructural flaws degrade optoelectronic quality and facilitate defect migration and ion transport. Under illumination, the photoinduced strain and thermal expansion of the MAPbI3 lattice can further reduce the activation energy for the halide-vacancy migration, thereby further facilitating the ion migration and performance degradation over time [13]. Therefore, the control of the crystallization kinetics and grain growth of perovskite is central to obtaining high-quality films with reduced defect densities, larger grain sizes, and strong operational stability.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0003",
+   "section": "1. Introduction",
+   "text": "To address these challenges, a variety of additive-engineering and interface-modification strategies have been explored. In the precursor solution or at the interfaces, functional small molecules, polymers, ionic liquids and inorganic salts have been incorporated to tune crystallization, passivate defects and stabilize the perovskite phase [14]. A broad range of additives has been investigated to regulate the formation of MAPbI3 films and reduce losses associated with structural and electronic defects. These additives can be broadly grouped according to their chemical nature and function. Lewis-basic compounds, including thiourea, urea, and sulfoxide derivatives, interact with Pb2+ ions in the precursor solution. Such coordination can alter intermediate-phase formation, slow crystallization, and promote the development of larger and more uniform grains [15]. Ammonium and alkylammonium halides are commonly introduced to compensate for halide-related defects and passivate electrically active sites at grain boundaries and interfaces, often resulting in improved open-circuit voltage [16]. Polymers such as polyethylene glycol (PEG), polyvinylpyrrolidone (PVP), and poly(methyl methacrylate) (PMMA) can influence nucleation and grain growth while improving film coverage and providing partial protection against moisture. Ionic liquids containing imidazolium or pyridinium cations offer another approach because their low volatility and ionic character allow them to modify precursor properties and interact with charged defects in the perovskite layer [17]. Inorganic salts, particularly alkali-metal halides and pseudohalide compounds, have also been employed to regulate crystallization, passivate defects, and limit ion-migration-related losses [18]. Although these additive families operate through different pathways, they share the objective of improving film quality, reducing non-radiative recombination, and stabilizing device operation. Their development has contributed substantially to the progress of MAPbI3 solar cells, with reported efficiencies increasing from below 15% to more than 21% during the past decade [19].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0004",
+   "section": "1. Introduction",
+   "text": "Despite substantial advances in additive engineering, several persistent limitations continue to restrict the development of broadly applicable molecular design principles. One important issue is the functional specificity of many reported additives. Compounds selected to regulate nucleation and crystal growth do not necessarily passivate the electronic defects remaining in the deposited film [20]. A second limitation concerns the restricted structural tunability of conventional small-molecule additives. Even minor changes to their functional groups or molecular backbones can substantially alter solubility, volatility, thermal stability, and compatibility with the perovskite precursor solution. Consequently, it is difficult to vary one molecular parameter while keeping the remaining physicochemical properties unchanged [21]. Third, practical drawbacks are also associated with several established additive classes. Although ionic liquids can offer strong chemical interactions and favorable processing characteristics, they are often expensive, and poorly immobilized ionic components may contribute to field-driven redistribution and scan-dependent device behavior. Polymeric additives can improve film coverage and mechanical integrity, but excessive incorporation of electrically insulating polymer chains may obstruct charge transport or accumulate at grain boundaries. Similarly, hygroscopic salts, including some lithium- and cesium-containing compounds, can increase the sensitivity of the perovskite layer to ambient moisture and thereby compromise long-term stability [22]. These limitations do not preclude the use of such materials, but they emphasize the need to optimize additive concentration, chemical stability, spatial distribution, and electronic compatibility rather than considering defect passivation alone. Differences in precursor chemistry, deposition conditions, interfacial layers, and measurement protocols further obscure relationships between molecular structure, film formation, defect passivation, and photovoltaic performance. Comparative investigations conducted under otherwise identical conditions are therefore essential for determining which structural features govern additive–precursor interactions and for establishing reliable design rules for multifunctional additives.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0005",
+   "section": "1. Introduction",
+   "text": "Cost and compatibility with scalable manufacturing must also be considered when evaluating the practical relevance of an additive strategy. In many current perovskite solar-cell architectures, the absorber accounts for only a relatively small proportion of the total materials cost, whereas major contributions arise from the hole-transport layer, transparent conducting substrate, and metallic electrode. Accordingly, additives introduced at the low concentrations typically required for crystallization control or defect passivation are unlikely to increase absorber cost substantially. This advantage, however, depends on the use of readily available compounds with simple preparation and purification requirements. Additives that rely on multistep synthesis, specialized reagents, or laborious isolation may offer excellent laboratory-scale performance while remaining unsuitable for large-area production. An effective additive should therefore combine multiple functions, structural tunability, low loading, solution-process compatibility, and economical availability without introducing new pathways for ionic instability, transport losses, or environmental degradation.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0006",
+   "section": "1. Introduction",
+   "text": "While these strategies have led to significant improvements in efficiencies, they frequently lack structural precision and molecular-level tunability. Covalent organic frameworks (COFs) have emerged as highly attractive candidates for rational control of perovskite crystallization and defect chemistry in this regard [23]. COFs are crystalline, porous, organic polymers constructed via strong covalent bonds between predesigned building blocks, giving rise to periodic architectures with well-defined pores and extended π-conjugation [24]. Their low density, large surface area, tunable pore environments, and chemically programmable frameworks make COFs naturally attractive for applications such as photocatalysis, energy storage, and photovoltaics [25]. In perovskite systems in particular, they can play several complementary roles: they provide structural scaffolds that template nucleation and guide crystal growth, they act as electronic modulators that assist charge separation and transport, and they form physical barriers that help to suppress ion migration and protect the material from environmental degradation [26]. For instance, in situ formation of 2D COFs within PbI2 layers has been shown to regulate perovskite crystallization, lower defect densities, and enhance carrier transport. Other studies have demonstrated that carefully chosen COF–perovskite composites can suppress phase degradation (e.g., δ-phase formation in FAPbI3), reduce surface trap states, and significantly improve long-term device stability [27].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0007",
+   "section": "1. Introduction",
+   "text": "Reports on COF–perovskite integration may be categorized according to the location and function of the framework in the device. A frequently studied design is a pre-synthesized COF sandwiched as an interlayer between the perovskite absorber and a charge-transport layer. Lewis-basic groups on the pore surface may interact with undercoordinated Pb2+ sites, minimizing interfacial defects and the accompanying non-radiative recombination in this configuration [28]. For example, Mohamed MG et al. sandwiched two-dimensional Car-ETTA and TFPPy-ETTA COFs between PTAA and the perovskite layer in inverted solar cells [29]. Their porous surfaces promoted perovskite nucleation and crystal growth, resulting in better morphology and crystallinity of the films. The Car-ETTA- and TFPPy-ETTA-based devices gave PCEs of 19.79% and 19.72%, respectively, while the control gave 17.40%. Guo J et al. later utilized sulfhydryl-functionalized COFs (HS-COFs) at both of the perovskite film interfaces [30]. The COF at the buried interface was beneficial in reducing the residual lattice strain and enhancing the resistance to UV exposure, whereas at the top interface, the sulfhydryl groups passivated the surface defects via S–Pb interactions. This dual interface method achieved a PCE of 24.26%, which is one of the highest values recorded for COF-modified perovskite solar cells.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0008",
+   "section": "1. Introduction",
+   "text": "The second technique is to directly introduce COFs into the perovskite absorber as bulk additives. Wu et al. reported a conjugated three-dimensional framework, SP-3D COF, to realize good electrical coupling with the perovskite [31]. The suggested bidirectional charge-transfer process improved carrier transport and enhanced the PCE from 16.70% to 19.07%. Nie et al. improved both film formation and operational stability by using TTDA-TTA COF synthesized from thieno [3,2-b]thiophene-2,5-dicarbaldehyde and 2,4,6-tris(4-aminophenyl)-1,3,5-triazine [32]. The expanded conjugated structure and π–π interactions boosted perovskite crystallization and suppressed degradation in humid and hot settings, achieving a champion PCE of 23.35%. In a similar fashion, Gao X et al. used an amino-functionalized framework (NH2-COF) to control crystallization and passivate defects [15]. The coordination of amino groups and Pb sites enhanced the crystallinity of the film and decreased non-radiative recombination, leading to a champion PCE of 22.13%. These investigations suggest that COFs may enhance perovskite devices by tailoring key interfaces or by regulating crystallization, defect chemistry and charge transport in the absorber.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0009",
+   "section": "1. Introduction",
+   "text": "Two limitations of this body of work motivate the present study. First, the framework is in most cases deposited as a discrete layer or applied as a post-treatment, which retains the process-complexity penalty discussed above and confines the interaction to the surface of the absorber rather than to the grain boundaries distributed throughout it. Reports in which COF chemistry is introduced directly into the MAPbI3 precursor ink, so that it acts during nucleation and growth rather than after it, remain comparatively few. Despite encouraging results, the existing literature provides limited guidance for the rational design of framework modifiers. Individual studies generally focus on only one framework, making it difficult to determine whether the reported improvements arise from linker coordination, pore architecture, π-conjugation, or simply the incorporation of an organic component at grain boundaries [33]. Comparisons among separate reports do not resolve this issue because perovskite-film properties are highly sensitive to experimental variables, including precursor stoichiometry, antisolvent treatment, and annealing conditions, which vary considerably among laboratories [34]. Moreover, many previous investigations have examined compositions other than MAPbI3. These include formamidinium-based absorbers, for which stabilization against the photoinactive δ-phase is a primary concern, and lead-free perovskites studied mainly for photocatalytic applications [35,36]. Because these materials exhibit defect populations and degradation pathways that differ from those of MAPbI3, their reported trends cannot be applied directly to MAPbI3 devices. In particular, there is a lack of comparative studies that investigate how different COF linkers and functional groups regulate MAPbI3 nucleation, grain coalescence, and optoelectronic properties within a unified device platform. Second, almost all published studies examine a single COF system, so the reported improvements cannot be attributed to any particular structural feature of the framework. Without a controlled comparison of chemically distinct frameworks within one device platform, it is not possible to establish which linkage motifs, functional groups, or coordination environments are responsible for the observed effects, and it is therefore not possible to formulate design rules for selecting or synthesizing new candidates.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0010",
+   "section": "1. Introduction",
+   "text": "The choice of building blocks determines the coordination environment and hydrogen-bonding capacity that the resulting framework can present to the perovskite, and the three used here were selected to vary these systematically while retaining a common structural motif. 1,3,5-Triformylphloroglucinol serves as the trialdehyde node in all three frameworks. Its C3-symmetric geometry directs the formation of hexagonally ordered networks, and its three hydroxyl groups, positioned ortho to the aldehyde functions, permit the keto-enol tautomerism that stabilizes β-ketoenamine linkages against hydrolysis, giving frameworks of unusual chemical robustness [37]. Condensation with p-phenylenediamine yields the simplest of the three networks, in which a rigid, minimally functionalized aryl linker provides extended π-conjugation and a high density of nodes but few sites capable of specific interaction with the perovskite precursors. Boc-PDA introduces a bulky carbamate substituent on the same aryl backbone, adding steric volume and carbonyl oxygen atoms that can act as Lewis-basic sites while retaining the aromatic character of the linker [38]. 2,5-Dimethoxyterephthalohydrazide differs more substantially: its two hydrazide groups each provide a carbonyl oxygen and two nitrogen atoms capable of coordination and hydrogen bonding, and the two methoxy substituents are electron-donating and supply further oxygen donors [39]. It therefore presents the richest combination of coordination and hydrogen-bonding motifs of the three, and the highest density of sites available to interact with Pb2+ centers and with the methylammonium and iodide species in the precursor solution. Comparing these three frameworks within one device platform thus separates the contribution of the linker chemistry from that of the common node, which is the basis of the structure–property correlation presented in this work. The molecular structures of the three building blocks are shown in Figure 1.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0011",
+   "section": "1. Introduction",
+   "text": "In this work, we address these gaps by systematically engineering MAPbI3 crystallization through the incorporation of three distinct COFs, each formed by condensation of 1,3,5-triformylphloroglucinol (Tp) with 2,5-dimethoxyterephthalohydrazide (DMTH), Boc-PDA phenylenediamine (Boc-PDA), and 1,3,5-triformylphloroglucinol (Tp). These building blocks give frameworks with different linkage motifs and pore chemistries, spanning hydrazone and β-ketoenamine linkages, and therefore different electronic environments and coordination sites for the perovskite precursor species. DMTH-COF introduces methoxy-substituted hydrazide units that act as electron-donating and coordinating groups, potentially slowing crystal growth and favoring larger grain formation. Boc-PDA-COF offers protected amine functionalities that can be deprotected to expose reactive sites, allowing controlled interaction with the perovskite lattice. Tp-based frameworks typically form highly ordered, hexagonally porous β-ketoenamine COFs, which can serve as rigid templates for perovskite nucleation. By integrating these COFs directly into the MAPbI3 precursor and employing a controlled spin-coating process, we perform a comparative study of how COF chemistry influences crystallization kinetics, grain size, film morphology, defect passivation, optical properties, and device stability. We show that COF-assisted crystallization leads to enlarged grains, reduced grain-boundary density, and suppressed non-radiative recombination, with DMTH-based COFs in particular yielding the most pronounced improvements in film quality and device performance. The resulting mesoscopic n-i-p PSCs exhibit enhanced PCE and markedly improved stability under prolonged illumination and ambient humidity. This work provides strong evidence that rationally designed COFs can serve as powerful crystallization regulators and defect-passivating scaffolds for MAPbI3, providing a structurally tunable platform to simultaneously engineer morphology, electronic structure, and stability in perovskite solar cells. The novelty of this study lies in three key aspects. First, we employ COFs as bulk additives within the MAPbI3 precursor solution rather than as separately deposited interfacial layers. As set out in the preceding discussion, this distinction is consequential: a bulk additive acts during nucleation and growth and is therefore distributed among the grain boundaries throughout the film, whereas a deposited layer acts only at the surface and requires an additional processing step. Second, we present a systematic comparison of three chemically and structurally distinct hydrazone- and β-ketoenamine-linked COFs, prepared from DMTH, Boc-PDA and p-phenylenediamine with 1,3,5-triformylphloroglucinol, within the same MAPbI3 platform, directly correlating framework structure with grain growth statistics, vibrational signatures, optical response, wetting behavior and device-level stability. Third, we show that an optimized COF (DMTH) can simultaneously deliver micrometer-scale grains, reduced microstrain, enhanced hydrophobicity and that the resulting energy-level alignment at the perovskite/HTL interface is consistent with more efficient hole extraction. Together, these advances position COF-based bulk doping as a previously underexplored but highly effective strategy for integrated microstructural and interfacial engineering in perovskite photovoltaics.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0012",
+   "section": "2.1. Chemicals and Materials",
+   "text": "All chemicals were used as received without further purification unless otherwise noted. N-Boc-PDA-phenylenediamine (Boc-PDA, 97%), 2,5-dimethoxyterephthalohydrazide (DMTH, 98%), 1,3,5-triformylphloroglucinol (Tp,95%), lead(II) iodide (PbI2, 99.999%), methylammonium iodide (MAI, 99%), dimethyl sulfoxide (DMSO, anhydrous, 99.9%), N,N-dimethylformamide (DMF, anhydrous, 99.8%), mesitylene (98%), acetic acid (glacial, 99.7%), chlorobenzene (99.9%), ethyl acetate (99.8%), 1,4-dioxane (99%), and p-toluenesulfonic acid (PTSA, 98%) were purchased from Sigma-Aldrich (St. Louis, MO, USA). Spiro-OMeTAD (99%), 4-tert-butylpyridine (TBP, 96%), bis(trifluoromethanesulfonyl)imide lithium salt (LiTFSI, 99.95%), acetonitrile (anhydrous, 99.8%), titanium isopropoxide (97%), titanium tetrachloride (99.9%), ethanol (99.8%), acetone (99.5%), isopropanol (99.5%), hydrochloric acid (37%) and zinc powder were obtained from Merck. Mesoporous titania paste (18NR-T) was obtained from Dyesol (Queanbeyan, NSW, Australia), and gold pellets (99.99%) for thermal evaporation from Spiro-OMeTAD (99%), 4-tert-butylpyridine (TBP, 96%), bis(trifluoromethanesulfonyl)imide lithium salt (LiTFSI, 99.95%), acetonitrile (anhydrous, 99.8%), titanium isopropoxide (97%), titanium tetrachloride (99.9%), ethanol (99.8%), acetone (99.5%), isopropanol (99.5%), hydrochloric acid (37%) and zinc powder were obtained from Merck (Merck KGaA, Darmstadt, Germany). Mesoporous titania paste (18NR-T) was obtained from Dyesol, and gold pellets (99.99%) for thermal evaporation from Merck (Merck KGaA, Darmstadt, Germany).",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0013",
+   "section": "2.2. Preparation of TiO2 Layers",
+   "text": "Fluorine-doped tin oxide (FTO)–coated glass substrates (sheet resistance 7–10 Ω sq−1, Sigma-Aldrich (St. Louis, MO, USA)) were patterned by wet chemical etching using HCl and Zn powder. The substrates were then sequentially cleaned in DI water, acetone, and isopropanol (10 min each, ultrasonic bath) and dried in a vacuum oven at 110 °C for 15 min. A compact TiO2 (c-TiO2) precursor solution was prepared by adding titanium isopropoxide (380 μL) dropwise into ethanol (2.56 mL) under continuous stirring. In a separate vial, diluted HCl (340 μL, HCl: water = 3:1 v/v) was mixed with ethanol (2.52 mL). The acidic ethanol solution was then added dropwise to the titanium isopropoxide solution under vigorous stirring, followed by an additional 30 min of stirring to obtain a homogeneous, transparent sol. The TiO2 precursor was spin-coated onto the cleaned FTO substrates at 2000 rpm for 30 s, as shown in Figure 2. The resulting films were dried at 100 °C and then sintered at 450 °C for 40 min to form the c-TiO2 layer. To improve interfacial contact between the compact and mesoporous layers, the c-TiO2-coated substrates were immersed in a 40 mM aqueous TiCl4 solution at 70 °C for 30 min, rinsed, and annealed at 450 °C for 30 min. The mesoporous TiO2 (m-TiO2) scaffold was deposited by spin-coating a diluted TiO2 paste (Dyesol (Queanbeyan, NSW, Australia) 18NR-T) at 4000 rpm. The paste was first dispersed in ethanol (1 g in 5 mL) by repeated sonication and stirring until a uniform suspension was obtained. The m-TiO2-coated substrates were subsequently calcined at 500 °C for 1 h. The patterned FTO substrates gave a device area of 0.50 cm2, defined by the overlap of the FTO and Au electrodes; J–V characterization was performed through a metal aperture mask, as described in Section 2.6.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0014",
+   "section": "2.3. Synthesis of Covalent Organic Frameworks (COFs)",
+   "text": "Three COFs were synthesized via solvothermal condensation. These COFs were specifically selected to provide distinct pore chemistries and coordination environments, enabling a systematic investigation of how COF structure directs MAPbI3 nucleation and grain growth.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0015",
+   "section": "2.3. Synthesis of Covalent Organic Frameworks (COFs)",
+   "text": "DMTH-based COF (DMTH-COF). DMTH (26 mg, 0.102 mmol, 1.43 equiv) and Tp (15 mg, 0.071 mmol, 1.00 equiv) were dissolved in a mixture of mesitylene (4 mL), 1,4-dioxane (2 mL) and acetic acid (0.6 mL) in a glovebox. The mixture was sonicated for 10 min, transferred to a sealed vessel and heated at 140 °C for 72 h (28.3 mg, 77%). The resulting yellow precipitate was collected by centrifugation, washed with ethanol (4 × 10 mL) and acetone (4 × 10 mL), and dried under vacuum at 75 °C for 12 h.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0016",
+   "section": "2.3. Synthesis of Covalent Organic Frameworks (COFs)",
+   "text": "Boc-PDA-based COF (Boc-PDA-COF). Boc-PDA (30 mg, 0.144 mmol, 1.38 equiv), Tp (22 mg, 0.105 mmol, 1.00 equiv) and PTSA (2 mg, 0.012 mmol, 0.11 equiv) were combined in 1,4-dioxane (2 mL) and mesitylene (4 mL) in a glovebox. After sonication and degassing, the mixture was heated at 100 °C for 48 h (26.7 mg, 87%). The precipitate was isolated by centrifugation, washed with ethanol (4 × 10 mL) and acetone (4 × 10 mL), and dried under vacuum at 75 °C for 12 h.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0017",
+   "section": "2.3. Synthesis of Covalent Organic Frameworks (COFs)",
+   "text": "Tp-based COF (Tp-COF). p-Phenylenediamine (16.2 mg, 0.150 mmol, 1.43 equiv) and Tp (22 mg, 0.105 mmol, 1.00 equiv) were dissolved in mesitylene (4 mL), 1,4-dioxane (2 mL) and acetic acid (0.3 mL) in a glovebox. After 10 min of sonication and degassing the mixture was heated at 120 °C for 72 h. The precipitate was collected by centrifugation, washed with ethanol (4 × 10 mL) and acetone (4 × 10 mL), and dried under vacuum at 75 °C for 12 h (25.4 mg, 80%).",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0018",
+   "section": "2.3. Synthesis of Covalent Organic Frameworks (COFs)",
+   "text": "The three frameworks were prepared by condensation with 1,3,5-triformylphloroglucinol (Tp). Those formed with DMTH and Boc-PDA are denoted DMTH-COF and Boc-PDA-COF after the hydrazide or amine partner, while the framework formed with p-phenylenediamine is denoted Tp-COF. For brevity, perovskite films and devices containing them are labeled MAPbI3–DMTH, MAPbI3–Boc-PDA and MAPbI3–Tp throughout.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0019",
+   "section": "2.4. Preparation of MAPbI3 and COF–MAPbI3 Solutions",
+   "text": "MAPbI3 precursor solutions were prepared outside the glovebox under ambient conditions at approximately 20% relative humidity. For pristine MAPbI3, MAI (0.19 g, 1.195 mmol, 0.92 equiv) and PbI2 (0.60 g, 1.302 mmol, 1.00 equiv) were dissolved in a mixed solvent of DMF (0.8 mL) and DMSO (0.2 mL), giving nominal concentrations of 1.20 M and 1.30 M, respectively, and stirred at 800 rpm and 60 °C for 2 h to obtain a clear solution. For COF-doped MAPbI3, the COF (0.5 mg, corresponding to 0.5 mg mL−1 or 0.063 wt% of the total solute mass) was dispersed in 1.0 mL of the MAPbI3 precursor solution by sonication for 30 min to yield a homogeneous ink. The dispersion was then stirred at 800 rpm and 60 °C for 2 h and passed through a 0.45 μm PTFE filter prior to deposition.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0020",
+   "section": "2.4. Preparation of MAPbI3 and COF–MAPbI3 Solutions",
+   "text": "Perovskite films were deposited onto the m-TiO2/FTO substrates by a two-step spin-coating protocol. The COF–MAPbI3 ink was first spin-coated at 3000 rpm for 30 s. The spinning speed was then briefly reduced to 500 rpm for 2 s, during which 0.5 mL of chlorobenzene (antisolvent) was quickly dropped onto the rotating substrate. The speed was subsequently increased again to 3000 rpm for 30 s to remove excess solvent and promote rapid crystallization. The resulting films were annealed at 110 °C for 25 min to ensure complete conversion to MAPbI3. Control MAPbI3 films (without COF) were prepared using the same protocol but without COF addition. The final film thickness was ~500 nm, as determined by profilometry. The controlled incorporation of COFs into the MAPbI3 precursor at low loading enables us to probe how COF scaffolding influences nucleation, grain coalescence, and defect formation without significantly altering the bulk composition of the perovskite.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0021",
+   "section": "2.5. Device Fabrication",
+   "text": "The resulting mesoscopic PSCs with the architecture FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au were fabricated. The hole-transporting layer (HTL) solution was prepared by dissolving Spiro-OMeTAD (72.4 mg) in chlorobenzene (1 mL), followed by the addition of 4-tert-butylpyridine (TBP, 28.8 μL) and a LiTFSI solution (17.3 μL of 450 mg mL−1 LiTFSI in acetonitrile). This HTL solution was spin-coated onto the COF:MAPbI3 (or pristine MAPbI3) layer at 3500 rpm for 30 s and dried at 60 °C for 15 min. Finally, a 100 nm Au top electrode was thermally evaporated through a shadow mask at a deposition rate of 0.3–0.5 Å s−1 under a base pressure of ~1 × 10−6 Torr. The active area of each device was 0.50 cm2, defined by the overlap of the FTO and Au electrodes.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0022",
+   "section": "2.6. Materials and Device Characterization",
+   "text": "The crystal structure of the perovskite films was analyzed using a Proto A-XRD diffractometer equipped with a Cu Kα source (λ = 1.5406 Å) and a scintillation counter detector. Instrumental broadening was not subtracted from the measured full widths at half maximum. The crystallite sizes reported in Table 1 therefore represent apparent values and constitute lower bounds on the true coherent domain size. Since all films were measured on the same instrument under identical optical configuration, the relative comparison between samples is unaffected. UV–Vis absorption spectra of perovskite films on FTO were recorded with a Shimadzu UV-2550 spectrophotometer. Surface morphology, elemental composition, and elemental mapping were examined using a Zeiss field-emission scanning electron microscope (FE-SEM) operated at 20 kV. Film thicknesses were measured with a KLA-Tencor surface profilometer. Steady-state photoluminescence (PL) spectra were collected on a Horiba Fluorolog spectrometer equipped with a 532 W xenon lamp. Raman spectra were recorded using a Renishaw inVia spectrometer (532 nm excitation). Fourier-transform infrared (FTIR) spectra were recorded using a PerkinElmer Spectrum 400 spectrometer equipped with a diamond attenuated total reflectance (ATR) accessory. A background spectrum of the clean, empty ATR crystal was collected before sample measurement and subtracted automatically by the instrument software. No post-acquisition atmospheric compensation for water vapor or CO2 was applied. External quantum efficiency (EQE) measurements were performed using an Enli Technology QE-R system. Current density–voltage characteristics were recorded using a Keithley 2400 source meter under simulated AM1.5G illumination at 100 mW cm−2. Both scan directions were measured in a single continuous sweep cycle over the range −0.24 to 1.19 V at a scan rate of 0.286 V s−1 with no settling delay between the voltage step and the current measurement, and identical conditions were applied to all devices. Measurements were performed through a metal aperture mask defining the active area. The hysteresis index was calculated as HI = (PCE reverse − PCE forward)/PCE reverse.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0023",
+   "section": "3. Results and Discussion",
+   "text": "X-ray diffraction (XRD) analysis was employed to elucidate the crystallographic structure, phase purity, and microstructural evolution of MAPbI3 thin films in the presence of different COF additives. Figure 3 compares the diffraction patterns of pristine MAPbI3 with those of MAPbI3 films doped with low concentrations of COFs derived from DMTH, Boc-PDA, and Tp. All samples exhibit a consistent set of well-defined reflections at 2θ ≈ 14.26°, 20.04°, 22.95°, 24.53°, 28.04°, 31.92°, 34.05°, 40.24°, 43.12°, and 50.13°, which can be indexed to the (110), (112), (202), (211), (220), (310), (321), (224), (314), and (404) planes of the tetragonal MAPbI3 phase (ICDD 01-084-2960) [40,41]. The absence of additional peaks, particularly the PbI2 (001) reflection at ~12.7° or any broad amorphous features, confirms that the incorporation of COFs does not generate detectable secondary phases or disrupt the perovskite framework within the resolution of our measurements. This is a critical result: it demonstrates that the COF additives, at the concentrations used here, are structurally compatible with MAPbI3 and can be used to manipulate crystallization without sacrificing phase purity. Beyond phase identification, the XRD patterns provide quantitative insight into how COF chemistry influences the crystallization kinetics, crystalline coherence, and lattice strain of MAPbI3.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0024",
+   "section": "3. Results and Discussion",
+   "text": "The lattice parameters, the crystallite size (D) calculated from the (220) peak, and microstrain (ϵ), of perovskite films were estimated using the following equation reported elsewhere [42,43,44]:(1)D = 0.9λ / (β cos θ)(2)ε = β / (4 tan θ)(3)d = λ / (2 sin θ)(4)1 / d2 = (h2 + k2) / a2 + l2 / c2 where λ is the X-ray wavelength (0.15406 nm), θ is the Bragg angle (in radians; here evaluated near θ ≈ 28.5°), β is the FWHM (in radians) of the chosen diffraction peak, and (hkl) are the Miller indices corresponding to the tetragonal lattice parameters a and c. The quantity D obtained from Equation 1 is the coherent scattering domain size, that is, the length scale over which the lattice diffracts as a single periodic unit and is distinct from the physical grain size determined below by FE-SEM. Values of D are uncorrected for instrumental broadening. D and ε are estimated here under the limiting assumptions of size-only and strain-only broadening, respectively, and are therefore indicative parameters rather than a full deconvolution of the two contributions. The extracted lattice parameters, FWHM values, crystallite sizes, and microstrain for all samples are summarized in Table 1.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0025",
+   "section": "3. Results and Discussion",
+   "text": "The lattice parameters remain essentially invariant across all samples, with (a ≈ 8.895) Å and (c ≈ 12.758) Å, confirming that the introduction of Tp, Boc-PDA, or DMTH does not alter the average tetragonal MAPbI3 crystal structure. By contrast, the FWHM, crystallite size (D), and microstrain ε show a clear and systematic dependence on COF chemistry. Pristine MAPbI3 exhibits a relatively broad FWHM of 0.23°, corresponding to an average crystallite size of 35.6 nm and a microstrain of 3.56 × 10−3. Upon incorporation of Tp-COF, the FWHM decreases to 0.18°, and the crystallite size increases to 45.49 nm, accompanied by a reduction in microstrain to 2.76 × 10−3. Boc-PDA-COF further improves these parameters, yielding (D = 48.17) nm and ε = 2.53 × 10−3 (FWHM = 0.17°). The most pronounced effect is observed for the DMTH-modified film, which displays the narrowest peak (FWHM = 0.15°), the largest crystallite size (54.59 nm), and the lowest microstrain (2.26 × 10−3). The crystallite sizes obtained here, 35.6–54.6 nm, are an order of magnitude smaller than the mean grain sizes of 0.36–1.00 μm determined by FE-SEM in the following section, as expected since each grain accommodates multiple coherently diffracting domains. Both quantities increase in the same order across the additive series, indicating that the COFs enlarge the grains and improve the crystalline coherence within them at the same time.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0026",
+   "section": "3. Results and Discussion",
+   "text": "This systematic evolution, characterized by larger crystallite size (D) and smaller microstrain (ε) from pristine MAPbI3 to Tp-, Boc-PDA-, and finally DMTH-modified films, provides strong quantitative evidence that COF chemistry governs MAPbI3 crystallization kinetics and defect formation. The Tp-based system already acts as an effective scaffold, promoting more coherent crystalline growth and partially relaxing lattice distortion. Introducing Boc-PDA further enriches the framework with amino functionality, enhancing interactions with PbI2/MAI species and leading to a further increase in crystallite size and strain relief. DMTH-COF, which combines methoxy-substituted aromatic rings with hydrazide groups, exerts the strongest effect: its richer coordination and hydrogen-bonding environment most effectively regulates nucleation and supports the growth of larger, more ordered perovskite domains with minimal residual strain. The XRD and extracted microstructural parameters show that all three COFs preserve the tetragonal MAPbI3 phase while progressively sharpening the diffraction peaks, enlarging the crystallites, and reducing microstrain. Among them, DMTH-COF stands out as the most efficient crystallization regulator, delivering the largest coherent domain size and the lowest lattice distortion. This structural optimization, namely phase-pure tetragonal MAPbI3 with enlarged grains and reduced microstrain, provides the crystallographic foundation for the improved photophysical properties and device performance observed in the subsequent PL and photovoltaic measurements [45].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0027",
+   "section": "3. Results and Discussion",
+   "text": "Raman spectroscopy was employed to probe how COF additives affect the molecular and lattice dynamics of MAPbI3, complementing the XRD analysis of long-range order. Spectra were collected using a confocal Raman microscope with a 532 nm laser (200 mW) in the 0–500 cm−1 range, which captures the key inorganic framework vibrations and MA+-related modes while avoiding strong substrate contributions. Figure 4 compares the Raman response of pristine MAPbI3 with that of films prepared with DMTH, Boc-PDA, and Tp-based COFs. In all cases, the spectra exhibit characteristic low-wavenumber bands that are consistent with the tetragonal MAPbI3 phase reported in the literature [46,47]. The Raman spectra are dominated in the low-wavenumber region by distinct features at approximately 36, 54, 83, and 112 cm−1 [48,49,50]. These bands arise mainly from Pb–I stretching and bending vibrations within the corner-sharing [PbI6]4− octahedral framework, together with lattice modes involving coupled displacements of the MA+ cations [48]. The preservation of these sharp, phase-specific vibrational signatures, together with the absence of additional peaks associated with PbI2 or other degradation products, is fully consistent with the XRD results and confirms that all COF-treated films retain the tetragonal MAPbI3 perovskite structure. Although the overall vibrational fingerprint of MAPbI3 is preserved, careful inspection reveals systematic COF-induced modifications in both peak position and line shape.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0028",
+   "section": "3. Results and Discussion",
+   "text": "In particular, the Pb–I lattice modes shift progressively toward lower wavenumbers in the COF-treated films. To quantify this, each band was fitted with a Lorentzian profile over an identical spectral window for all four samples, and the extracted positions are given in Table 2.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0029",
+   "section": "3. Results and Discussion",
+   "text": "Lorentzian fitting was performed to quantify the positions of the selected low-wavenumber Raman bands (Table 2). The lower-frequency mode was located at 58.22 cm−1 for pristine MAPbI3 and shifted to 55.97, 55.44, and 54.71 cm−1 after modification with Tp, Boc-PDA, and DMTH, respectively. The corresponding red shifts were 2.25, 2.78, and 3.51 cm−1. Similarly, the higher-frequency mode shifted from 121.88 cm−1 for the pristine film to 119.93, 118.17, and 115.88 cm−1 for the Tp-, Boc-PDA-, and DMTH-modified films, respectively. These shifts are consistent with modification of the local Pb–I vibrational environment and may reflect changes in lattice strain, bonding interactions, or the electrostatic environment surrounding the PbI6 octahedra [47]. Their magnitudes follow the same ordering as the crystallite size and microstrain from XRD and the grain size from FE-SEM, providing independent vibrational evidence for the progressive relaxation of the Pb–I framework.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0030",
+   "section": "3. Results and Discussion",
+   "text": "The relative changes among the three COFs are particularly revealing. The 36 and 83 cm−1 features were not analyzed quantitatively; the former, because it does not follow a consistent trend across the series and the latter because its low intensity and overlap with the 112 cm−1 mode preclude a reliable fit. The Tp-modified film already exhibits a modest narrowing and slight intensity enhancement of the lattice modes compared to the pristine reference, suggesting that even a relatively rigid, less functionalized COF can improve vibrational coherence. The Boc-PDA-COF system further sharpens the Pb–I features and strengthens the modes associated with MA+ libration, which is consistent with amino-containing linkers interacting more directly with the organic cations [51]. The DMTH-containing films show the most pronounced effects, with the largest narrowing and the strongest intensity increase in the mixed Pb–I–MA region. This behavior can be attributed to the richer hydrogen-bonding and coordination landscape provided by the methoxy and hydrazide groups in DMTH-COF, which are well suited to interact simultaneously with the inorganic framework and the MA+ cations [52]. These interactions likely damp large-amplitude MA+ reorientations and reduce dynamic disorder at grain boundaries, leading to a more coherent vibrational response.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0031",
+   "section": "3. Results and Discussion",
+   "text": "The Raman data provide molecular-level support for the proposed COF-assisted crystallization mechanism. The preservation of phase-specific modes indicates that the perovskite lattice is not disrupted by COF incorporation. The red shifts and peak sharpening demonstrate that COFs relieve local strain and suppress vibrational disorder, in agreement with the larger crystallite sizes and lower microstrain extracted from XRD. Among the three systems, DMTH-COF stands out as the most effective modifier of the vibrational landscape, which aligns with its superior impact on grain growth and defect suppression. These spectroscopic signatures strongly suggest that COFs act as static structural templates during film formation and also as dynamic modulators of lattice and cation motions. This dual role is highly relevant for device performance, since reduced vibrational disorder and stabilized MA+ dynamics are expected to lower non-radiative recombination, hinder ion migration, and ultimately contribute to the enhanced photostability and efficiency observed in the corresponding solar cells [53].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0032",
+   "section": "3. Results and Discussion",
+   "text": "To elucidate how COF incorporation modifies the microstructure of MAPbI3, we examined the surface morphology of the perovskite films by field-emission scanning electron microscopy, as shown in Figure 5. All samples were prepared by spin-coating on TiO2-based substrates under identical conditions, with low loadings of COFs chosen to promote crystallization while preserving the underlying perovskite lattice. The COFs studied here, DMTH, Boc-PDA, and Tp, are relatively under-explored in the context of perovskite thin films, which allows us to directly assess their potential as morphology-directing additives. The pristine MAPbI3 film (Figure 5a) exhibits a compact but fine-grained morphology, with grains averaging around 360 nm. Although the surface coverage is reasonably uniform, the high density of grain boundaries and the presence of small voids and irregular grain shapes are evident. Such features are typically associated with elevated densities of grain-boundary defects, which can act as non-radiative recombination centers and scattering sites, limiting carrier mobility and diffusion length in photovoltaic devices [54].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0033",
+   "section": "3. Results and Discussion",
+   "text": "Upon incorporation of COF additives, the morphology changes dramatically. The Tp-doped film (Figure 5b) shows grains that have grown to roughly 670 nm on average, with improved grain coalescence and fewer visible intergranular gaps. Boc-PDA-COF further accentuates this trend (Figure 5c), producing grains of about 910 nm, as well as a noticeably smoother and more continuous surface. The most pronounced effect is observed for DMTH-COF (Figure 5d), where the average grain size reaches about 1 µm, corresponding to more than a threefold increase compared to the pristine film. In this case, the surface is dominated by large, faceted grains with well-defined boundaries, and the film appears nearly pinhole-free at the micron scale. These systematic morphological changes indicate that the COFs strongly influence the nucleation and growth kinetics of MAPbI3. The enlarged grains and reduced boundary density suggest that COFs act as crystallization regulators or soft templates during film formation [55]. Mechanistically, this behavior can be rationalized by the functional groups and porous architectures intrinsic to these COFs. The hydrazide and imine (C=N) functionalities provide coordination sites for Pb2+ species, while amino and methoxy groups can form hydrogen bonds with MA+ cations or halide anions [56,57]. Such interactions are expected to moderate the rate of nucleation, promote the growth of fewer but larger nuclei, and stabilize the evolving grain boundaries [58]. At the same time, the porous and π-conjugated networks of the COFs likely facilitate more uniform solvent evaporation and enhance mass transport during the crystallization step, which further supports the formation of large, well-connected grains [59].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0034",
+   "section": "3. Results and Discussion",
+   "text": "Incorporation of COFs therefore affects the geometric microstructure and the defect landscape. Fewer grain boundaries and smoother interfaces imply a lower density of undercoordinated Pb2+ and halide vacancies at the surface and interfaces [60]. The coordination bonding between COF C=N groups and Pb2+ ions, coupled with hydrogen bonding between COF −NH2 groups and halides, can effectively passivate both shallow and deep traps at and near grain boundaries [61]. This structural passivation is consistent with the observed narrowing of XRD peaks and reduced microstrain. From a device standpoint, the grain enlargement and improved surface quality induced by COF additives are expected to have several beneficial consequences. Larger grains and fewer boundaries reduce non-radiative recombination pathways, allowing photogenerated carriers to travel longer distances before recombination, which should enhance charge collection and increase open-circuit voltage [62]. Better grain connectivity and reduced porosity facilitate more efficient charge transport across the perovskite layer, which can translate into higher fill factors and improved device performance [63]. Additionally, the partial hydrophobic character introduced by certain COF moieties, particularly in the DMTH-modified films, may help to improve environmental stability by limiting moisture ingress along grain boundaries [64]. Importantly, the use of DMTH, Boc-PDA, and Tp as direct dopants inside the perovskite layer represents a distinct approach compared with most previous studies, which have concentrated on more conventional imine-linked COFs used mainly at interfaces or as surface passivation layers [65,66]. Here, the COFs actively guide bulk film formation and microstructure rather than only decorating the surface. The FE-SEM results thus provide direct visual evidence that COF chemistry can be harnessed to engineer the grain-scale architecture of MAPbI3, laying a structural foundation for the improved optoelectronic properties and photovoltaic performance that will be discussed in the following sections.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0035",
+   "section": "3. Results and Discussion",
+   "text": "Figure 6 shows the grain size distributions of COF-modified MAPbI3 films and quantitatively confirms the strong grain-growth effect inferred from the FE-SEM images. The histograms were obtained by measuring individual grains from plan-view FE-SEM micrographs and plotting the frequency of occurrence as a function of equivalent grain diameter for MAPbI3 films doped with (a) Boc-PDA-COF and (b) DMTH-COF. In both cases, the distributions exhibit the characteristic positive skew typical of solution-processed perovskites and are well described by lognormal fits, indicating that nucleation and growth follow a multiplicative process. The Boc-PDA-COF film displays a mean grain size of approximately 0.91 μm, with the majority of grains clustered around 0.6–0.8 μm and relatively few sub-500 nm crystallites, indicating efficient suppression of excessive nucleation and enhanced grain coalescence. The DMTH-COF film shows an even more pronounced shift toward larger grains, with a mean diameter near 1.0 μm and a distribution that is both broadened toward larger sizes and depleted of small grains. This evolution of the lognormal parameters between Boc-PDA-COF and DMTH-COF provides strong evidence that COF chemistry systematically modulates the statistics of MAPbI3 grain growth: DMTH-COF, with its more strongly coordinating hydrazide and methoxy functionalities, promotes fewer nucleation events and more extensive lateral growth per nucleus, yielding a microstructure dominated by large, well-connected grains and a significantly reduced grain-boundary density.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0036",
+   "section": "3. Results and Discussion",
+   "text": "To evaluate the elemental composition and spatial distribution within the DMTH-COF-modified MAPbI3 film, we conducted energy-dispersive X-ray spectroscopy (EDX). The summed spectrum (Figure 7b) is dominated by characteristic iodine and lead emissions, yielding atomic fractions of 74.31% I and 24.25% Pb. The resulting Pb:I ratio of 1:3.06 aligns closely with the nominal 1:3 stoichiometry of MAPbI3, confirming that the COF additive does not disrupt the bulk inorganic framework [67]. This compositional stability is critical: deviations from ideal stoichiometry typically generate halide vacancies or metallic lead clusters, both of which act as deep trap states and exacerbate non-radiative recombination. Consequently, the enhanced carrier lifetime and device performance cannot be attributed to compositional shifts in the bulk perovskite, but rather to the structural and interfacial improvements identified via our diffraction and morphological analyses. The elemental maps further demonstrate that this near-ideal stoichiometry is uniform across the film’s microstructure. Both iodine and lead signals (Figure 7c,d) are distributed continuously across the grain interiors and boundaries. We observe no regions of halide depletion or lead enrichment, which would indicate halide segregation or PbI2 accumulation at the grain edges.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0037",
+   "section": "3. Results and Discussion",
+   "text": "The absence of such segregation is consistent with the XRD data, where no residual PbI2 reflection was detected at 12.7°, confirming that the enlarged grains induced by the COF remain compositionally homogeneous. Signals for nitrogen (1.11 at.%) and oxygen (0.33 at.%) were also detected, and their corresponding maps (Figure 7e,f) show a uniform distribution across the imaged area. Because light elements are notoriously difficult to quantify accurately by EDX due to severe self-absorption and low detector efficiency at the low energies of the N Kα (0.392 keV) and O Kα (0.525 keV) lines, these absolute values should be treated as qualitative. However, the spatial mapping is highly informative: the lack of localized N or O accumulation confirms that the additive does not aggregate into discrete, phase-separated organic domains. Instead, the COF remains homogeneously dispersed throughout the film. Together, these results indicate that the additive facilitates uniform crystallization and surface passivation without perturbing the phase purity or bulk composition of the perovskite absorber.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0038",
+   "section": "3. Results and Discussion",
+   "text": "Water contact angle measurements were performed to quantitatively examine how COF doping modifies the surface wettability and, by implication, the surface energy and moisture affinity of MAPbI3 thin films. Because MAPbI3 degradation is strongly accelerated by humidity and frequently initiates at exposed surfaces and grain boundaries [68], even relatively small changes in surface hydrophilicity or hydrophobicity can have a disproportionate impact on long-term stability and interfacial reliability in devices [69]. In this work, three COF-type organic additives based on DMTH, Boc-PDA, and Tp were incorporated into MAPbI3, and their influence on WCA was systematically compared with that of undoped MAPbI3. The WCA analysis therefore provides a direct, macroscopic probe of how COFs alter the outermost surface chemistry and morphology, linking microstructural changes observed by FE-SEM and XRD to the improvements in device performance and stability.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0039",
+   "section": "3. Results and Discussion",
+   "text": "All WCA measurements were carried out using the sessile-drop method on a contact angle goniometer. MAPbI3 and MAPbI3–COF films (MAPbI3–Tp, MAPbI3–Boc-PDA, and MAPbI3–DMTH) were deposited on identically cleaned TiO2/FTO substrates, employing the same precursor concentration, spin parameters, antisolvent timing, and annealing protocol described in the experimental section. A microsyringe was used to gently place small droplets (4 µL) of deionized water onto the film surface without mechanically disturbing the perovskite layer. Representative droplet profiles are shown in Figure 8. The pristine MAPbI3 film (Figure 8a) exhibits a moderate an average contact angle of 65.3°, corresponding to partial wetting and a surface that is neither strongly hydrophilic nor strongly hydrophobic. This behavior is consistent with the mixed ionic and organic nature of MAPbI3 and the presence of polar methylammonium cations and undercoordinated ions at the surface [70]. While such an intermediate WCA favors wetting by typical solution-processed transport layers, it also leaves the surface vulnerable to water adsorption from ambient air, which can initiate hydrolysis and decomposition [71]. This pristine WCA therefore serves as a meaningful baseline for assessing the effect of COF incorporation.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0040",
+   "section": "3. Results and Discussion",
+   "text": "When Tp-based COF is introduced (Figure 8b, MAPbI3–Tp), the water droplet becomes slightly more spherical, and the contact angle increases to about 71.1°. This change reflects a modification of the surface free energy, likely due to the presence of aromatic rings and keto/enolic groups in the Tp-derived network that partially shield polar sites at the perovskite surface or at grain boundaries [72]. Even this modest increase suggests that the COF is not confined to the film interior but influences the near-surface region, either through surface segregation or preferential decoration of grain boundaries that intersect the surface. A more pronounced effect is seen for the film doped with Boc-PDA-derived COF (Figure 8c, MAPbI3–Boc-PDA), where the WCA rises to approximately 78.7°. The Boc-PDA-COF motif introduces bulky aromatic and urethane-like groups that can reorient at the film–air interface and alter local packing [73]. The higher WCA indicates a more hydrophobic surface, which reduces direct contact between water molecules and polar perovskite sites. Combined with FE-SEM evidence of smoother, denser morphologies and XRD indications of improved crystallinity, this increase in WCA supports the interpretation that Boc-PDA-based COF effectively passivates surface defects and grain boundaries, thereby limiting moisture access to reactive sites and contributing to enhanced stability.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0041",
+   "section": "3. Results and Discussion",
+   "text": "The most dramatic change in wettability is observed for the DMTH-containing film (Figure 8d, MAPbI3–DMTH), where the WCA reaches approximately 96°. The significantly more spherical droplet profile reveals a highly hydrophobic surface compared to the pristine and other COF-modified films. Given the functional architecture of DMTH-COF, which combines methoxy and hydrazide groups within a conjugated framework, this strong hydrophobic response can be attributed to a combination of topographical smoothing, partial coverage of hydrophilic perovskite sites by the COF, and reorientation of less polar COF moieties toward the outer surface [74]. The concomitant microstructural improvements seen in FE-SEM for DMTH-doped films, including large, well-coalesced grains with minimal pinholes, further reinforce the view that DMTH-COF not only regulates bulk crystallization but also significantly reorganizes the surface region. The series of WCA images and corresponding values reveal a clear, monotonic tuning of surface wettability with COF chemistry. Relative to pristine MAPbI3, all three COF-doped films exhibit higher contact angles, confirming that COF addition is an effective strategy for increasing the hydrophobic character of the perovskite surface. This trend is particularly pronounced for DMTH-COF, which yields a hydrophobic surface regime. When these results are considered alongside FE-SEM (denser, larger grains), XRD (enlarged crystallites and reduced microstrain), PL (enhanced radiative recombination and reduced non-radiative loss), and device performance data (higher Jsc, FF, PCE, together with improved operational stability), a coherent picture emerges. COF additives simultaneously refine the bulk microstructure and engineer the outermost surface to be less accessible to moisture and other environmental stressors [75]. The WCA measurements therefore provide an essential mechanistic link between molecular-scale surface modification by COFs and the macroscopic gains in efficiency and durability observed in MAPbI3 perovskite solar cells.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0042",
+   "section": "3. Results and Discussion",
+   "text": "UV–Vis spectrophotometry was employed to elucidate how COF additives influence the optical response and band structure of MAPbI3 thin films. Absorbance spectra were recorded using a double-beam spectrophotometer over 400–900 nm with a 1 nm resolution. All films examined by UV–Vis spectroscopy were prepared using the same perovskite precursor concentration and an identical additive concentration of 0.5 mg mL−1, under the same deposition and annealing conditions, allowing direct comparison of their measured spectra. The four spectra coincide below the absorption edge and separate only above it, confirming that the differences in absorbance arise from the optical response of the films rather than from any difference in thickness or absorber loading. As shown in Figure 9, all spin-coated films exhibit strong absorption across the visible spectrum with a pronounced onset near 750–780 nm, consistent with the direct bandgap transition of MAPbI3 arising from electronic transitions between valence-band states derived primarily from I 5p and Pb 6s orbitals and conduction-band states dominated by Pb 6p orbitals [76,77]. The high absorbance in this region reflects the intrinsically large absorption coefficient of hybrid lead halide perovskites [78]. The pristine MAPbI3 film presents a relatively sharp absorption edge and smooth spectral profile. Upon incorporation of Tp, Boc-PDA, and DMTH-based COFs, the overall absorbance in the visible range increases while the absorption edge remains unchanged. Among the modified samples, the DMTH-containing film displays the highest absorbance over a broad wavelength range. This enhancement can be attributed to improved film coverage and crystallinity, as corroborated by FE-SEM and XRD, and to additional electronic interactions between the π-conjugated COF and the perovskite lattice that increase the effective oscillator strength and reduce scattering losses [79].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0043",
+   "section": "3. Results and Discussion",
+   "text": "To quantify the impact on the optical bandgap, the absorption data were analyzed using Tauc plots for direct-bandgap semiconductors, according to(5)(αhν)n = A(hν − Eg) where α = Absorption coefficient, h = Planck’s constant, ν = Frequency, n = Exponent related to the transition type, A = Constant, and Eg = Band gap energy. Extrapolation of the linear region of ((αhν)2) versus (hν) gives bandgap values of 1.567 eV for pristine MAPbI3, 1.567 eV for the Tp-doped film, 1.567 eV for the Boc-PDA-doped film and 1.560 eV for the DMTH-doped film, equal to within 7 meV (inset of Figure 9). The absorption onset is therefore unaffected by COF incorporation, as expected for additives too large to be accommodated on a lattice site, and consistent with the invariant tetragonal lattice parameters reported in Table 1.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0044",
+   "section": "3. Results and Discussion",
+   "text": "These optical trends are significant for several reasons. First, the preservation of a sharp absorption onset and the absence of additional sub-bandgap features confirm that COF incorporation does not generate optically active defect phases, which is consistent with the phase-pure XRD patterns and clean vibrational signatures seen in the Raman data. Second, the increased absorbance across the visible range reflects improved film coverage and crystallinity, which enhances photon harvesting within the same spectral window and contributes to the higher short-circuit current density [80]. Third, the strongest effects are observed for the DMTH-modified film, which is consistent with its superior structural and vibrational characteristics. The methoxy and hydrazide functionalities in DMTH-COF are expected to donate electron density and form hydrogen bonds at the perovskite surface, stabilizing the lattice and slightly perturbing the band edges. The combination of higher absorbance, an unchanged bandgap and maintained spectral cleanliness reflects a favorable modification of the perovskite morphology without alteration of its electronic structure. These optical improvements, when considered together with the enlarged grain sizes, reduced microstrain, and more coherent lattice dynamics, point to a coherent picture in which COF-engineered MAPbI3 films are better suited to high-efficiency and potentially more stable perovskite solar cells, with improved visible-light absorption.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0045",
+   "section": "3. Results and Discussion",
+   "text": "Photoluminescence spectroscopy provides a direct probe of radiative and non-radiative recombination processes in perovskite absorbers and is therefore a sensitive indicator of defect density, trap passivation, and carrier dynamics. Here, steady-state PL measurements were performed on MAPbI3 films spin-coated onto compact/mesoporous TiO2 substrates, with emission collected between 550 and 1000 nm under 532 nm excitation. Figure 10 compares the PL response of pristine MAPbI3 with that of films incorporating DMTH, Boc-PDA, and Tp-based COFs. All three films were prepared at the same additive loading and film thickness and measured under identical excitation conditions, so the absorbed photon flux is comparable across the series. All samples display a dominant emission peak in the 750–800 nm region, consistent with band-edge recombination in tetragonal MAPbI3 [81]. All spectra exhibit a single, intense emission band centered around 772 nm (approximately 1.6 eV), in excellent agreement with the optical bandgap extracted from UV–Vis measurements.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0046",
+   "section": "3. Results and Discussion",
+   "text": "The nearly invariant PL peak position therefore indicates that Tp, Boc-PDA, and DMTH do not substantially alter the fundamental bandgap of MAPbI3. Accordingly, the differences in the apparent Tauc bandgaps are interpreted as variations in the near-edge optical response rather than evidence of pronounced bandgap narrowing. The observed changes in PL intensity are more reasonably associated with changes in defect-mediated non-radiative recombination and film quality [82]. Furthermore, the absence of secondary peaks or shoulders and the nearly Gaussian line shape indicate minimal contributions from phase impurities, self-trapped excitons, or strong photon reabsorption [83]. This clean, unimodal profile is fully consistent with the phase-pure tetragonal MAPbI3 structure established by XRD and the well-defined vibrational fingerprints observed in Raman spectra. The most striking feature in Figure 10 is the systematic enhancement of PL intensity upon COF incorporation. Relative to pristine MAPbI3, all COF-treated films show significantly higher PL, with the strongest emission observed for the DMTH-modified film, followed by Boc-PDA-COF and then Tp-COF. Since the emission peak position remains essentially unchanged, this increase in PL intensity can be attributed primarily to a reduction in non-radiative recombination pathways [84]. The COF additives improve the internal radiative efficiency of the perovskite by passivating electronic defects that would otherwise act as non-radiative recombination centers. These spectroscopic indications align closely with the structural and morphological trends identified in the previous sections. Structural analysis revealed that COF-treated films possess larger crystallite sizes and lower microstrain than pristine MAPbI3, particularly in the DMTH-COF case. FE-SEM images showed more compact, well-coalesced grains with fewer pinholes for COF-modified films. Such structural improvements are expected to decrease the density of undercoordinated Pb2+ and halide vacancies at grain boundaries, which are known to act as deep traps [85]. The enhanced PL intensity is therefore consistent with a scenario in which COFs, and especially the hydrazide and methoxy functionalities in DMTH-COF, coordinate to undercoordinated Pb2+ sites and participate in hydrogen bonding with MA+ cations, thereby passivating traps and suppressing non-radiative losses [86].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0047",
+   "section": "3. Results and Discussion",
+   "text": "From a device perspective, these PL results are highly relevant. High steady-state PL under open-circuit-like conditions is characteristic of high-quality perovskite absorbers with low non-radiative recombination, which typically correlates with higher open-circuit voltage and improved power conversion efficiency. In operational devices, efficient charge extraction at short circuit leads to PL quenching; thus, the combination of strong PL in stand-alone films and strong quenching in complete devices is a hallmark of optimal absorber/transport-layer coupling [87]. The pronounced PL enhancement in the DMTH-containing films therefore foreshadows the superior photovoltaic performance and stability observed for these devices.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0048",
+   "section": "3. Results and Discussion",
+   "text": "Fourier-transform infrared spectroscopy was used to probe chemical interactions between the COFs (DMTH, Boc-PDA, and Tp-based frameworks) and the MAPbI3 lattice at the molecular level. Because the organic sublattice of MAPbI3 plays a central role in hydrogen bonding, ion migration, and structural stability [88], even subtle changes in the vibrational signatures of CH3NH3+ and COF functional groups can reveal how these additives reorganize the local bonding environment and help stabilize the perovskite. Figure 11 shows the FTIR spectra of pristine and COF-modified MAPbI3 films over the mid-IR range. The reference MAPbI3 film displays the expected vibrational fingerprint. The methylammonium (CH3–NH3+) rocking mode appears near 851 cm−1 [89], while prominent C–N stretching modes are observed at approximately 1021 and 1135 cm−1 [90]. A further band arising from the methylammonium cation is detected around 1215 cm−1, and a well-defined N–H bending mode of the ammonium group is located near 1512 cm−1 [46]. At higher wavenumbers, weak features are observed near 1857 and 2091 cm−1. Because the CH3NH3PbI3 lattice contains neither carbonyl nor nitrile functional groups, these features are not assigned to intrinsic C=O or C≡N stretching vibrations of the perovskite [91]. They appear at the same positions and with comparable intensity in all four spectra, including the pristine reference, and lie within the region in which the underlying glass substrate absorbs through Si–O overtone and combination modes [92]. They are therefore attributed to a residual contribution from the underlying glass substrate and are excluded from the structural interpretation of the films. The band near 2372 cm−1 is attributed to the asymmetric stretching vibration of atmospheric CO2 [93]. Its presence is consistent with the fact that no post-acquisition atmospheric correction was applied to the ATR-FTIR spectra.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0049",
+   "section": "3. Results and Discussion",
+   "text": "A broad asymmetric N–H stretching envelope centered around 3190 cm−1 reflects the hydrogen-bonding environment of MA+ within the Pb–I framework [94]. Upon incorporation of COFs, these bands do not disappear or split into new impurity-related features, which indicates that the fundamental perovskite lattice is preserved. Instead, the spectra exhibit systematic shifts in peak positions and changes in relative intensity that can be directly linked to COF–perovskite interactions. All three COF-modified films show noticeable variations in the CH3–NH3+-related modes (rocking, bending, and C–H stretching) and in the C–O and C=O bands. For example, the N–H bending band near 1512 cm−1 slightly shifted and sharpened in the presence of COFs. These shifts are consistent with a change in the hydrogen-bonding strength between MA+ and surrounding iodide ions, as well as with additional hydrogen bonds and weak coordination involving COF functional groups such as hydrazides, Boc-protected amines, and aromatic carbonyls [95].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0050",
+   "section": "3. Results and Discussion",
+   "text": "In the DMTH-modified film, for instance, the C–O and C=O bands show small but reproducible shifts and intensity changes, consistent with partial coordination of the hydrazide and methoxy groups to undercoordinated Pb2+ centers and with altered hydrogen-bonding networks involving MA+ and halides [96]. Similar, though less pronounced, trends are observed for Boc-PDA- and Tp-based films, indicating that all three COFs participate in interfacial interactions but with different strengths and geometries. The broad N–H stretching region around 3190 cm−1 is particularly informative. In pristine MAPbI3, the breadth of this band reflects a distribution of hydrogen-bond strengths between MA+ and iodide (N+–H···I) [97]. Any narrowing or shift in this band upon COF doping points to a more uniform and possibly stronger hydrogen-bonding environment, which is expected to suppress dynamic disorder of the organic cation and reduce the formation of defect-related local environments. The attenuation or modification of certain NH3+ stretching components in COF-containing samples can be interpreted as a consequence of additional N–H···O or N–H···N interactions introduced by the COFs, which partially redistribute the hydrogen-bonding network away from purely MA+–I− contacts [95].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0051",
+   "section": "3. Results and Discussion",
+   "text": "These molecular-level signatures are fully consistent with the broader structural and optoelectronic trends observed in this study. COF incorporation produces larger grains with lower microstrain and smoother, denser films, along with stronger band-edge emission, reduced non-radiative recombination, an unchanged bandgap and enhanced optical absorption. The FTIR evidence of modified CH3NH3+ and C–O/C=O vibrational environments provides the chemical basis for these observations: COFs interact with the perovskite at the grain boundaries and surfaces, coordinating to undercoordinated Pb2+ and participating in hydrogen bonding with MA+ and halides [98]. In doing so, they passivate traps, stabilize the organic–inorganic interface, and suppress vibrational and structural disorder, without disrupting the core PbI6 framework.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0052",
+   "section": "3. Results and Discussion",
+   "text": "X-ray photoelectron spectroscopy (XPS) was used to verify the presence of the DMTH-COF additive after thermal annealing and to evaluate its chemical interaction with the perovskite lattice. Figure 12 displays the high-resolution core-level spectra for both pristine and modified films. The pristine sample shows the I 3d doublet at 619.5 eV (I 3d5/2) and 630.8 eV (I 3d3/2). Incorporation of COF shifts these peaks to 619.8 eV and 631.4 eV, respectively, while the spin–orbit splitting remains approximately 11.6 eV [99]. The Pb 4f spectra exhibit a parallel shift: pristine peaks at 139.1 eV and 143.9 eV move to 139.2 eV and 144.1 eV in the modified film. The spin–orbit splitting stays at ~4.9 eV, and the absence of a signal near 136.8 eV confirms the strict preservation of the Pb2+ state [100]. The uniform shift in both Pb and I core levels, without changes to their splitting, indicates a surface Fermi level shift driven by the electron-donating COF rather than altered Pb–I covalency. The bulk halide sublattice therefore remains intact.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0053",
+   "section": "3. Results and Discussion",
+   "text": "The N 1s spectra confirm the additive’s retention. The pristine film exhibits a single peak at 402.3 eV from the protonated methylammonium (MA+) cation [101]. After modification, the (MA+) peak is shifted to 401.9 eV and a clear second component appears at 399.7 eV. This new feature, 2.2 eV below the ammonium peak, is consistent with a less positively charged nitrogen environment and is therefore assigned to the hydrazide/hydrazone nitrogens in the DMTH framework [102]. Its presence confirms that the organic framework survives the 110 °C anneal. To decouple local chemical effects from uniform surface charging, the internal energy separation between the N 1s and I 3d5/2 core levels was evaluated. This gap increases by 0.7 eV, from 217.2 eV (pristine) to 217.9 eV (modified). This relative shift, combined with the displacement of the MA+ peak, shows that the additive chemically interacts with the perovskite rather than forming a segregated organic phase. The C 1s spectra show only a minor shift from 286.5 eV to 286.6 eV, as expected given the overlap between the dominant MA+ signal and the low-concentration COF (0.063 wt%). The XPS data establish that the DMTH-COF remains within the film, chemically couples to the perovskite at the surfaces or grain boundaries, and leaves the bulk Pb–I structural framework unperturbed. This surface-localized interaction supports the proposed passivation mechanism, explaining the suppressed non-radiative recombination without compromising the bulk lattice integrity.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0054",
+   "section": "3. Results and Discussion",
+   "text": "The energy level diagram in Figure 13 illustrates the charge-extraction pathways in the perovskite solar cell, with a particular focus on the offsets along the hole-transport route. The energy levels shown in Figure 13 are based on literature values and electrochemical estimates rather than direct UPS/KPFM measurements, and are used to illustrate a plausible band-alignment scenario rather than to provide exact work-function values [103]. In the reference stack, the MAPbI3 conduction band minimum (CBM, ≈−3.93 eV) aligns reasonably well with the TiO2 CBM (≈−4.2 eV), which supports efficient electron extraction toward the FTO contact [104]. On the hole side, the MAPbI3 valence band maximum (VBM, ≈−5.43 eV) is offset from the Spiro-OMeTAD HOMO (≈−5.2 eV) and the Au work function (≈−5.1 eV) [105]. This offset of 0.23 eV between the perovskite VBM and the Spiro-OMeTAD HOMO is favorably oriented for hole extraction while remaining small enough to limit the associated energy loss.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0055",
+   "section": "3. Results and Discussion",
+   "text": "DMTH-COF is incorporated within the MAPbI3 absorber rather than as a discrete layer and therefore does not contribute frontier levels to the charge-extraction pathway. The polar hydrazide and methoxy groups in DMTH-COF facilitate the formation of an oriented interfacial dipole at the perovskite surface, locally shifting the vacuum level and tuning the perovskite work function without significantly perturbing the bulk bandgap. This reduces the energy offset between the perovskite VBM and the Spiro-OMeTAD HOMO, which in turn lowers interfacial energy losses, enables a larger fraction of the photovoltage to be harvested, and supports a higher quasi-Fermi level splitting under illumination [106]. The alignment shown in Figure 13 is consistent with the experimental device trends. DMTH-containing cells exhibit higher Voc and fill factor than pristine devices, despite comparable optical bandgaps, indicating that fewer photogenerated carriers are lost to interfacial non-radiative recombination and that the built-in potential is more efficiently utilized. The microstructural advantages of DMTH-COF, comprising micrometer-scale grains, reduced microstrain and enhanced hydrophobicity, reduce the density of recombination-active sites within the absorber, so that a larger fraction of photogenerated holes reaches the Spiro-OMeTAD interface and is subsequently collected at the Au electrode. In parallel, electrons follow a separate, well-aligned route via TiO2 and FTO [107].",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0056",
+   "section": "3. Results and Discussion",
+   "text": "The photovoltaic performance of the devices provides an integrated assessment of how COF doping affects the structure, optoelectronic properties, and charge-transport characteristics of MAPbI3. PSCs were fabricated in a standard n–i–p configuration, glass/FTO/c–TiO2/m -TiO2/MAPbI3:COF/Spiro- OMeTAD/Au, using MAPbI3 absorbers prepared without and with COFs (Tp, Boc-PDA-phenylenediamine, and DMTH). All devices were measured under AM 1.5G illumination (100 mW cm−2). From Figure 14 and Table 3, the reference (undoped) MAPbI3 device exhibits a Voc of 1.142 V, a Jsc of 17.53 mA cm−2, a fill factor (FF) of 73.45%, and a power conversion efficiency (PCE) of 14.7%. These values are characteristic of solution-processed MAPbI3 cells limited by defect-mediated non-radiative recombination, incomplete light harvesting, and non-ideal series and shunt resistances [108]. Introduction of COF additives leads to a systematic improvement in all figures of merit. The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and the DMTH-based device achieves the highest performance with Voc = 1.183 V, Jsc = 22.98 mA cm−2, FF = 76.46%, and PCE = 20.78%. This progression demonstrates that the extent of performance enhancement closely follows the effectiveness of each COF in controlling crystallization, passivating defects, and optimizing interfacial energetics.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0057",
+   "section": "3. Results and Discussion",
+   "text": "The Voc enhancement from 1.142 V to 1.183 V reflects a reduction in non-radiative recombination losses in the bulk and at the interfaces. This is consistent with the strong PL intensity increase observed for COF-treated films, particularly for DMTH-COF, which indicates reduced trap-assisted recombination and higher quasi-Fermi level splitting. The Jsc increase, from 17.53 to 22.98 mA cm−2, arises from a combination of broader and more intense optical absorption and improved carrier collection [80]. UV–Vis spectra showed enhanced absorbance at an unchanged absorption onset for COF-doped films, while XRD and FE-SEM revealed enlarged grain sizes and fewer grain boundaries, both of which promote longer diffusion lengths and lower recombination probabilities. The largest Jsc in DMTH-based devices is therefore a direct manifestation of the most favorable combination of microstructure, defect passivation, and optical response. The fill factor also improves with COF doping, rising from 73.45% in the pristine device to 76.46% in the DMTH-COF case. This improvement is tightly linked to the evolution of series resistance (Rs) and shunt resistance (Rsh). The fill factor also improves with COF doping, rising from 73.45% in the pristine device to 76.46% in the DMTH-COF case. The series resistance extracted from the slope of the reverse-scan J–V curve at Voc falls from 5.5 Ω cm2 in the pristine device to 4.0 Ω cm2 in the DMTH-COF device, a reduction of 27%. The intermediate values obtained for the Tp-COF and Boc-PDA-COF devices, 4.8 and 5.1 Ω cm2, are close to the uncertainty of the extraction, so the comparison is made here between the pristine and DMTH-COF cases.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0058",
+   "section": "3. Results and Discussion",
+   "text": "In parallel, Rsh increases from 5.92 to 7.74 kΩ cm2 with COF doping. Low Rsh in the pristine devices indicates the presence of leakage paths, such as micro-shorts, surface defects, and ion-migration-related shunts [108]. The higher Rsh in COF-modified devices shows that these parasitic channels are significantly suppressed. Morphologically, this corresponds to denser, more uniform films with reduced pinhole density, as seen by FE-SEM, and structurally to fewer extended defects and dislocations, as suggested by the narrowed XRD peaks and reduced microstrain. The concurrent decrease in Rs and increase in Rsh demonstrates that COF additives simultaneously enhance charge-transport pathways and block undesirable leakage routes, which together raise the FF and overall PCE.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0059",
+   "section": "3. Results and Discussion",
+   "text": "The relative performance of the three COFs aligns with their structural and electronic characteristics. Tp-based COFs form ordered, β-ketoenamine networks with hexagonal pores that provide a basic scaffold for more uniform crystal growth and moderate passivation. Boc-PDA-derived COFs introduce aromatic and Boc-protected amine functionalities that more effectively interact with MA+ and Pb2+, leading to larger grains, lower trap density, and better surface passivation, and consequently a substantial jump in PCE to 18.88%. DMTH, containing methoxy-substituted hydrazide groups, goes further by combining strong coordination capability with electron-donating character and good solubility. This enables the formation of flexible, two-dimensional COF networks that intimately coat grain surfaces and interfaces, finely tuning crystallization.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0060",
+   "section": "3. Results and Discussion",
+   "text": "The photovoltaic parameters obtained from forward and reverse J–V sweeps, together with the calculated hysteresis indices, are summarized in Figure 15 and Table 4. The pristine MAPbI3 device shows pronounced scan dependence: its PCE falls from 14.84% in the reverse direction to 11.92% in the forward direction, giving a hysteresis index of 0.197. In MAPbI3 devices, such discrepancies generally arise from a combination of charge trapping, carrier accumulation at the contacts, and redistribution of mobile ionic species during the sweep [85]. Defects including undercoordinated Pb2+ sites and halide vacancies can promote all three processes by introducing trap states and distorting the local electric field.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0061",
+   "section": "3. Results and Discussion",
+   "text": "All three additives reduce the scan dependence, though to different degrees. The hysteresis index drops to 0.161 with Tp, 0.107 with Boc-PDA, and 0.110 with DMTH. The improvement with Tp is modest, whereas Boc-PDA and DMTH nearly halve the hysteresis relative to the control. This suggests that both additives alter the defect and interfacial environment of the perovskite layer in ways that make charge extraction far less sensitive to sweep direction. The raw hysteresis index alone, however, does not tell the full story. Although Boc-PDA gives the marginally lower index, the DMTH device delivers the best absolute performance in both sweep directions, with PCEs of 20.38% and 18.13% under reverse and forward scans, respectively. Weighing hysteresis suppression against absolute efficiency, DMTH therefore offers the most favorable balance of the three additives.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0062",
+   "section": "3. Results and Discussion",
+   "text": "The relative variation in Jsc between sweep directions falls monotonically from 35.3% in the pristine device to 29.5%, 16.3% and 2.7% for the Tp-, Boc-PDA- and DMTH-modified devices, indicating that photocurrent collection becomes substantially less dependent on scan direction once the additive is present. This is consistent with a lower trap density and reduced interfacial charge buildup [93]. A suppressed contribution from ion-migration-induced polarization is also plausible, although J–V sweeps alone cannot quantify ion motion; impedance spectroscopy or transient measurements would be needed to resolve that contribution directly. The observed trend is chemically reasonable. The nitrogen- and oxygen-bearing groups in these additives can coordinate undercoordinated Pb2+ sites or bind charged defects at grain boundaries and interfaces, lowering the density of electronically active traps and curbing non-radiative recombination. The particularly strong effect of DMTH plausibly reflects the arrangement of its hydrazide and methoxy groups, which provide multiple coordination sites within close proximity. We stress, however, that this remains a proposed mechanism: definitive confirmation would require direct spectroscopic or electrical evidence of the passivation interaction.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0063",
+   "section": "3. Results and Discussion",
+   "text": "The reproducibility of the photovoltaic performance was evaluated using 10 independently fabricated devices for each condition (N = 10). As shown in Figure 16, the individual measurements were overlaid on the box plots to provide a direct representation of the device-to-device variation. The statistical values reported in Table 3 were calculated from the same datasets and are presented as the mean ± standard deviation. Figure 16 presents box plots of the solar cells that were examined in this study. The photovoltaic parameters of the pristine and COF-modified devices are presented as box plots. Figure 16a–d display the Voc in V, Jsc in mA cm−2, FF in%, and PCE in% of the solar cells, respectively. The mean Voc increased from 1.142 V for pristine samples to 1.183 V for the DMTH-COF device, a 3.59% increase. The Jsc enhancements are even more substantial, with an increase of 31.09% from 17.53 mA cm−2 for pristine to 22.98 mA cm−2 for the DMTH-COF device. The FF enhancements are also notable, with a pristine value of 73.45% and a DMTH-COF device value of 76.46%, resulting in a 4.10% increase in value. The increase in PCE is even more significant, with a rise from 14.7% for pristine to 20.78% for the DMTH-COF device, resulting in a 41.36% increase. The DMTH-modified devices achieved a mean PCE of 20.78 ± 0.37%, owing to the increases in Jsc, Voc, and FF. The ability of the COFs to passivate defects and improve charge-carrier mobility partially accounts for the increase in Jsc [109]. Furthermore, the best optimal Voc performance for devices is achieved through the reduction in recombination losses following the incorporation of these COFs, aligning with the PL and FTIR observations of decreased non-radiative pathways and improved stability under environmental stress.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0064",
+   "section": "3. Results and Discussion",
+   "text": "To quantitatively link the microstructural evolution induced by COF doping with photovoltaic performance, we correlated the mean grain size extracted from FE-SEM analysis with the Jsc and PCE values obtained from J–V measurements. Figure 17 summarizes this relationship for pristine MAPbI3 and for films doped with Tp, Boc-PDA, and DMTH. The x-axis reports the average grain size for each composition (approximately 0.36 µm for pristine, 0.67 µm for Tp-COF, 0.91 µm for Boc-PDA-COF, and 1.00 µm for DMTH-COF), while the left and right y-axes correspond to Jsc and PCE, respectively. Both Jsc (solid green line) and PCE (dotted brown line) increase monotonically as the grain size grows. The pristine film, with the smallest grains, exhibits the lowest Jsc (17.53 mA cm−2) and PCE (14.7%). Introducing Tp-COF leads to moderate grain enlargement and a corresponding increase in Jsc and PCE. Boc-PDA-COF further pushes the grain size close to 0.9 µm and yields a more pronounced rise in both parameters. The DMTH-doped film, which achieves grains near 1.0 µm, delivers the highest Jsc (22.98 mA cm−2) and PCE (20.78%). This trend indicates that enlarging the perovskite grains and reducing the density of grain boundaries are key to improving charge collection and suppressing recombination losses [110]. The correlation in Figure 17 directly supports the microstructure–property–performance linkage established throughout the study. Larger grains formed under COF-assisted crystallization reduce the number of grain boundaries per unit volume, thereby lowering the density of boundary-related traps and non-radiative recombination centers [111]. This structural refinement enables photogenerated carriers to traverse longer distances without recombination, which manifests as increased Jsc and higher internal quantum efficiency. At the device level, this improved collection efficiency, combined with reduced series resistance and higher shunt resistance in COF-doped devices, drives the observed PCE enhancement.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0065",
+   "section": "3. Results and Discussion",
+   "text": "Figure 18 shows the external quantum efficiency (EQE) spectra of PSCs based on pristine MAPbI3 and COF-modified absorbers (Tp, Boc-PDA, and DMTH), recorded under monochromatic illumination in the 300–900 nm range. The pristine device exhibits a maximum EQE of approximately 68% in the visible region (about 400–800 nm), with a pronounced roll-off toward longer wavelengths and an integrated Jsc of around 17.5 mA cm−2, in agreement with the J–V data. The COF-doped devices display progressively higher and broader EQE responses, with the Tp- and Boc-PDA-COF-modified cells already showing enhanced conversion efficiency across most of the spectrum and reduced loss in the red/near-IR region. The DMTH-based device reaches a peak EQE close to 92% and maintains a strong response up to about 800 nm, corresponding to an integrated Jsc of approximately 23.0 mA cm−2.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0066",
+   "section": "3. Results and Discussion",
+   "text": "The evolution of the EQE spectra mirrors the structural and optoelectronic improvements induced by COF incorporation. The higher EQE in the blue–green region reflects more effective photogeneration and collection in the bulk perovskite, consistent with the enlarged grains, reduced microstrain, and improved crystallinity seen in XRD and FE-SEM. The sustained EQE at longer wavelengths for the COF-treated devices, particularly DMTH-COF, indicates that carriers generated deeper in the absorber experience fewer trap-assisted losses and can be extracted more efficiently, in line with the enhanced PL intensity and improved carrier collection inferred for these films. The good agreement between the EQE-integrated Jsc values and those obtained from J–V curves indicates that the COF additives do not introduce significant parasitic absorption or optical losses in the working spectral range. This, together with the enhanced PL and device performance, is consistent with an improvement in internal quantum efficiency through suppressed recombination and optimized charge transport throughout the device stack.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0067",
+   "section": "3. Results and Discussion",
+   "text": "Figure 19 presents a quantitative comparison of the operational stability of pristine and COF-modified MAPbI3 PSCs over 500 h of continuous AM 1.5G illumination (100 mW cm−2) at 25 °C and 50% relative humidity. This accelerated stress test directly probes the susceptibility of the different absorber formulations to photo- and moisture-induced degradation and links the microstructural and interfacial improvements induced by COFs to long-term device performance. The pristine MAPbI3 devices start from Voc = 1.142 V, Jsc = 17.53 mA cm−2, FF = 73.45%, and PCE = 14.7% but deteriorate rapidly under continuous operation. After 500 h, they retain only about 20% of their initial PCE (final PCE ≈ 2.94%). This steep decline is characteristic of unprotected MAPbI3 and can be attributed to the combined effects of moisture ingress and light-induced ion migration [112]. Water molecules diffuse along grain boundaries and interfaces, facilitating hydrolysis of the methylammonium cation, PbI2 segregation, and progressive formation of non-perovskite phases [113]. At the same time, the high density of unpassivated defects at grain boundaries promotes ion migration and interfacial reactions, thereby intensifying non-radiative recombination. These processes manifest macroscopically as a rapid loss of Voc (increased non-radiative losses) and FF (increased series and leakage components), with only modest changes in Jsc as the absorber progressively decomposes.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0068",
+   "section": "3. Results and Discussion",
+   "text": "Incorporation of COFs significantly alters this degradation pathway. DMTH-doped devices, which initially deliver Voc = 1.183 V, Jsc = 22.98 mA cm−2, FF = 76.46%, and PCE = 20.78%, show a noticeably slower performance decay. After 500 h, they retain approximately 50% of their initial PCE, corresponding to a final PCE of approximately 10.39%. The more gradual loss of Voc and FF indicates that DMTH-COF reduces the formation and activation of non-radiative recombination centers during operation. This behavior is consistent with the structural and spectroscopic evidence that DMTH-derived COFs passivate undercoordinated Pb2+ and halide sites through coordination and hydrogen bonding, enlarge grains, and reduce microstrain. The resulting reduction in defect density and ion-migration pathways at grain boundaries delays the onset of moisture-driven decomposition and preserves more of the built-in potential under stress. Devices doped with Boc-PDA-COF also exhibit markedly improved stability relative to pristine cells. Their initial performance (Voc = 1.174 V, Jsc = 21.33 mA cm−2, FF = 75.43%, PCE = 18.88%) translates into a PCE retention of about 41% after 500 h (final PCE ≈ 7.74%). The Boc-PDA protected amine groups in this COF provide a combination of aromatic conjugation and steric protection at the perovskite surface and grain boundaries, which enhances interfacial adhesion, suppresses the evaporation of volatile organic species, and passivates traps. As a result, the evolution of leakage paths and shunt channels is slowed, and the FF remains relatively high even after extended operation. Among the three COF-modified devices. Starting from Voc = 1.152 V, Jsc = 18.75 mA cm−2, FF = 73.54%, and PCE = 15.88%, they maintain approximately 30% of their original PCE after 500 h (final PCE ≈ 4.76%). The relatively superior stability of Tp-containing cells reflects the robust, β-ketoenamine-type network formed by Tp-based COFs, which provides a mechanically and chemically stable framework around perovskite grains. This framework likely enhances lattice rigidity, reduces stress-induced phase transitions, and offers an effective barrier against moisture penetration along grain boundaries. The high PCE retention factor (0.50 at 500 h, compared to 0.20 for pristine) directly evidences this stabilizing effect.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0069",
+   "section": "3. Results and Discussion",
+   "text": "The stability trends across pristine, Tp-, Boc-PDA-, and DMTH-doped devices mirror the way each COF modifies crystallization, defect chemistry, and surface wettability. All three COFs enlarge grains, reduce microstrain, and increase water contact angles relative to pristine MAPbI3, thereby limiting the density of reactive sites and slowing water ingress. At the same time, their distinct functional groups (hydrazide and methoxy in DMTH, Boc-protected amines in Boc-PDA, and keto-enolic motifs in Tp) tailor the balance between passivation strength, lattice rigidity, and interfacial protection. After 500 h, the normalized PCE retention values were approximately 0.20 for pristine MAPbI3, 0.50 for DMTH-COF, 0.41 for Boc-PDA-COF, and 0.30 for Tp-COF. Thus, DMTH-COF produced the highest initial efficiency, whereas Tp-COF provided the highest relative stability under the applied aging conditions. The improved stability of the COF-modified devices is consistent with reduced defect density, modified film microstructure, and increased surface hydrophobicity, although the individual contributions of defect passivation, ion migration, and moisture transport require further direct investigation.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0070",
+   "section": "3. Results and Discussion",
+   "text": "Table 5 compares the photovoltaic performance and stability of the present devices with previously reported COF-modified and additive-engineered perovskite solar cells. The DMTH-containing device achieved a PCE of 20.78%, close to the 20.04% reported for a triazine-based COF additive in MAPbI3 and the 21.35% obtained using MAOCN in the same absorber system. Higher efficiencies have been reported for an amino-functionalized COF in a mixed-cation perovskite (22.13%) and for dual-interface COF modification (24.26%). These values, however, should not be compared solely on the basis of efficiency because the studies differ in absorber composition, device architecture, active area, and measurement conditions. In particular, mixed-cation perovskites generally offer greater compositional flexibility and improved thermal stability compared with conventional MAPbI3.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0071",
+   "section": "3. Results and Discussion",
+   "text": "Among the MAPbI3 devices listed in Table 5, the DMTH-modified cell exhibits the highest open-circuit voltage, reaching 1.183 V compared with 1.04 and 1.126 V in the two most closely related additive studies. This result agrees with the stronger photoluminescence observed for the DMTH-containing film, which suggests that non-radiative recombination was reduced. By contrast, its fill factor of 76.5% remains below the previously reported values of 79.4% and 81.2%. The larger active area used in this work (0.50 cm2) may have contributed to this difference through increased series resistance and current-collection losses, although variations in device architecture and fabrication conditions may also be involved. The stability data must likewise be interpreted in relation to the aging conditions. Most of the reference devices were evaluated during dark storage under ambient or controlled-humidity conditions. In the present study, the devices were exposed to continuous AM1.5G illumination at 50% relative humidity. Continuous illumination can activate degradation processes that are absent or less pronounced during dark storage, including photoinduced ion redistribution, interfacial deterioration, and accelerated decomposition in the presence of moisture. The reported retention values are therefore not directly equivalent. Although the DMTH device does not provide the highest efficiency in the broader comparison, its performance under a more demanding illumination-and-humidity protocol demonstrates the practical value of introducing DMTH directly into the MAPbI3 precursor solution.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P1",
+   "paragraph_id": "d0072",
+   "section": "4. Conclusions",
+   "text": "This work establishes covalent organic framework (COFs) as a powerful and versatile class of bulk dopants for engineering MAPbI3 perovskite thin films and devices. By integrating three structurally distinct frameworks, DMTH-COF, Boc-PDA-COF and Tp-COF, each prepared from commercially available building blocks, directly into the MAPbI3 precursor solution, we demonstrate that COFs can act simultaneously as crystallization regulators and defect passivators. Unlike most previous reports where COFs are confined to surface passivation layers or used as inert scaffolds, our approach uses COFs as bulk additives to tune film formation and electronic structure in a single solution-processing step, without sacrificing phase purity or process simplicity. Structurally, XRD and FE-SEM show that COF incorporation preserves the tetragonal MAPbI3 phase while driving a profound reorganization of the microstructure. Grain sizes increase from a few hundred nanometers in pristine films to approximately one micrometer in DMTH-modified layers, with concomitant narrowing of diffraction peaks and reduced microstrain. Raman and FTIR analyses reveal that this morphological improvement is underpinned by specific chemical interactions: COF functional groups coordinate undercoordinated Pb2+ sites and participate in hydrogen bonding with MA+ and halides, which relieves local lattice strain, stabilizes the organic sublattice, and suppresses vibrational disorder. These molecular-scale interactions directly reduce the density of electronic traps at grain interiors and boundaries. Optically and electronically, COF doping enhances light harvesting and carrier management without compromising the intrinsic perovskite band structure. Tauc analysis performed with a common background subtraction and a common extrapolation range gives optical bandgaps equal to within 7 meV across all four films at 1.56 eV, consistent with the invariant photoluminescence emission energy and the common EQE absorption onset. Steady-state PL and EQE measurements confirm that COF-treated films exhibit higher radiative efficiency and improved photon-to-current conversion, particularly at longer wavelengths where recombination losses are typically severe. Water contact angle measurements further show that COF doping, especially with DMTH, renders the film surface significantly more hydrophobic, limiting moisture ingress and reinforcing environmental stability at the most vulnerable interfaces. To our knowledge, this is the first systematic comparison of three chemically distinct COFs on MAPbI3, directly correlating COF structure with grain growth, defect passivation, surface wettability, and spectral response within a single, consistent device platform. X-ray photoelectron spectroscopy establishes that the framework survives annealing and remains chemically coupled to the perovskite. At the device level, these coupled structural and optoelectronic improvements translate into a clear and statistically robust progression in all key photovoltaic metrics. Relative to pristine MAPbI3 cells, which reach about 14.7% PCE, COF-doped devices exhibit systematically higher Voc, Jsc, FF, and PCE, with the DMTH-based cells achieving Voc = 1.183 ± 0.006 V, Jsc = 22.98 ± 0.46 mA cm−2, FF = 76.46 ± 1.544%, and PCE = 20.78 ± 0.37%. These gains are accompanied by a marked reduction in series resistance and an increase in shunt resistance, reflecting improved grain connectivity, lower trap density, fewer leakage paths, and a more favorable interfacial energy-level alignment inferred from the measured device performance and literature energy levels. Box-plot statistics show that DMTH not only lifts the average performance but also reduces device-to-device variations, which is essential for scalable fabrication. In contrast to more conventional dopants such as simple salts or polymers, the COFs used here deliver concurrent improvements in morphology, energetics, and moisture resistance, highlighting a genuinely multifunctional and previously under-explored design space for perovskite optimization.",
+   "id_derived": true
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par3",
+   "section": "Introduction",
+   "text": "Metal halide perovskites have emerged as leading materials for next-generation optoelectronic devices. These materials exhibit exceptional properties, including long carrier diffusion lengths, high absorption coefficients, and tunable band gaps1–4. Currently, solar cell device efficiency has improved substantially. However, a quantitative understanding of charge carrier recombination dynamics remains a key bottleneck for further improving performance and long-term stability5–8.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par4",
+   "section": "Introduction",
+   "text": "Photoluminescence (PL) based techniques are important noninvasive techniques for perovskite characterization. Particularly, time-resolved photoluminescence (TrPL) is widely used to probe perovskite carrier lifetimes9–11. TrPL profiles show the luminescence temporal evolution after excitation. Carrier lifetimes are typically extracted from TrPL decay profiles through exponential fitting (\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$I={I}_{0}+{\\sum }_{i=1}^{n}{A}_{i}\\exp (-t/{\\tau }_{i})$$\\end{document}I=I0+∑i=1nAiexp(−t/τi)). However, the multichannel and coupled natures of perovskite kinetics are largely neglected by these phenomenological fitting approaches. Further, carrier lifetimes may vary significantly with measurement conditions. These limitations imply that the extracted lifetimes may lack a clear physical interpretation. On the other hand, differential decay time (\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\tau }_{{{{\\rm{diff}}}}}\\equiv -2{dt}/d{{\\mathrm{ln}}}I\\left(t\\right)$$\\end{document}τdiff≡−2dt/dlnIt) is also frequently used to evaluate the carrier lifetime of perovskites. However, Yuan et al. proved that the differential decay time is an ambiguous indicator when represented as a function of time. Plotting the differential decay time as a function of time can obscure quantitative kinetic information because the effective bimolecular recombination coefficient is no longer retained. As a result, important information related to processes such as shallow trap-mediated recombination may be lost. In this case, the analysis mainly preserves the information that the decay follows a power law behavior associated with bimolecular type recombination, while the corresponding recombination coefficient remains inaccessible. In contrast, plotting differential decay time against quasi-Fermi-level splitting or carrier density can retain meaningful recombination information12. Accordingly, perovskite recombination kinetics may be obscured when they are interpreted solely using lifetimes derived from exponential fitting or differential decay times plotted as a function of time.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par5",
+   "section": "Introduction",
+   "text": "In contrast, charge carrier models based on rate equations provide a physical framework for the kinetic interpretation. Through comprehensively considering the temporal evolution of photogenerated species, these models provide a mechanistic description of recombination13–15. Since rate equations consider the initial excitation state, the PL decays under different excitation conditions can be explained mechanistically. However, the application of rate-equation models is limited by two major challenges: (1) the need to predefine the kinetic model based on a limited set of experimental observations, which can lead to poorly constrained parameter estimation; and (2) parameter non-uniqueness arising from strong coupling among multiple recombination channels. Specifically, the same TrPL decay can be reproduced by several distinct parameter sets.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par6",
+   "section": "Introduction",
+   "text": "Recent data-driven strategies offer promising alternatives16–20. For example, Bayesian inference has been adopted to invert kinetic behaviors in several semiconductors21–23. However, Bayesian inference often incurs substantial computational overhead because it requires a large number of forward simulations. In contrast, deep learning (DL) provides a more computationally economical and efficient data-driven approach. In materials science, DL has been employed in crystal structure prediction, phase classification, and spectroscopy analysis24–26. By establishing mappings from TrPL profiles to kinetic parameters, it can provide direct physical kinetic solutions quickly. Once trained, the DL model can rapidly predict kinetic parameters without repeated optimization. Lee’s group has conducted in-depth research on determining organic light-emitting-diode electroexcitation kinetics by DL. They successfully extracted coefficients of the polaron recombination and the triplet-triplet annihilation from the time-resolved electroluminescence27,28. While fairly high accuracy has been achieved, the model output is limited to a single kinetic parameter. To date, developing a single model capable of predicting multiple kinetic parameters remains largely unexplored.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par7",
+   "section": "Introduction",
+   "text": "In this work, we show that TrPL decay profiles alone are insufficient to uniquely determine carrier kinetics in perovskites. This is due to the existence of non-unique solutions. We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness. Previous work has shown that the curves of PLQY as a function of excitation pulse energy and repetition frequency help to verify the validity of the kinetic model29. This may be attributed to the fact that PLQY adds an independent steady-state constraint to the ratio between radiative and nonradiative recombination channels. Recently, using an analytical method, Hüpkes et al. demonstrated that trap depth significantly affects the steady-state PLQY and transient PL responses of halide perovskites30. Although analytical treatments are essential for understanding limiting cases, they usually rely on simplified assumptions and cannot easily resolve the fully coupled nonlinear kinetics. The community still needs an efficient and scalable solution for extracting multiple coupled kinetic parameters. Building on this insight, we develop a DL-based framework that jointly analyzes TrPL and PLQY data. The proposed framework is able to directly extract physically meaningful kinetic parameters (Fig. 1a).Fig. 1Schematic diagram of the present work and the kinetic model.a Schematic diagram of the present work: leveraging AI to extract perovskite charge carrier kinetics from TrPL+PLQY joint characterization. b Schematic diagram of the kinetic model incorporating trap states with the following processes: ① bimolecular recombination, ② electron capture, ③ hole capture, ④ electron emission, and ⑤ Auger recombination. c Influences of kinetic parameters on normalized TrPL decay profiles (five simulated cases). d Enlarged view of simulated cases 1 and 2, where TrPL decay profiles almost overlapped. e Influences of kinetic parameters on PLQY as a function of photocarrier generation rate. f A detailed comparison of simulated cases 1 and 2.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par8",
+   "section": "Introduction",
+   "text": "Here, we construct a large training pool capturing diverse kinetic scenarios by high-throughput TrPL and PLQY simulation. A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients of determination (R2s) over 0.9. The model is adopted to predict kinetics for four deposited perovskite films. The high prediction accuracy is confirmed after comparison with the experimentally fitted parameters. The device-level electrical characterizations further show trends consistent with the DL-predicted kinetics. Together, this work establishes a general and robust data-driven framework for quantitative analysis of kinetics in perovskite semiconductors.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par9",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "The high power conversion efficiency (PCE) of metal halide perovskites originates from their long carrier diffusion lengths, strong optical absorption, and high charge carrier densities under operating conditions31–33. Under excitation, the charge carrier density is governed by the balance between carrier generation and recombination processes. In the ideal limit of bimolecular recombination, the externally observable radiative recombination rate can be expressed as:1\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$R={\\gamma }_{{eh}}{n}_{e}{n}_{h}$$\\end{document}R=γehnenhwhere γeh is the effective external band-to-band electron-hole bimolecular recombination coefficient. It differs from the internal coefficient γeh,int entering the van Roosbroeck–Shockley relation because photon outcoupling and photon recycling affect the externally observed luminescence34.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par10",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "To comprehensively capture coupled processes, the electron trap states are incorporated into the kinetic model, see Fig. 1b35. Following the conventional Shockley–Read–Hall terminology, the trap-mediated processes considered here are electron capture, hole capture, and electron emission36. To limit the number of unknown kinetic parameters, we assume an electron trap located above the intrinsic level and closer to the conduction band, for which hole emission is much weaker than electron emission. The hole emission is therefore neglected in the present kinetic model. Upon photoexcitation, the photogenerated species undergo multiple competing pathways, including ① direct band-to-band bimolecular recombination, ② electron trapping (electron capture), ③ nonradiative recombination of trapped electrons with valence band holes (hole capture), and ④ electron emission from traps. The TrPL decay profiles differ substantially under different excitation fluences. At low excitation fluence, the curve tends to an exponential decay dominated by monomolecular recombination; at high excitation fluence, the curve tends to a power law decay dominated by bimolecular recombination. This is due to the existence of trap states. When the density of photogenerated carriers is lower than the density of trap states, free electrons or holes preferentially undergo trap-mediated monomolecular recombination with trap states. When there is a high concentration of charge carriers, free charge carriers that fail to fill trap states undergo bimolecular recombination. Trap-related processes are dynamic processes involving capture and emission.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par11",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "At high carrier density conditions, on the other hand, higher-order processes such as third-order Auger recombination may also contribute to excited state dynamics. This mechanism typically manifests as anomalous signatures, such as high-fluence roll-off in PLQY and super-linear early-time TrPL behavior. ⑤ Auger recombination is thus incorporated in the present model via the term γAugnenh(ne+nh). Considering the low exciton binding energy (typically within the range of 2–55 meV) of perovskites, which is comparable to thermal energy (\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${k}_{B}T\\cong$$\\end{document}kBT≅2 meV at room temperature), excitons tend to dissociate rapidly, and their equilibrium population is generally negligible compared with the total excited state density37–39. Consequently, the contribution of excitons is not considered. Therefore, the interpretation of excitation-density-dependent photo physics is restricted to regimes predominantly governed by monomolecular, bimolecular, and trimolecular processes involving photogenerated charges and traps.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par12",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "Based on the above assessment of kinetic processes, coupled rate equations describing the temporal evolution of free electrons, captured electrons, and recombination were constructed as follows:2\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\begin{array}{c}-\\frac{d{n}_{e}}{{dt}}={\\gamma }_{{eh}}{n}_{e}{n}_{h}+{\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)-{\\gamma }_{{ee}}{n}_{T}+{\\gamma }_{{Aug}}{n}_{e}{n}_{h}\\left({n}_{e}+{n}_{h}\\right)\\\\ -\\frac{d{n}_{T}}{{dt}}=-{\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)+{\\gamma }_{{hc}}\\left({n}_{T}{n}_{e}+{n}_{T}^{2}\\right)+{\\gamma }_{{ee}}{n}_{T}\\end{array}$$\\end{document}−dnedt=γehnenh+γecneNT−nT−γeenT+γAugnenhne+nh−dnTdt=−γecneNT−nT+γhcnTne+nT2+γeenTwhere γec, γhc, γee and γAug are the coefficients of electron capture, hole capture, electron emission, and Auger recombination, respectively. NT and nT denote the total trap density and the density of filled traps, respectively. In view of the charge neutrality condition, the hole density is nh = ne + nT. In summary, within this framework, γeh describes the radiative recombination pathway; γhc and γAug describe the nonradiative recombination pathways; γec and γee describe interactions between electrons and traps beyond recombination.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par13",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "Considering that PL intensity is proportional to the radiative band-to-band bimolecular recombination, the definition of the normalized TrPL intensity gives:3\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\frac{{I}_{{PL}}^{t}}{{I}_{{PL}}^{0}}=\\frac{{n}_{e}^{t}{n}_{h}^{t}}{{n}_{e}^{0}{n}_{h}^{0}}$$\\end{document}IPLtIPL0=netnhtne0nh0where superscript 0 and t represent the initial time and elapsed time after the photoexcitation. To study the effects of the involved kinetic parameters on TrPL decay, we adjusted the parameters and simulated different decay curves. All used kinetic parameters are tabulated in the Supplementary Table 1. The TrPL profiles exhibit different decay characteristics due to the changes of kinetic parameters, as illustrated in Fig. 1c. Strikingly, distinct parameter sets can produce nearly identical TrPL decay profiles (simulation cases 1 and 2). The enlarged view in Fig. 1d further shows features that are nearly identical, which are undetectable in experimental TrPL measurements mixed with noise. This overlap characteristic demonstrates that the kinetic parameters inferred solely from the TrPL profiles may be unreliable. Consequently, determining carrier dynamics solely through TrPL is largely affected by the non-unique-solution problem.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par14",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "To resolve this ambiguity, we introduce the PLQY, defined as the ratio of emitted to absorbed photons, as an additional constraint on carrier kinetics:4\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${{{\\rm{PLQY}}}}=\\frac{{\\gamma }_{{eh}}{n}_{e}{n}_{h}}{{\\gamma }_{{eh}}{n}_{e}{n}_{h}+{\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)+{\\gamma }_{{Aug}}{n}_{e}{n}_{h}\\left({n}_{e}+{n}_{h}\\right)}$$\\end{document}PLQY=γehnenhγehnenh+γecneNT−nT+γAugnenhne+nh",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par15",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "A detailed derivation is provided in Supplementary Note 1.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par16",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "Although different parameter sets may yield identical PLQY values at a fixed carrier density, their PLQY evolution diverges with the excitation density increase (Fig. 1e). A clear comparison between simulation cases 1 and 2 is presented in Fig. 1f. Although the TrPL decays are similar, PLQYs in case 2 are higher than those in case 1. This demonstrates that joint analysis of TrPL and PLQY can provide complementary information to distinguish non-unique solutions.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par17",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "In fact, excitation-dependent PLQY in perovskites has been extensively investigated. deQuilettes et al. reported a pronounced excitation intensity dependence of PLQY; at high excitation intensities, the PLQY of perovskite can exceed 30%40. They demonstrated that the excitation-dependent trend can be interpreted by the kinetic equations. Kiligaridis et al. pointed out that only by adding trap-related terms and Auger recombination terms to the SRH model can both PLQY and PL decay be fitted simultaneously29. This is strong evidence that our work effectively alleviates the non-uniqueness problem by introducing PLQY. In fact, the characteristic of PLQY to mitigate the physical solution non-uniqueness stems from its definition. Under charge neutrality condition, PLQY gives:5\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${{{\\rm{PLQY}}}}=\\frac{{\\gamma }_{{eh}}{n}_{e}\\left({n}_{e}+{n}_{T}\\right)}{{\\gamma }_{{eh}}{n}_{e}\\left({n}_{e}+{n}_{T}\\right)+{\\gamma }_{{hc}}{n}_{T}\\left({n}_{e}+{n}_{T}\\right)+{\\gamma }_{{Aug}}{n}_{e}\\left({n}_{e}+{n}_{T}\\right)\\left(2{n}_{e}+{n}_{T}\\right)}$$\\end{document}PLQY=γehnene+nTγehnene+nT+γhcnTne+nT+γAugnene+nT2ne+nT",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par18",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "This expression shows that PLQY is sensitive to trap filling through the charge neutrality condition. Therefore, PLQY does not merely add more data points; it provides a different physical constraint on the steady-state carrier distribution and on the branching between radiative and nonradiative recombination pathways.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par19",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "To gain more insights into the physical impact of kinetic coefficients on experimental observations, we simulated the trends of TrPL and PLQY with increasing kinetic coefficients. Figure 2a–c illustrates the changes with gradually increasing trap densities. Overall, the TrPL decay becomes progressively faster as NT increases. The influence is relatively weak at low NT but becomes pronounced at higher trap densities. Increasing NT suppresses the rise in PLQY. This is because traps become increasingly difficult to fill. A higher photogenerated carrier generation rate is required to fill the traps to achieve recombination luminescence. Notably, PLQY provides a clearer picture compared to the weak trend of TrPL at low trap densities. The changes with the γee are shown in Fig. 2d–f. Unfortunately, even when the γee span two orders of magnitude, changes in TrPL remain almost imperceptible. This suggests that electron emission information extracted solely from TrPL may be unreliable. However, electron emission dominates carrier dynamics over long timescales, making its accurate extraction crucial41. By contrast, it can be seen that at low carrier generation rates (1020–1021 cm−3 s−1), PLQY can provide relatively clear distinctions, providing improved sensitivity for extracting the γees. The same issue arises with the γAug; Auger recombination has a small effect on TrPL decay (see Fig. 2g). This effect may be enhanced under extremely high photoexcitation. Fortunately, Auger recombination has a significant effect on PLQY at high photogeneration rates (Fig. 2i). As the γAug increases, the peak value of PLQY tends to decrease. This reflects the gradual dominance of Auger recombination. Besides, the effects of the γeh, γec, and γhc on photoluminescence are presented in Supplementary Fig. 1.Fig. 2Effects of individual kinetic parameters on TrPL and PLQY.a TrPL variation with increasing trap density (NT), b Schematic diagram of trap density. c PLQY variations with NT, d TrPL variations with increasing electron emission coefficient (γee), e Schematic diagram of electron emission process, f PLQY variations with increasing γee, g TrPL variations with increasing Auger recombination coefficient (γAug), h Schematic diagram of Auger recombination process, i PLQY variations with increasing γAug.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par20",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "Based on the introduced physical insights, we developed a supervised DL framework to directly extract kinetic parameters from the joint TrPL + PLQY profiles, as illustrated in Fig. 3a. The initial photogenerated charge carrier density (N0) is included to enable the model to account for different excitation states42. First, six key parameters (γeh, γec, γhc, NT, γee, γAug), together with the initial carrier density N0, were randomly sampled within physically reasonable ranges, which are listed in Supplementary Table 2. A total of 200,000 parameter sets were finally generated. From the distribution histograms of the generated parameters in Supplementary Fig. 2, it can be seen that the parameter data points are evenly distributed within the sampling ranges. For each parameter set, TrPL decay profiles and PLQY curves were simulated by solving the kinetic model. The acquired TrPL profiles then undergo a preprocessing procedure that limits the profiles to a reasonable time window and decay cutoff. Afterward, the learning pool was constructed by pairing the processed profiles with their associated kinetic parameters. Curve diagrams are plotted in Supplementary Fig. 3 using 10,000 randomly selected simulation cases. Both TrPL and PLQY curves exhibited diverse trends, demonstrating the broad applicability of the kinetic model employed.Fig. 3DL-based workflow for extracting charge carrier kinetic parameters and evaluating model performance.a 200,000 kinetic scenarios were simulated by varying six parameters in the rate equation model, outputting the corresponding TrPL and PLQY profiles. The DL model is trained based on the established learning pool. When new characterization profiles are input, the model can predict the kinetics of the studied samples. Model performances: b R2 bar charts of kinetic parameters (bimolecular recombination coefficient (γeh), electron capture coefficient (γec), hole capture coefficient (γhc), trap density (NT), electron emission coefficient (γee), and Auger recombination coefficient (γAug)) for different training datasets: only TrPL as input, only PLQY as input, TrPL + PLQY as input, and optimized learning pool and model architecture. c Correlation scatter distribution plots of labeled and predicted kinetic parameters. Color represents the number of data points within each hexagonal bin. The color scale is shared by all panels.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par21",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "The DL model is used to map the input PL data and associated N0 to the six kinetic parameters. An optimization procedure is performed, which aims to explore the accuracy boundaries with the appropriate sample size, number of sampling points, and the neural network architecture. The DL optimization process is introduced in the Supplementary Note 2, Supplementary Figs. 4, 5, and Supplementary Tables 3, 4. Finally, 200,000 entries and 200 sampling points per profile (a 200,000 × 200 matrix) are determined. The final input comprises 200 TrPL points, 200 PLQY points, and one initial carrier density value, yielding 401 input features per sample. The neural network architecture was determined as 401:1800:1800:6 with a dropout rate of 0.048, as illustrated in Supplementary Fig. 6. The models were implemented in Python 3.12.7 (PyTorch). According to FAIR principles, the complete database, trained model package and code are provided, see data availability statement43.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par22",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "Figure 3b compares the R2s of the DL models trained with different learning pools. R2 is a commonly used metric for evaluating the predictive performance of regression models, measuring the agreement between model predictions and actual values44,45. It is defined as follows:6\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${R}^{2}=1-\\frac{{\\sum }_{i}{\\left({y}_{i}-{\\hat{y}}_{i}\\right)}^{2}}{{\\sum }_{i}{\\left({y}_{i}-\\bar{y}\\right)}^{2}}$$\\end{document}R2=1−∑iyi−y^i2∑iyi−ȳ2where yi is the actual labeled value, y ̂i is the model predicted value, y ̅ is the average of the actual labeled values. The closer the value of R2 is to 1, the closer the model prediction is to the actual labeled value, and the better the regression performance. It is worth noting that R2 only reflects the overall fit and does not directly indicate the prediction errors. We present the mean square errors (MSEs) in Supplementary Figs. 4 and 5 to compensate for this. Small MSEs are observed between the predicted and labeled values. Furthermore, R2 is easily affected by outliers, but no pronounced outliers are evident in the correlation scatter distribution plots.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par23",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "From the R2 bar cluster of the model trained solely on TrPL profiles, poor modeling performance on all kinetic parameters except for the γeh (R2 = 0.86) is observed. Particularly low accuracy is observed for Auger recombination, with R2 of 0.057. Meanwhile, the model trained only on PLQY data suffers from limited performance, with the R2 range of 0.64–0.83. The reason for the insufficient accuracy is that the parameters are obtained by solving the kinetic models under steady-state conditions, leading to a lack of interpretation of the instantaneous PL. In contrast, the model trained on TrPL + PLQY joint data yields R2s ranging from 0.76 to 0.94. The improvements in R2s imply that TrPL and PLQY provide each other with orthogonal information to make accurate inferences. After optimization, R2s of all target parameters are further boosted above 0.9. From the correlation scatter distributions of the optimized model in Fig. 3c, most scatters lie close to the identity line, showing good agreement between the predicted and labeled values. The above results indicate that independent TrPL or PLQY characterizations are insufficient to provide adequate kinetic information. The combined characterization strategy is more effective for extracting the full set of kinetic parameters than either dataset alone. Furthermore, we train the model using TrPL data with added experimental noise to explore its predictive ability on real experimental data. Fortunately, except for the test R2 for the γee, which decreased to 0.73, the R2s for all other coefficients are above 0.84, demonstrating that the model remains reasonably robust to the level of simulated experimental noise. The predictive scatter plot is included in Supplementary Fig. 7. To further examine the extensibility of the proposed framework, we additionally applied it to a more complex ETL half device architecture, glass/FTO/SnO2/perovskite, in which electron extraction and interfacial nonradiative recombination introduce additional kinetic pathways beyond bulk carrier recombination. The corresponding kinetic model, parameter ranges, and DL prediction performance are provided in Supplementary Note 3 and Supplementary Figs. 8, 9.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par24",
+   "section": "Film characterization and kinetic fitting",
+   "text": "In the present work, perovskite films with compositions of FA0.9MA0.1PbI2.85Br0.15 (FAMA) and Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA) are deposited to verify the functionality of the established model. Here, the corresponding passivated samples are prepared by depositing 4-methoxy-phenethylammonium iodide (4-MeO-PEAI) on the perovskite absorber surface.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par25",
+   "section": "Film characterization and kinetic fitting",
+   "text": "Scanning electron microscopy (SEM) was employed to examine the surface morphologies of the perovskite films. Figure 4a, b show the surface morphologies of the FAMA and CsFAMA films, respectively. Well-formed perovskite grains with relatively uniform size distributions are observed, with average grain sizes of approximately 962 nm for FAMA and 682 nm for CsFAMA. Nevertheless, pinhole defects are present at some grain boundaries, which are commonly regarded as centers for nonradiative recombination. The surface morphologies and cross-sectional SEM images of the 4-MeO-PEAI–passivated films are presented in Supplementary Fig. 10. These images indicate a more uniform surface morphology after 4-MeO-PEAI treatment, accompanied by effective passivation of surface defects. Cross-sectional SEM images further indicate a film thickness of approximately 500 nm. To check the formation of the perovskite phase, their X-ray diffraction (XRD) patterns and the corresponding full widths at half maximums (FWHMs) were measured and shown in Supplementary Fig. 11. Two strong peaks occur at 14.0° and 28.3°, and their corresponding (110) and (220) crystal planes suggest the formation of the perovskite host phase. Compared to the control groups, the passivated films exhibit narrower FWHMs, indicating improved crystallinity and reduced microstrain.Fig. 4Characterizations of the perovskite film samples of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a, b Scanning electron microscopy (SEM) surface morphology images of FA0.9MA0.1PbI2.85Br0.15, Cs0.05FA0.90MA0.05PbI2.85Br0.15. Inset histograms are grain size distributions in the images. Scale bars, 500 nm. c Initial TrPL intensity changes as functions of charge carrier density. d, e Normalized PL spectra and Tauc plots from ultraviolet visible absorption spectra (UV-vis). f, g Experimentally measured TrPL decay scatters and fitting curves. h, i Experimental PLQY scatters with error bars in different incident intensities and fitting curves. Error bars represent the mean ± sd of three independent measurements.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par26",
+   "section": "Film characterization and kinetic fitting",
+   "text": "The PL intensities of the four studied perovskite films under different carrier concentrations are plotted in Fig. 4c. The PL intensity exhibits an approximately quadratic relationship with the carrier concentration, indicating that radiative recombination mainly originates from bimolecular recombination. The Tauc plots converted from ultraviolet visible absorption spectra (UV-Vis) and the PL spectra are plotted in Fig. 4d, e. By taking the intercept of the Tauc plots, the band gaps of the four perovskite films were calculated as follows: FAMA 1.567 eV, passivated FAMA 1.573 eV, CsFAMA 1.571 eV, and passivated CsFAMA 1.577 eV. Passivation resulted in a negligible increase in the band gap. Meanwhile, it is observed that the PL peaks were close to the absorption onsets. This spectral alignment is consistent with direct bandgap behavior and band edge emission.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par27",
+   "section": "Film characterization and kinetic fitting",
+   "text": "Subsequently, the TrPL decays under 1000 nJ cm−2 fluence excitation, and PLQYs under different incident intensities are measured. Experimental conditions are introduced in Supplementary Note 4. To investigate the detailed kinetics, all TrPL decays and PLQY profiles are fitted by the kinetic model. A genetic algorithm was used for searching the globally optimal kinetic solutions of the experimental TrPLs and PLQYs. The operation logic of the algorithm can be found in Supplementary Fig. 12.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par28",
+   "section": "Film characterization and kinetic fitting",
+   "text": "The TrPL decays of the studied perovskite films are presented in Fig. 4f, g. Generally, surface passivation exhibits no influence on decay trends, while perovskite compositions show a significant impact. Specifically, FAMA films exhibit fast decays in the initial stage and slow decays in the later stage; CsFAMA films are dominated by exponential decay. This difference in decay profiles implies distinct carrier kinetics. Meanwhile, the light-colored curves are the fitting curves with physical meanings. All fitting lines match well with the experimentally measured decays, with MSEs of 1.12 × 10−4, 7.14 × 10−5, 2.72 × 10−5, and 2.90 × 10−5. In addition, the error distribution plots are provided in Supplementary Fig. 13. All errors are within the range of −0.04 to 0.04, indicating excellent fitting.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par29",
+   "section": "Film characterization and kinetic fitting",
+   "text": "Referring to the work of Sutter-Fella et al., PLQYs were measured over a range of photocarrier generation rate (1020–1023 cm−3 s−1), as shown in Fig. 4h, i46. All PLQY profiles are fitted well, with MSEs of 0.023, 0.093, 0.018, and 0.054, respectively. The changes in PLQYs show a trend of gradually increasing to saturation, and then stabilizing or decreasing, which is consistent with the description of the adopted kinetic model47,48. This phenomenon can be attributed to the competition among electron capture, electron emission, radiative recombination, and Auger recombination, together with progressive trap filling40.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par30",
+   "section": "Film characterization and kinetic fitting",
+   "text": "To study the model performance under different excitation densities, TrPLs under the excitation fluence of 3000 nJ cm−2 were further measured. The corresponding fitting results are provided in the Supplementary Figs. 14 and 15. During the model prediction process, a logistic function was employed to fit the experimental PLQY data and capture the overall trend of the scattered data points. The fitted curves were then used as inputs for the DL model. The logistic fitting results are shown in Supplementary Fig. 16.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par31",
+   "section": "Device performance",
+   "text": "Perovskite solar cells (PSCs) with an n–i–p architecture were fabricated to further evaluate the effect of surface passivation, and the device configuration is shown in Fig. 5a. The current density–voltage (J–V) curves of the champion devices are presented in Fig. 5b, c. Overall, passivation increases the PCE from 22.41% to 25.08% for the FAMA PSC, and from 21.64% to 23.23% for the CsFAMA PSC. As shown in Supplementary Fig. 17, the integrated short circuit current density (Jsc) derived from the external quantum efficiency (EQE) spectra agrees well with the J–V measurements, confirming the reliability of the photovoltaic data.Fig. 5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices. b, c J–V curves of the champion FAMA- and CsFAMA-based devices, respectively. The corresponding photovoltaic parameters are provided in the panels. d Power conversion efficiency (PCE) box and distribution plots of 15 devices. Box plots show the distribution of PCE values. The central line indicates the median, the box limits represent the lower and upper quartiles (25th and 75th percentiles), and the whiskers extend to 1.5 times the interquartile range. Open circles represent individual devices, and black crosses indicate the mean values. e Light-dependent Voc and fitting lines. f Nyquist plots and fitted circuit diagrams.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par32",
+   "section": "Device performance",
+   "text": "Passivation leads to simultaneous improvements in all photovoltaic parameters. As shown in Fig. 5d, overall, considering the mean, median, or extreme values, the passivated PSC device achieved a significant improvement in PCE. The statistical distributions of photovoltaic parameters in Supplementary Fig. 18 further reflect the enhancements. In particular, the open circuit voltage (Voc) and fill factor (FF) show significant improvements in their overall distribution.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par33",
+   "section": "Device performance",
+   "text": "The Voc changes with the various light intensities are recorded and plotted in Fig. 5e. In FAMA devices, 1.42 kBT/q (control) > 1.18 kBT/q (passivated), and 1.38 kBT/q (control) > 1.16 kBT/q (passivated) in CsFAMA devices, where kB is the Boltzmann constant, T is the temperature in Kelvin, and q is the elementary charge. The passivated devices exhibit ideality factors closer to unity, further confirming their improved device performance.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par34",
+   "section": "Device performance",
+   "text": "Charge carrier recombination processes were further examined by electrochemical impedance spectroscopy (EIS). The Nyquist plots and the corresponding equivalent circuit model are shown in Fig. 5f, with the fitted parameters summarized in Supplementary Table 5. Both passivated devices exhibit reduced series resistance (Rs) and increased recombination resistance (Rrec), indicating enhanced charge transport and suppressed interfacial recombination. Additional electrical measurements, including capacitance–voltage, and space-charge-limited-current (SCLC), are provided in Supplementary Figs. 19 and 20 as auxiliary device-level characterizations. Because these techniques can be influenced by device architecture, contacts, ionic motion, and interfacial charge accumulation, they are not used here as quantitative probes of built-in voltage, trap depth, or trap density49,50.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par35",
+   "section": "Evaluation of AI prediction",
+   "text": "In studies involving TrPL measurements of perovskite films, the temporal acquisition windows and PL decay cutoffs vary. Despite the widespread use of TrPL as a diagnostic tool, a community-wide standardized protocol for excitation conditions and data analysis is still lacking. Consequently, reported carrier lifetimes and recombination parameters often depend strongly on the selected measurement window and fitting methodology, rather than reflecting intrinsic material properties51,52.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par36",
+   "section": "Evaluation of AI prediction",
+   "text": "Here, we trained models using different time windows and different decay cutoffs. It is determined that a time window of 2 µs and a decay cutoff of 0.01 provide sufficient kinetic information. This setting applies to the N0 in the range of 1015–1017 cm−3, which corresponds to the excitation fluence range of 100–2000 nJ cm−2 in our model cases (500 nm thick polycrystalline film with absorption coefficient of 105 cm−1 at 532 nm wavelength). The criterion is not universal. For high-quality single crystals, 2D perovskites, and nanocrystals, we recommend using our proposed methodology to train their proprietary models. Further reductions in either the time window or the decay cutoff lead to a pronounced decrease in prediction accuracy, indicating the loss of critical kinetic information. Therefore, TrPL measurements employing a 2 μs time window and a cutoff of at least 0.01 are identified as a practical and reliable condition for AI-assisted kinetic analysis. This conclusion is further confirmed by the area retention analysis of the area under TrPL decay, where both the time window and the cutoff window retain more than 95% of the area information. A detailed discussion is provided in Supplementary Note 5, Supplementary Figs. 21 and 22.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par37",
+   "section": "Evaluation of AI prediction",
+   "text": "Combined with the initial photogenerated charge carrier density in TrPL (N0), the measured TrPL and PLQY profiles were imported to the trained DL model. To verify the accuracy of the model, the experimentally fitted (genetic algorithm) parameters and the DL-predicted parameters are presented in Fig. 6, and their numerical values are summarized in Supplementary Table 6. It can be seen that the model provides highly accurate predictions for the studied kinetic parameters. The close correspondence between the experimental and predicted histograms indicates that the DL model can successfully capture the main recombination and trap-related kinetic features from the PL data.Fig. 6Experimental verification of DL prediction.Kinetic bar chart comparisons between experimentally fitted and DL-predicted parameters of four studied perovskite films (FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (Passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (Passivated CsFAMA)): a bimolecular recombination coefficient (γeh), b electron capture coefficient (γec), c hole capture coefficient (γhc), d trap density (NT), e electron emission coefficient (γee), and f Auger recombination coefficient (γAug).",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par38",
+   "section": "Evaluation of AI prediction",
+   "text": "Figure 6a shows the comparison results of the bimolecular recombination coefficients. The strong agreement between the experimental and predicted values suggests the model can effectively identify changes in band-to-band radiative recombination behavior caused by compositional engineering and passivation treatment. The γehs of the passivated perovskites are all improved (1.87 × 10−11 cm3 s−1 to 2.65 × 10−11 cm3 s−1 in CsFAMA, 2.72 × 10−11 cm3 s−1 to 3.61 × 10−11 cm3 s−1 in FAMA), which is consistent with the enhanced radiative recombination observed after passivation.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par39",
+   "section": "Evaluation of AI prediction",
+   "text": "The comparison of trap-related kinetics is shown in Fig. 6b–e. The electron capture and hole capture processes are reasonably reproduced, as shown in Fig. 6b, c. Since these two parameters are directly related to carrier trapping and trap-assisted nonradiative recombination pathways, the agreement confirms that the model is sensitive to trap-mediated kinetic processes. Both coefficients decrease through passivation. The decrease in the γhc indicates the suppression of nonradiative recombination. Although the γec is not directly related to nonradiative recombination, its decrease reduces the probability of trap-assisted nonradiative recombination. NT is a key indicator of trap density in perovskite films. The Fig. 6d suggests that the model can distinguish differences in trap densities among the studied films. Compared to experimental values, the parameters predicted by DL clearly show the difference in trap density before and after passivation (CsFAMA reduced from 7.35 × 1015 cm−3 to 6.05 × 1015 cm−3, and FAMA reduced from 7.31 × 1015 cm−3 to 4.88 × 1015 cm−3). This is attributed to the model’s generalizable judgment based on large-scale data. In Fig. 6e, the γee is well predicted, indicating that the reverse release of trapped carriers back to the free carrier population is captured by the model. This is essential for describing delayed recombination and long tail features in TrPL decay curves. In general, differences in perovskite compositions have little effect on electron emission, while passivation slightly increases the probability of it.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par40",
+   "section": "Evaluation of AI prediction",
+   "text": "Although Auger recombination typically becomes significant at high carrier concentrations, the DL model exhibits high predictive sensitivity for the γAug and preserves the relative differences among the four films, see Fig. 6f. This demonstrates the model’s effectiveness in extracting higher-order recombination information. The predicted Auger recombination coefficients are lower for the passivated films, indicating a reduced intrinsic tendency toward Auger recombination within the investigated model.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par41",
+   "section": "Evaluation of AI prediction",
+   "text": "The kinetic parameters of the samples under 3000 nJ cm−2 fluence excitation in TrPL measurements were further predicted using the DL model, as shown in Supplementary Fig. 23. Although the carrier concentration generated by 3000 nJ cm−2 fluence excitation exceeds the modeling range of DL, the model still achieved fairly high accuracy. This result suggests a degree of robustness beyond the training range under the present experimental conditions.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par42",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "To further examine whether the DL-predicted parameters can provide physically meaningful information, we reconstruct the charge carrier kinetics in transient and steady-state recombination processes of four investigated film samples. As illustrated by Fig. 7, the reconstructed kinetic evolution reveals distinct charge carrier recombination, capture, and release behaviors of different films.Fig. 7Reconstructed carrier kinetics after photoexcitation of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (Passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (Passivated CsFAMA) samples based on DL predicted parameters.a Filled trap density (nT) as a function of time. b Cumulative carriers consumed by bimolecular electron–hole recombination. c Cumulative carriers consumed by hole capture. d Instantaneous bimolecular recombination rate (γehnenh). e Instantaneous trap-assisted hole capture rate (γhcnTnh). f Steady-state carrier concentration as a function of generation rate. g Trapped carrier concentration (nT) as a function of carrier concentration. h Trap-assisted hole capture rate (γhcnTnh) as a function of trapped carrier concentration.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par43",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "Figure 7a shows the evolution of the filled trap density nT after pulsed photoexcitation in TrPL. The filled-trap densities of all samples increase rapidly at the initial time. This is because free carriers are captured by empty trap states through the electron capture process. After reaching the maximum value, nT gradually decreases. This decrease is caused by the carrier removal through the trap-assisted hole capture and electron emission processes. The different values and decay trends reflect the competition between electron capture and emission. Specifically, the passivated samples exhibit lower filled trap populations, consistent with reduced involvement of trap-mediated pathways under the investigated conditions. This observation agrees with the expected role of passivation in suppressing trap-mediated carrier loss.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par44",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "Using bimolecular electron-hole recombination and hole capture as examples, we show the consumption of accumulated carriers in Fig. 7b, c. These two cumulative carrier loss channels can directly explain the redistribution of carrier recombination pathways between radiative and trap-assisted nonradiative channels. The cumulative number of carriers consumed by radiative recombination increases with time and gradually approaches saturation as the free carrier density decreases. Under the same excitation conditions, a larger cumulative radiative contribution indicates that a greater fraction of photogenerated carriers undergoes radiative rather than trap-assisted nonradiative recombination. This behavior is indicative of improved optoelectronic quality, because the effective radiative recombination is closely associated with higher PLQY and lower nonradiative voltage loss in perovskite absorbers. In contrast, the cumulative number of carriers consumed through hole capture corresponds to the trap-mediated nonradiative recombination term. The cumulative hole capture curves represent clear differences among the four films, demonstrating that trap-related loss is largely influenced by material composition and passivation. Lower cumulative hole capture contributions are favorable for longer carrier lifetime and higher luminescence efficiency.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par45",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "The instantaneous kinetics further clarify the temporal origin of these differences. As illustrated in Fig. 7d, the bimolecular recombination rate rapidly reaches a maximum after excitation, then decreases rapidly with time. Such behavior is expected for a second-order recombination process, in which the rate is proportional to the product of electron and hole concentrations. Consequently, when the carrier density is high, the bimolecular recombination dominates the early stage of the TrPL decay. In comparison, the hole capture rates show a different temporal behavior, which reaches its maximum rapidly and then decreases more slowly (Fig. 7e). This is because it depends not only on the free-carrier density but also on the instantaneous trap filling. Therefore, the trap-mediated processes become increasingly important at the late decay stage, especially when the trapped carriers still exist after the free carrier density has decreased. Under the same excitation condition, the passivated film shows a larger radiative contribution and a smaller trap-assisted hole capture contribution, consistent with reduced nonradiative loss.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par46",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "The cumulative carrier consumptions and instantaneous consumption rates for all kinetic pathways are shown in Supplementary Figs. 24 and 25. Overall, bimolecular recombination and trap-mediated hole capture remain on the same order of magnitude over time, but bimolecular recombination is larger. In contrast, Auger recombination is an order of magnitude smaller. Therefore, at a fluence of 1000 nJ cm⁻2, bimolecular recombination within the perovskite film dominates, followed by trap-mediated recombination, with Auger recombination being much weaker.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par47",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "We further performed kinetic calculations under steady-state excitation. The charge carrier concentration increases with the generation rate. However, the two do not simply follow a linear relationship, but are regulated by a balance among radiative recombination, trap-mediated recombination, and Auger recombination. We note that, in general, passivated samples sustain higher steady-state carrier concentrations (Fig. 7f). The carrier concentration begins to increase markedly when G exceeds approximately 1021 cm−3 s−1. Meanwhile, the filled trap density increases with the increase of carrier concentration, and gradually approaches trap-filling saturation (Fig. 7g), which corresponds to the steady-state trap balance:7\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)={\\gamma }_{{hc}}{n}_{T}{n}_{h}+{\\gamma }_{{ee}}{n}_{T}$$\\end{document}γecneNT−nT=γhcnTnh+γeenT",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par48",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "The passivated samples exhibit higher filled trap densities because their higher steady-state free carrier densities increase the electron capture flux, despite their lower total trap densities and capture coefficients. As we stated earlier, electron capture only indicates the probability of trap-mediated nonradiative recombination to a certain extent; specific kinetic insights can only be obtained by analyzing specific process channels. Taking the hole capture rate as an example, Fig. 7h shows its evolution with filled trap density. As the filled-trap density increases, the trap-assisted hole capture rate becomes progressively larger with increasing nT, confirming that the filled-trap density affects the intensity of trap-mediated nonradiative recombination. Compared to the control group, at a specific filled trap density, the hole capture rates of the passivated films are lower. Moreover, the passivated films reach a comparable hole-capture rate only at a higher filled trap density. The complete steady-state kinetic pathways of the studied samples under steady-state excitation are shown in Supplementary Fig. 26.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par49",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "In brief, our proposed method for resolving carrier dynamics using DL achieves high accuracy. The reconstructed kinetic evolution indicates that the DL-predicted parameters lead to physically consistent carrier dynamics. Compared with conventional fitting methods, this method exhibits several advantages: (1) It provides a deterministic parameter prediction for each input profile within the trained parameter space; (2) It reduces the data processing time requirement from tens of minutes to microseconds; (3) It allows batch data processing; (4) No large scale parallel computing is required, model training can be completed in hours on a local workstation (AMD Ryzen 7 5800H CPU, 16 GB RAM, NVIDIA GeForce RTX 3060 GPU); (5) Once trained, the packaged model can be repeatedly applied to new datasets acquired under conditions consistent with the training domain, without retraining for each individual sample. Systematic comparison workflows between conventional fitting and the DL methods are provided in Supplementary Fig. 27.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par50",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "In summary, we present a deep learning (DL) based framework for quantitatively extracting charge carrier recombination kinetics in metal halide perovskites using combined time-resolved photoluminescence (TrPL) and photoluminescence quantum yield (PLQY) measurements. We show that TrPL decay alone suffers from intrinsic parameter non-uniqueness, whereas excitation-dependent PLQY provides a critical complementary constraint. This complementary steady-state constraint enables more physically meaningful parameter determination while substantially alleviating parameter non-uniqueness.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par51",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "Based on physically grounded rate equations, we generated a high-throughput dataset comprising 200,000 paired TrPL and PLQY profiles. The optimized DL model achieves excellent predictive accuracy, with R2 values exceeding 0.9 for all six kinetic parameters (γeh, γec, γhc, NT, γee, and γAug) across multiple orders of magnitude. Experimental studies of FA0.9MA0.1PbI2.85Br0.15, Cs0.05FA0.90MA0.05PbI2.85Br0.15, and samples passivated with 4-MeO-PEAI further validate the approach. The extracted kinetics show strong agreement with experimental fitting results, confirming the reliability of the framework. Independent optical and electrical measurements further provide qualitative support.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par52",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "After introducing PLQY, we identify an appropriate TrPL acquisition window, namely a time range of 0–2 μs and a normalized TrPL intensity range of 1–0.01, for excitation fluences spanning 100–2000 nJ cm−2. This guideline provides a practical basis for standardized TrPL measurement protocols.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par53",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "More broadly, this work establishes DL as a powerful tool for data-driven kinetic analysis in semiconductors. Future work may incorporate physics-informed constraints, such as range constraint losses and kinetic consistency losses, to improve physical interpretability and generalization. However, a balance needs to be struck between model performance and computational cost. The framework may be extendable to other semiconductor systems, such as low-dimensional perovskites, colloidal quantum dots, direct bandgap III–V and II–VI semiconductors, and organic emissive semiconductors. Future integration with imaging-based models may enable direct extraction of kinetic mechanisms from spatially resolved characterization data.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par54",
+   "section": "DL algorithms",
+   "text": "Standardization: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\widetilde{x}}_{i}=\\frac{{x}_{i}-\\mu }{\\sigma },\\,\\mu=\\frac{1}{N}\\mathop{\\sum }_{j=1}^{N}{x}_{j},\\,\\sigma=\\sqrt{\\frac{1}{N}\\mathop{\\sum }_{j=1}^{N}{\\left({x}_{j}-\\mu \\right)}^{2}}$$\\end{document}x~i=xi−μσ,μ=1N∑j=1Nxj,σ=1N∑j=1Nxj−μ2.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par55",
+   "section": "DL algorithms",
+   "text": "Inverse transform: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\hat{y}={\\sigma }_{y}\\hat{y}+{\\mu }_{y}$$\\end{document}y^=σyy^+μy.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par56",
+   "section": "DL algorithms",
+   "text": "Fully connected layers and affine transformation: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$z={Wx}+b$$\\end{document}z=Wx+b, where \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$W\\in {R}^{1800\\times 401}$$\\end{document}W∈R1800×401, b is the bias vector.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par57",
+   "section": "DL algorithms",
+   "text": "Activation function (rectified linear unit (ReLU)): \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${{{\\rm{ReLU}}}}\\left(z\\right)=\\max \\left(0,z\\right)$$\\end{document}ReLUz=max0,z. During the backpropagation: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\frac{\\partial {{{\\rm{ReLU}}}}\\left(z\\right)}{\\partial {z}}=\\left\\{\\begin{array}{cc}1 & x > 0\\\\ 0 & x\\le 0\\end{array}\\right.$$\\end{document}∂ReLUz∂z=1x>00x≤0.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par58",
+   "section": "DL algorithms",
+   "text": "Dropout: for each input neuron, set its output to 0 with probability p, and scale the remaining outputs by 1/(1−p). If the retention probability is q = 1−p, then the output of neurons retained during training must be scaled to 1/q of their original value.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par59",
+   "section": "DL algorithms",
+   "text": "Loss function(MSE): \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${MSE}=\\frac{1}{B}\\mathop{\\sum }_{i=1}^{B}{{||}{\\hat{y}}_{i}-{y}_{i}{||}}_{2}^{2}=\\frac{1}{B}\\mathop{\\sum }_{i=1}^{B}\\mathop{\\sum }_{k=1}^{d}{\\left({\\hat{y}}_{i,k}-{y}_{i,k}\\right)}^{2}$$\\end{document}MSE=1B∑i=1B∣∣y^i−yi∣∣22=1B∑i=1B∑k=1dy^i,k−yi,k2. The gradient with respect to the prediction is y ̂: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\frac{\\partial {MSE}}{\\partial {\\hat{y}}_{i,k}}=\\frac{2}{B}\\left({\\hat{y}}_{i,k}-{y}_{i,k}\\right)$$\\end{document}∂MSE∂y^i,k=2By^i,k−yi,k.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par60",
+   "section": "DL algorithms",
+   "text": "Backpropagation and parameter optimization (Adam optimizer): Adam maintains the first order moment estimate mt and the second-order moment estimate vt.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par62",
+   "section": "DL algorithms",
+   "text": "Update at time step t: t ← t + 1, \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${g}_{t}={\\nabla }_{\\theta }{L}_{t}$$\\end{document}gt=∇θLt (current gradient), \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${m}_{t}={\\beta }_{1}{m}_{t-1}+\\left(1-{\\beta }_{1}\\right){g}_{t}$$\\end{document}mt=β1mt−1+1−β1gt, \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${v}_{t}={\\beta }_{2}{v}_{t-1}+\\left(1-{\\beta }_{2}\\right){g}_{t}^{2}$$\\end{document}vt=β2vt−1+1−β2gt2, where β1 = 0.9, β2 = 0.999;",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par63",
+   "section": "DL algorithms",
+   "text": "Deviation correction: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\hat{m}}_{t}=\\frac{{m}_{t}}{1-{\\beta }_{1}^{t}}$$\\end{document}m^t=mt1−β1t, \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\hat{v}}_{t}=\\frac{{v}_{t}}{1-{\\beta }_{2}^{t}}$$\\end{document}v^t=vt1−β2t;",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par64",
+   "section": "DL algorithms",
+   "text": "Parameter update: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\theta }_{i+1}={\\theta }_{t}-\\alpha \\frac{{\\hat{m}}_{t}}{\\sqrt{{\\hat{v}}_{t}}+\\epsilon }$$\\end{document}θi+1=θt−αm^tv^t+ϵ, where ϵ = 10−8.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par65",
+   "section": "DL algorithms",
+   "text": "Forward pass model prediction: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\hat{y}={f}_{\\theta }\\left(x\\right)={L}_{3}\\left({{{\\rm{Droupout}}}}\\left({{{\\rm{ReLU}}}}\\left({L}_{2}\\left({{{\\rm{Dropout}}}}\\left({{{\\rm{ReLU}}}}\\left({L}_{1}\\left(x\\right)\\right)\\right)\\right)\\right)\\right)\\right)$$\\end{document}y^=fθx=L3DroupoutReLUL2DropoutReLUL1x, where L is the linear layer.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par66",
+   "section": "DL algorithms",
+   "text": "Evaluation indicator (coefficient of determination, R2): \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${R}^{2}=1-\\frac{\\mathop{\\sum }_{i=1}^{n}{\\left({y}_{i}-{\\hat{y}}_{i}\\right)}^{2}}{\\mathop{\\sum }_{i=1}^{n}{\\left({y}_{i}-\\bar{y}\\right)}^{2}}$$\\end{document}R2=1−∑i=1nyi−y^i2∑i=1nyi−ȳ2, where y ̅ is the mean of the y.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par67",
+   "section": "Materials",
+   "text": "All the solvents and reagents were purchased and used without further purification. Fluorine-doped tin oxide (SnO2:F, FTO) VU glass was purchased from Asahi (Japan). Hydrochloric acid (HCl, 35%), acetone (99.5%), and ethyl alcohol (EtOH, 99.5%) were purchased from DaeJung Chemicals & Metals (South Korea). Tin(IV) oxide (SnO2, 20% in H2O colloidal dispersion) and potassium chloride (KCl, 99.995%) were purchased from Alfa Aesar (United States of America, USA). Hellmanex III (detergent), deionized water (DI water), chlorobenzene (CB, anhydrous, 99%), dimethylformamide (DMF, anhydrous, 99.8%), dimethyl sulfoxide (DMSO, anhydrous, 99.9%), acetonitrile (anhydrous, 99.8%), anisole (anhydrous, 99.7%), 4-tert-butylpyridine (tBP, 99.8%), 2-propanol (IPA, anhydrous, 99.5%), cesium iodide (CsI, 99.9%), lithium bis(trifluoromethanesulfonyl)imide salt (Li-TFSI, 99.5%), 2-methoxyethanol (2ME, anhydrous, 99.8%) were purchased from Sigma-Aldrich (USA). Zinc (powder, 96%), lead iodide (PbI2, 99.99%), and lead bromide (PbBr2, 99.99%) were purchased from Tokyo Chemical Industry Chemicals (Japan). Formamidinium iodide (FAI, 99.9%), methylammonium bromide (MABr, 99.9%), methylammonium chloride (MACl, 98%), and 4-methoxy-phenethylammonium iodide (4-MeO-PEAI) were purchased from GreatCell Solar (Australia). 2,2′,7,7′-tetrakis[N,N-di(4-methoxyphenyl)-amino]-9,9′-spirobifluorene (spiro-OMeTAD, 99.5%, LT-S922) was purchased from Lumtec.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par68",
+   "section": "Film deposition",
+   "text": "Microscope slides were sonicated sequentially with 2 vol% Hellmanex in DI water, DI water, acetone, EtOH for 15 min each, and finally irradiated under UV-ozone for 40 min to remove the last traces of organic residues. Unless otherwise specified, precursor preparation was performed in an argon filled glovebox. 1.6 M FA0.9MA0.1PbI2.85Br0.15 perovskite precursor solution was prepared by dissolving 0.262 g FAI, 0.009 g MABr, 0.723 g PbI2 (3% excess in mol), 0.029 g PbBr2, 0.035 g MACl (as additive) in 1 mL DMF/DMSO (8:2, v/v) solution. 1.6 M Cs0.05FA0.90MA0.05PbI2.85Br0.15 perovskite precursor solution was prepared by dissolving 0.021 g CsI, 0.249 g FAI, 0.009 g MABr, 0.760 g PbI2 (3% excess in mol), 0.029 g PbBr2, 0.035 g MACl (as additive) in 1 mL DMF/DMSO (8:2, v/v) solution. Passivation solution was prepared by dissolving 3 mg of 4-MeO-PEAI in 1 mL of IPA. The precursor and passivation solutions were then transferred to a dry room with a controlled humidity lower than 20% and stirred for 40 min and 60 min. After filtration through a 0.2 μm polytetrafluoroethylene (PTFE) filter, 40 μL of the precursor solution was deposited on the microscope slide. After the precursor was spread on the surface, the solution was spin coated at a speed of 5000 rpm for 25 s, with an acceleration of 2000 rpm/s. At 19 s after the start of spin coating, 500 μL of anisole was continuously dispensed onto the center of the spinning substrate over approximately 1 s. After that, the substrates were moved to a hotplate at 100 °C and kept for 30 min. For passivated samples, 40 μL of passivation solution was dynamically spin-coated on the cooled perovskite film after filtration through the 0.2 μm pore size PTFE filter, without annealing.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par69",
+   "section": "Device fabrication",
+   "text": "2 × 2 cm2 FTO substrate glasses were etched by an acid solution (HCl: DI = 2: 1, v/v) and zinc powder as an etchant in a 2 × 0.4 cm2 side area. The etched area was covered with zinc powder first and followed by dropwise addition of the acid solution. The unetched area was protected by PTFE tape. After etching, the PTFE tape was removed and the substrates were cleaned by DI water. Before spin coating the electron transport layer (ETL), substrates were sonicated sequentially with 2 vol% Hellmanex in DI water, DI water, acetone, EtOH for 15 min each, and finally irradiated under UV-ozone for 40 min to remove the last traces of organic residues. The ETL material was prepared by adding 10 mM KCl into a solution with a volume ratio SnO2: DI water = 1:3. After stirring for 30 min and filtration through a 0.2 μm pore size polyvinylidene fluoride (PVDF) filter, the ETL solution was spin-coated on the substrates at 3000 rpm for 30 s with an acceleration rate of 1000 rpm/s. Next, a 2 × 0.5 cm2 area of the SnO2 film (opposite the etched area) was wiped off with a cotton swab dipped in DI water. Then the substrates were annealed at 100 °C for 10 min and moved to the dry room. Before depositing the perovskite layer, the substrates were irradiated under UV-ozone for 20 min. The perovskite precursor preparation and film deposition procedures were identical to those described in the “Film deposition” section. The hole transport layer (HTL) solution was prepared by mixing 0.090 g spiro-OMeTAD, 36 µL tBP, 23 µL of Li-TFSI solution (520 mg/mL in acetonitrile) with 1 mL CB in the argon glove box. Then the HTL solution was transferred to the dry room and stirred for 1 h. After filtration through a 0.2 μm pore size PTFE filter, 40 µL of the solution was dynamically spin coated on the surface at 4000 rpm for 30 s with an acceleration rate of 1000 rpm/s. Next, the same 2 × 0.5 cm2 area of the perovskite film and the HTL was wiped off with a cotton swab dipped in 2ME. The prepared samples were stored in the dry room for 2 days for oxidation. Finally, 80 nm of silver as the electrode was thermally evaporated on the HTL layer at a rate of 2 Å/s under a base pressure of approximately 10−6 Torr.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par70",
+   "section": "Characterization",
+   "text": "The J–V characteristics of the as-prepared solar cells were measured using a solar simulator (Newport Oriel Solar 3 A Class AAA, 64023 A) and potentiostat (CHI 660D, CH instruments) under 1 sun illumination of the AM 1.5 G spectrum (100 mW cm−2). The light intensity of the solar simulator was calibrated using a standard Si-based solar cell (Oriel, VLSI standards) and a light-sensor current controller (Newport Oriel digital exposure controller, Model 68 945). During testing, an antireflective film was attached to the rear side of the glass substrate. The performances of all the devices were measured after covering the active area with a thin mask (0.14 cm2). J–V curves were measured using reverse scanning at a rate of 200 mV s−1 under 1 sun illumination of the simulated AM 1.5 G spectrum (100 mW cm−2) in ambient air (room temperature (≈20 °C) and an RH in the range of 5–10%); all the devices were illuminated under 1 sun for 20–30 s before J–V measurements. SEM images and elemental-content mappings were recorded by a hot-field emission scanning electron microscope (JSM-7600F, JEOL, Japan). XRD patterns of the perovskite films were measured using a D8 Discover instrument with Cu Kα radiation (λ = 1.5418 Å). Absorbance spectra were measured using a UV–vis spectrometer (Lambda 45, Perkin Elmer). PL spectra were recorded using a fluorescence lifetime spectrometer (Quantaurus Tau C11367-12, HAMAMATSU) with 464-nm pulsed (10 MHz)-laser (PLP-10, HAMAMATSU) excitation. TrPL decays were measured using a pulsed Nd:YAG laser source (10 Hz) at 532 nm (Surelite, II-10), housed with the Cryogenic Femtosecond Transient Kerr-Gate Spectro-microscopy Facility (NFEC-2025-03-305124). To measure the PLQY, samples were placed in an integrating sphere (Newport, 819C-IS-3.3), and illuminated by a 532 nm continuous wave laser (CNI, MGL-III−532). Optical density filters were used to get low intensities and a focusing lens was placed between laser and sample to get high intensities. An optical fiber coupled to the integrating sphere was used to collect the emitted PL. An IPCE system for photovoltaic measurements in the DC mode with a monochromatic beam generated by a 75-W Xe lamp (USHIO) was used for IPCE spectral measurements.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par71",
+   "section": "Reporting summary",
+   "text": "Further information on research design is available in the Nature Portfolio Reporting Summary linked to this article.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par74",
+   "section": "Supplementary information",
+   "text": "Supplenmentary information Reporting Summary Transparent Peer Review file",
+   "id_derived": false
+  }
+ ]
+}

@@ -1,0 +1,506 @@
+{
+ "source_id": "P2",
+ "doi": "10.1038/s41467-026-77052-8",
+ "title": "Resolving carrier kinetics in perovskite through deep-learning-assisted photoluminescence analysis",
+ "authors": [
+  "Wenning Chen",
+  "Hui Chan Ahn",
+  "Bonghyun Jo",
+  "Sijia Li",
+  "Zheyu Zhang",
+  "Kelvian T. Mularso",
+  "Jong In Huh",
+  "Sae Byeok Jo",
+  "Hyun Suk Jung"
+ ],
+ "license": "Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reprodu",
+ "sha256": "5082ea3cda7b148776d3d3931f01cdf82c41d066ef49ff650e904556f1f3cdfb",
+ "role": "secondary",
+ "journal": "Nature Communications",
+ "year": "2026",
+ "paragraphs": [
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par3",
+   "section": "Introduction",
+   "text": "Metal halide perovskites have emerged as leading materials for next-generation optoelectronic devices. These materials exhibit exceptional properties, including long carrier diffusion lengths, high absorption coefficients, and tunable band gaps1–4. Currently, solar cell device efficiency has improved substantially. However, a quantitative understanding of charge carrier recombination dynamics remains a key bottleneck for further improving performance and long-term stability5–8.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par4",
+   "section": "Introduction",
+   "text": "Photoluminescence (PL) based techniques are important noninvasive techniques for perovskite characterization. Particularly, time-resolved photoluminescence (TrPL) is widely used to probe perovskite carrier lifetimes9–11. TrPL profiles show the luminescence temporal evolution after excitation. Carrier lifetimes are typically extracted from TrPL decay profiles through exponential fitting (\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$I={I}_{0}+{\\sum }_{i=1}^{n}{A}_{i}\\exp (-t/{\\tau }_{i})$$\\end{document}I=I0+∑i=1nAiexp(−t/τi)). However, the multichannel and coupled natures of perovskite kinetics are largely neglected by these phenomenological fitting approaches. Further, carrier lifetimes may vary significantly with measurement conditions. These limitations imply that the extracted lifetimes may lack a clear physical interpretation. On the other hand, differential decay time (\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\tau }_{{{{\\rm{diff}}}}}\\equiv -2{dt}/d{{\\mathrm{ln}}}I\\left(t\\right)$$\\end{document}τdiff≡−2dt/dlnIt) is also frequently used to evaluate the carrier lifetime of perovskites. However, Yuan et al. proved that the differential decay time is an ambiguous indicator when represented as a function of time. Plotting the differential decay time as a function of time can obscure quantitative kinetic information because the effective bimolecular recombination coefficient is no longer retained. As a result, important information related to processes such as shallow trap-mediated recombination may be lost. In this case, the analysis mainly preserves the information that the decay follows a power law behavior associated with bimolecular type recombination, while the corresponding recombination coefficient remains inaccessible. In contrast, plotting differential decay time against quasi-Fermi-level splitting or carrier density can retain meaningful recombination information12. Accordingly, perovskite recombination kinetics may be obscured when they are interpreted solely using lifetimes derived from exponential fitting or differential decay times plotted as a function of time.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par5",
+   "section": "Introduction",
+   "text": "In contrast, charge carrier models based on rate equations provide a physical framework for the kinetic interpretation. Through comprehensively considering the temporal evolution of photogenerated species, these models provide a mechanistic description of recombination13–15. Since rate equations consider the initial excitation state, the PL decays under different excitation conditions can be explained mechanistically. However, the application of rate-equation models is limited by two major challenges: (1) the need to predefine the kinetic model based on a limited set of experimental observations, which can lead to poorly constrained parameter estimation; and (2) parameter non-uniqueness arising from strong coupling among multiple recombination channels. Specifically, the same TrPL decay can be reproduced by several distinct parameter sets.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par6",
+   "section": "Introduction",
+   "text": "Recent data-driven strategies offer promising alternatives16–20. For example, Bayesian inference has been adopted to invert kinetic behaviors in several semiconductors21–23. However, Bayesian inference often incurs substantial computational overhead because it requires a large number of forward simulations. In contrast, deep learning (DL) provides a more computationally economical and efficient data-driven approach. In materials science, DL has been employed in crystal structure prediction, phase classification, and spectroscopy analysis24–26. By establishing mappings from TrPL profiles to kinetic parameters, it can provide direct physical kinetic solutions quickly. Once trained, the DL model can rapidly predict kinetic parameters without repeated optimization. Lee’s group has conducted in-depth research on determining organic light-emitting-diode electroexcitation kinetics by DL. They successfully extracted coefficients of the polaron recombination and the triplet-triplet annihilation from the time-resolved electroluminescence27,28. While fairly high accuracy has been achieved, the model output is limited to a single kinetic parameter. To date, developing a single model capable of predicting multiple kinetic parameters remains largely unexplored.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par7",
+   "section": "Introduction",
+   "text": "In this work, we show that TrPL decay profiles alone are insufficient to uniquely determine carrier kinetics in perovskites. This is due to the existence of non-unique solutions. We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness. Previous work has shown that the curves of PLQY as a function of excitation pulse energy and repetition frequency help to verify the validity of the kinetic model29. This may be attributed to the fact that PLQY adds an independent steady-state constraint to the ratio between radiative and nonradiative recombination channels. Recently, using an analytical method, Hüpkes et al. demonstrated that trap depth significantly affects the steady-state PLQY and transient PL responses of halide perovskites30. Although analytical treatments are essential for understanding limiting cases, they usually rely on simplified assumptions and cannot easily resolve the fully coupled nonlinear kinetics. The community still needs an efficient and scalable solution for extracting multiple coupled kinetic parameters. Building on this insight, we develop a DL-based framework that jointly analyzes TrPL and PLQY data. The proposed framework is able to directly extract physically meaningful kinetic parameters (Fig. 1a).Fig. 1Schematic diagram of the present work and the kinetic model.a Schematic diagram of the present work: leveraging AI to extract perovskite charge carrier kinetics from TrPL+PLQY joint characterization. b Schematic diagram of the kinetic model incorporating trap states with the following processes: ① bimolecular recombination, ② electron capture, ③ hole capture, ④ electron emission, and ⑤ Auger recombination. c Influences of kinetic parameters on normalized TrPL decay profiles (five simulated cases). d Enlarged view of simulated cases 1 and 2, where TrPL decay profiles almost overlapped. e Influences of kinetic parameters on PLQY as a function of photocarrier generation rate. f A detailed comparison of simulated cases 1 and 2.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par8",
+   "section": "Introduction",
+   "text": "Here, we construct a large training pool capturing diverse kinetic scenarios by high-throughput TrPL and PLQY simulation. A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients of determination (R2s) over 0.9. The model is adopted to predict kinetics for four deposited perovskite films. The high prediction accuracy is confirmed after comparison with the experimentally fitted parameters. The device-level electrical characterizations further show trends consistent with the DL-predicted kinetics. Together, this work establishes a general and robust data-driven framework for quantitative analysis of kinetics in perovskite semiconductors.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par9",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "The high power conversion efficiency (PCE) of metal halide perovskites originates from their long carrier diffusion lengths, strong optical absorption, and high charge carrier densities under operating conditions31–33. Under excitation, the charge carrier density is governed by the balance between carrier generation and recombination processes. In the ideal limit of bimolecular recombination, the externally observable radiative recombination rate can be expressed as:1\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$R={\\gamma }_{{eh}}{n}_{e}{n}_{h}$$\\end{document}R=γehnenhwhere γeh is the effective external band-to-band electron-hole bimolecular recombination coefficient. It differs from the internal coefficient γeh,int entering the van Roosbroeck–Shockley relation because photon outcoupling and photon recycling affect the externally observed luminescence34.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par10",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "To comprehensively capture coupled processes, the electron trap states are incorporated into the kinetic model, see Fig. 1b35. Following the conventional Shockley–Read–Hall terminology, the trap-mediated processes considered here are electron capture, hole capture, and electron emission36. To limit the number of unknown kinetic parameters, we assume an electron trap located above the intrinsic level and closer to the conduction band, for which hole emission is much weaker than electron emission. The hole emission is therefore neglected in the present kinetic model. Upon photoexcitation, the photogenerated species undergo multiple competing pathways, including ① direct band-to-band bimolecular recombination, ② electron trapping (electron capture), ③ nonradiative recombination of trapped electrons with valence band holes (hole capture), and ④ electron emission from traps. The TrPL decay profiles differ substantially under different excitation fluences. At low excitation fluence, the curve tends to an exponential decay dominated by monomolecular recombination; at high excitation fluence, the curve tends to a power law decay dominated by bimolecular recombination. This is due to the existence of trap states. When the density of photogenerated carriers is lower than the density of trap states, free electrons or holes preferentially undergo trap-mediated monomolecular recombination with trap states. When there is a high concentration of charge carriers, free charge carriers that fail to fill trap states undergo bimolecular recombination. Trap-related processes are dynamic processes involving capture and emission.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par11",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "At high carrier density conditions, on the other hand, higher-order processes such as third-order Auger recombination may also contribute to excited state dynamics. This mechanism typically manifests as anomalous signatures, such as high-fluence roll-off in PLQY and super-linear early-time TrPL behavior. ⑤ Auger recombination is thus incorporated in the present model via the term γAugnenh(ne+nh). Considering the low exciton binding energy (typically within the range of 2–55 meV) of perovskites, which is comparable to thermal energy (\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${k}_{B}T\\cong$$\\end{document}kBT≅2 meV at room temperature), excitons tend to dissociate rapidly, and their equilibrium population is generally negligible compared with the total excited state density37–39. Consequently, the contribution of excitons is not considered. Therefore, the interpretation of excitation-density-dependent photo physics is restricted to regimes predominantly governed by monomolecular, bimolecular, and trimolecular processes involving photogenerated charges and traps.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par12",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "Based on the above assessment of kinetic processes, coupled rate equations describing the temporal evolution of free electrons, captured electrons, and recombination were constructed as follows:2\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\begin{array}{c}-\\frac{d{n}_{e}}{{dt}}={\\gamma }_{{eh}}{n}_{e}{n}_{h}+{\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)-{\\gamma }_{{ee}}{n}_{T}+{\\gamma }_{{Aug}}{n}_{e}{n}_{h}\\left({n}_{e}+{n}_{h}\\right)\\\\ -\\frac{d{n}_{T}}{{dt}}=-{\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)+{\\gamma }_{{hc}}\\left({n}_{T}{n}_{e}+{n}_{T}^{2}\\right)+{\\gamma }_{{ee}}{n}_{T}\\end{array}$$\\end{document}−dnedt=γehnenh+γecneNT−nT−γeenT+γAugnenhne+nh−dnTdt=−γecneNT−nT+γhcnTne+nT2+γeenTwhere γec, γhc, γee and γAug are the coefficients of electron capture, hole capture, electron emission, and Auger recombination, respectively. NT and nT denote the total trap density and the density of filled traps, respectively. In view of the charge neutrality condition, the hole density is nh = ne + nT. In summary, within this framework, γeh describes the radiative recombination pathway; γhc and γAug describe the nonradiative recombination pathways; γec and γee describe interactions between electrons and traps beyond recombination.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par13",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "Considering that PL intensity is proportional to the radiative band-to-band bimolecular recombination, the definition of the normalized TrPL intensity gives:3\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\frac{{I}_{{PL}}^{t}}{{I}_{{PL}}^{0}}=\\frac{{n}_{e}^{t}{n}_{h}^{t}}{{n}_{e}^{0}{n}_{h}^{0}}$$\\end{document}IPLtIPL0=netnhtne0nh0where superscript 0 and t represent the initial time and elapsed time after the photoexcitation. To study the effects of the involved kinetic parameters on TrPL decay, we adjusted the parameters and simulated different decay curves. All used kinetic parameters are tabulated in the Supplementary Table 1. The TrPL profiles exhibit different decay characteristics due to the changes of kinetic parameters, as illustrated in Fig. 1c. Strikingly, distinct parameter sets can produce nearly identical TrPL decay profiles (simulation cases 1 and 2). The enlarged view in Fig. 1d further shows features that are nearly identical, which are undetectable in experimental TrPL measurements mixed with noise. This overlap characteristic demonstrates that the kinetic parameters inferred solely from the TrPL profiles may be unreliable. Consequently, determining carrier dynamics solely through TrPL is largely affected by the non-unique-solution problem.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par14",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "To resolve this ambiguity, we introduce the PLQY, defined as the ratio of emitted to absorbed photons, as an additional constraint on carrier kinetics:4\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${{{\\rm{PLQY}}}}=\\frac{{\\gamma }_{{eh}}{n}_{e}{n}_{h}}{{\\gamma }_{{eh}}{n}_{e}{n}_{h}+{\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)+{\\gamma }_{{Aug}}{n}_{e}{n}_{h}\\left({n}_{e}+{n}_{h}\\right)}$$\\end{document}PLQY=γehnenhγehnenh+γecneNT−nT+γAugnenhne+nh",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par15",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "A detailed derivation is provided in Supplementary Note 1.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par16",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "Although different parameter sets may yield identical PLQY values at a fixed carrier density, their PLQY evolution diverges with the excitation density increase (Fig. 1e). A clear comparison between simulation cases 1 and 2 is presented in Fig. 1f. Although the TrPL decays are similar, PLQYs in case 2 are higher than those in case 1. This demonstrates that joint analysis of TrPL and PLQY can provide complementary information to distinguish non-unique solutions.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par17",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "In fact, excitation-dependent PLQY in perovskites has been extensively investigated. deQuilettes et al. reported a pronounced excitation intensity dependence of PLQY; at high excitation intensities, the PLQY of perovskite can exceed 30%40. They demonstrated that the excitation-dependent trend can be interpreted by the kinetic equations. Kiligaridis et al. pointed out that only by adding trap-related terms and Auger recombination terms to the SRH model can both PLQY and PL decay be fitted simultaneously29. This is strong evidence that our work effectively alleviates the non-uniqueness problem by introducing PLQY. In fact, the characteristic of PLQY to mitigate the physical solution non-uniqueness stems from its definition. Under charge neutrality condition, PLQY gives:5\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${{{\\rm{PLQY}}}}=\\frac{{\\gamma }_{{eh}}{n}_{e}\\left({n}_{e}+{n}_{T}\\right)}{{\\gamma }_{{eh}}{n}_{e}\\left({n}_{e}+{n}_{T}\\right)+{\\gamma }_{{hc}}{n}_{T}\\left({n}_{e}+{n}_{T}\\right)+{\\gamma }_{{Aug}}{n}_{e}\\left({n}_{e}+{n}_{T}\\right)\\left(2{n}_{e}+{n}_{T}\\right)}$$\\end{document}PLQY=γehnene+nTγehnene+nT+γhcnTne+nT+γAugnene+nT2ne+nT",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par18",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "This expression shows that PLQY is sensitive to trap filling through the charge neutrality condition. Therefore, PLQY does not merely add more data points; it provides a different physical constraint on the steady-state carrier distribution and on the branching between radiative and nonradiative recombination pathways.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par19",
+   "section": "Kinetic model and non-uniqueness of TrPL analysis",
+   "text": "To gain more insights into the physical impact of kinetic coefficients on experimental observations, we simulated the trends of TrPL and PLQY with increasing kinetic coefficients. Figure 2a–c illustrates the changes with gradually increasing trap densities. Overall, the TrPL decay becomes progressively faster as NT increases. The influence is relatively weak at low NT but becomes pronounced at higher trap densities. Increasing NT suppresses the rise in PLQY. This is because traps become increasingly difficult to fill. A higher photogenerated carrier generation rate is required to fill the traps to achieve recombination luminescence. Notably, PLQY provides a clearer picture compared to the weak trend of TrPL at low trap densities. The changes with the γee are shown in Fig. 2d–f. Unfortunately, even when the γee span two orders of magnitude, changes in TrPL remain almost imperceptible. This suggests that electron emission information extracted solely from TrPL may be unreliable. However, electron emission dominates carrier dynamics over long timescales, making its accurate extraction crucial41. By contrast, it can be seen that at low carrier generation rates (1020–1021 cm−3 s−1), PLQY can provide relatively clear distinctions, providing improved sensitivity for extracting the γees. The same issue arises with the γAug; Auger recombination has a small effect on TrPL decay (see Fig. 2g). This effect may be enhanced under extremely high photoexcitation. Fortunately, Auger recombination has a significant effect on PLQY at high photogeneration rates (Fig. 2i). As the γAug increases, the peak value of PLQY tends to decrease. This reflects the gradual dominance of Auger recombination. Besides, the effects of the γeh, γec, and γhc on photoluminescence are presented in Supplementary Fig. 1.Fig. 2Effects of individual kinetic parameters on TrPL and PLQY.a TrPL variation with increasing trap density (NT), b Schematic diagram of trap density. c PLQY variations with NT, d TrPL variations with increasing electron emission coefficient (γee), e Schematic diagram of electron emission process, f PLQY variations with increasing γee, g TrPL variations with increasing Auger recombination coefficient (γAug), h Schematic diagram of Auger recombination process, i PLQY variations with increasing γAug.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par20",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "Based on the introduced physical insights, we developed a supervised DL framework to directly extract kinetic parameters from the joint TrPL + PLQY profiles, as illustrated in Fig. 3a. The initial photogenerated charge carrier density (N0) is included to enable the model to account for different excitation states42. First, six key parameters (γeh, γec, γhc, NT, γee, γAug), together with the initial carrier density N0, were randomly sampled within physically reasonable ranges, which are listed in Supplementary Table 2. A total of 200,000 parameter sets were finally generated. From the distribution histograms of the generated parameters in Supplementary Fig. 2, it can be seen that the parameter data points are evenly distributed within the sampling ranges. For each parameter set, TrPL decay profiles and PLQY curves were simulated by solving the kinetic model. The acquired TrPL profiles then undergo a preprocessing procedure that limits the profiles to a reasonable time window and decay cutoff. Afterward, the learning pool was constructed by pairing the processed profiles with their associated kinetic parameters. Curve diagrams are plotted in Supplementary Fig. 3 using 10,000 randomly selected simulation cases. Both TrPL and PLQY curves exhibited diverse trends, demonstrating the broad applicability of the kinetic model employed.Fig. 3DL-based workflow for extracting charge carrier kinetic parameters and evaluating model performance.a 200,000 kinetic scenarios were simulated by varying six parameters in the rate equation model, outputting the corresponding TrPL and PLQY profiles. The DL model is trained based on the established learning pool. When new characterization profiles are input, the model can predict the kinetics of the studied samples. Model performances: b R2 bar charts of kinetic parameters (bimolecular recombination coefficient (γeh), electron capture coefficient (γec), hole capture coefficient (γhc), trap density (NT), electron emission coefficient (γee), and Auger recombination coefficient (γAug)) for different training datasets: only TrPL as input, only PLQY as input, TrPL + PLQY as input, and optimized learning pool and model architecture. c Correlation scatter distribution plots of labeled and predicted kinetic parameters. Color represents the number of data points within each hexagonal bin. The color scale is shared by all panels.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par21",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "The DL model is used to map the input PL data and associated N0 to the six kinetic parameters. An optimization procedure is performed, which aims to explore the accuracy boundaries with the appropriate sample size, number of sampling points, and the neural network architecture. The DL optimization process is introduced in the Supplementary Note 2, Supplementary Figs. 4, 5, and Supplementary Tables 3, 4. Finally, 200,000 entries and 200 sampling points per profile (a 200,000 × 200 matrix) are determined. The final input comprises 200 TrPL points, 200 PLQY points, and one initial carrier density value, yielding 401 input features per sample. The neural network architecture was determined as 401:1800:1800:6 with a dropout rate of 0.048, as illustrated in Supplementary Fig. 6. The models were implemented in Python 3.12.7 (PyTorch). According to FAIR principles, the complete database, trained model package and code are provided, see data availability statement43.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par22",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "Figure 3b compares the R2s of the DL models trained with different learning pools. R2 is a commonly used metric for evaluating the predictive performance of regression models, measuring the agreement between model predictions and actual values44,45. It is defined as follows:6\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${R}^{2}=1-\\frac{{\\sum }_{i}{\\left({y}_{i}-{\\hat{y}}_{i}\\right)}^{2}}{{\\sum }_{i}{\\left({y}_{i}-\\bar{y}\\right)}^{2}}$$\\end{document}R2=1−∑iyi−y^i2∑iyi−ȳ2where yi is the actual labeled value, y ̂i is the model predicted value, y ̅ is the average of the actual labeled values. The closer the value of R2 is to 1, the closer the model prediction is to the actual labeled value, and the better the regression performance. It is worth noting that R2 only reflects the overall fit and does not directly indicate the prediction errors. We present the mean square errors (MSEs) in Supplementary Figs. 4 and 5 to compensate for this. Small MSEs are observed between the predicted and labeled values. Furthermore, R2 is easily affected by outliers, but no pronounced outliers are evident in the correlation scatter distribution plots.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par23",
+   "section": "Deep learning framework for kinetic parameter extraction",
+   "text": "From the R2 bar cluster of the model trained solely on TrPL profiles, poor modeling performance on all kinetic parameters except for the γeh (R2 = 0.86) is observed. Particularly low accuracy is observed for Auger recombination, with R2 of 0.057. Meanwhile, the model trained only on PLQY data suffers from limited performance, with the R2 range of 0.64–0.83. The reason for the insufficient accuracy is that the parameters are obtained by solving the kinetic models under steady-state conditions, leading to a lack of interpretation of the instantaneous PL. In contrast, the model trained on TrPL + PLQY joint data yields R2s ranging from 0.76 to 0.94. The improvements in R2s imply that TrPL and PLQY provide each other with orthogonal information to make accurate inferences. After optimization, R2s of all target parameters are further boosted above 0.9. From the correlation scatter distributions of the optimized model in Fig. 3c, most scatters lie close to the identity line, showing good agreement between the predicted and labeled values. The above results indicate that independent TrPL or PLQY characterizations are insufficient to provide adequate kinetic information. The combined characterization strategy is more effective for extracting the full set of kinetic parameters than either dataset alone. Furthermore, we train the model using TrPL data with added experimental noise to explore its predictive ability on real experimental data. Fortunately, except for the test R2 for the γee, which decreased to 0.73, the R2s for all other coefficients are above 0.84, demonstrating that the model remains reasonably robust to the level of simulated experimental noise. The predictive scatter plot is included in Supplementary Fig. 7. To further examine the extensibility of the proposed framework, we additionally applied it to a more complex ETL half device architecture, glass/FTO/SnO2/perovskite, in which electron extraction and interfacial nonradiative recombination introduce additional kinetic pathways beyond bulk carrier recombination. The corresponding kinetic model, parameter ranges, and DL prediction performance are provided in Supplementary Note 3 and Supplementary Figs. 8, 9.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par24",
+   "section": "Film characterization and kinetic fitting",
+   "text": "In the present work, perovskite films with compositions of FA0.9MA0.1PbI2.85Br0.15 (FAMA) and Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA) are deposited to verify the functionality of the established model. Here, the corresponding passivated samples are prepared by depositing 4-methoxy-phenethylammonium iodide (4-MeO-PEAI) on the perovskite absorber surface.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par25",
+   "section": "Film characterization and kinetic fitting",
+   "text": "Scanning electron microscopy (SEM) was employed to examine the surface morphologies of the perovskite films. Figure 4a, b show the surface morphologies of the FAMA and CsFAMA films, respectively. Well-formed perovskite grains with relatively uniform size distributions are observed, with average grain sizes of approximately 962 nm for FAMA and 682 nm for CsFAMA. Nevertheless, pinhole defects are present at some grain boundaries, which are commonly regarded as centers for nonradiative recombination. The surface morphologies and cross-sectional SEM images of the 4-MeO-PEAI–passivated films are presented in Supplementary Fig. 10. These images indicate a more uniform surface morphology after 4-MeO-PEAI treatment, accompanied by effective passivation of surface defects. Cross-sectional SEM images further indicate a film thickness of approximately 500 nm. To check the formation of the perovskite phase, their X-ray diffraction (XRD) patterns and the corresponding full widths at half maximums (FWHMs) were measured and shown in Supplementary Fig. 11. Two strong peaks occur at 14.0° and 28.3°, and their corresponding (110) and (220) crystal planes suggest the formation of the perovskite host phase. Compared to the control groups, the passivated films exhibit narrower FWHMs, indicating improved crystallinity and reduced microstrain.Fig. 4Characterizations of the perovskite film samples of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a, b Scanning electron microscopy (SEM) surface morphology images of FA0.9MA0.1PbI2.85Br0.15, Cs0.05FA0.90MA0.05PbI2.85Br0.15. Inset histograms are grain size distributions in the images. Scale bars, 500 nm. c Initial TrPL intensity changes as functions of charge carrier density. d, e Normalized PL spectra and Tauc plots from ultraviolet visible absorption spectra (UV-vis). f, g Experimentally measured TrPL decay scatters and fitting curves. h, i Experimental PLQY scatters with error bars in different incident intensities and fitting curves. Error bars represent the mean ± sd of three independent measurements.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par26",
+   "section": "Film characterization and kinetic fitting",
+   "text": "The PL intensities of the four studied perovskite films under different carrier concentrations are plotted in Fig. 4c. The PL intensity exhibits an approximately quadratic relationship with the carrier concentration, indicating that radiative recombination mainly originates from bimolecular recombination. The Tauc plots converted from ultraviolet visible absorption spectra (UV-Vis) and the PL spectra are plotted in Fig. 4d, e. By taking the intercept of the Tauc plots, the band gaps of the four perovskite films were calculated as follows: FAMA 1.567 eV, passivated FAMA 1.573 eV, CsFAMA 1.571 eV, and passivated CsFAMA 1.577 eV. Passivation resulted in a negligible increase in the band gap. Meanwhile, it is observed that the PL peaks were close to the absorption onsets. This spectral alignment is consistent with direct bandgap behavior and band edge emission.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par27",
+   "section": "Film characterization and kinetic fitting",
+   "text": "Subsequently, the TrPL decays under 1000 nJ cm−2 fluence excitation, and PLQYs under different incident intensities are measured. Experimental conditions are introduced in Supplementary Note 4. To investigate the detailed kinetics, all TrPL decays and PLQY profiles are fitted by the kinetic model. A genetic algorithm was used for searching the globally optimal kinetic solutions of the experimental TrPLs and PLQYs. The operation logic of the algorithm can be found in Supplementary Fig. 12.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par28",
+   "section": "Film characterization and kinetic fitting",
+   "text": "The TrPL decays of the studied perovskite films are presented in Fig. 4f, g. Generally, surface passivation exhibits no influence on decay trends, while perovskite compositions show a significant impact. Specifically, FAMA films exhibit fast decays in the initial stage and slow decays in the later stage; CsFAMA films are dominated by exponential decay. This difference in decay profiles implies distinct carrier kinetics. Meanwhile, the light-colored curves are the fitting curves with physical meanings. All fitting lines match well with the experimentally measured decays, with MSEs of 1.12 × 10−4, 7.14 × 10−5, 2.72 × 10−5, and 2.90 × 10−5. In addition, the error distribution plots are provided in Supplementary Fig. 13. All errors are within the range of −0.04 to 0.04, indicating excellent fitting.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par29",
+   "section": "Film characterization and kinetic fitting",
+   "text": "Referring to the work of Sutter-Fella et al., PLQYs were measured over a range of photocarrier generation rate (1020–1023 cm−3 s−1), as shown in Fig. 4h, i46. All PLQY profiles are fitted well, with MSEs of 0.023, 0.093, 0.018, and 0.054, respectively. The changes in PLQYs show a trend of gradually increasing to saturation, and then stabilizing or decreasing, which is consistent with the description of the adopted kinetic model47,48. This phenomenon can be attributed to the competition among electron capture, electron emission, radiative recombination, and Auger recombination, together with progressive trap filling40.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par30",
+   "section": "Film characterization and kinetic fitting",
+   "text": "To study the model performance under different excitation densities, TrPLs under the excitation fluence of 3000 nJ cm−2 were further measured. The corresponding fitting results are provided in the Supplementary Figs. 14 and 15. During the model prediction process, a logistic function was employed to fit the experimental PLQY data and capture the overall trend of the scattered data points. The fitted curves were then used as inputs for the DL model. The logistic fitting results are shown in Supplementary Fig. 16.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par31",
+   "section": "Device performance",
+   "text": "Perovskite solar cells (PSCs) with an n–i–p architecture were fabricated to further evaluate the effect of surface passivation, and the device configuration is shown in Fig. 5a. The current density–voltage (J–V) curves of the champion devices are presented in Fig. 5b, c. Overall, passivation increases the PCE from 22.41% to 25.08% for the FAMA PSC, and from 21.64% to 23.23% for the CsFAMA PSC. As shown in Supplementary Fig. 17, the integrated short circuit current density (Jsc) derived from the external quantum efficiency (EQE) spectra agrees well with the J–V measurements, confirming the reliability of the photovoltaic data.Fig. 5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices. b, c J–V curves of the champion FAMA- and CsFAMA-based devices, respectively. The corresponding photovoltaic parameters are provided in the panels. d Power conversion efficiency (PCE) box and distribution plots of 15 devices. Box plots show the distribution of PCE values. The central line indicates the median, the box limits represent the lower and upper quartiles (25th and 75th percentiles), and the whiskers extend to 1.5 times the interquartile range. Open circles represent individual devices, and black crosses indicate the mean values. e Light-dependent Voc and fitting lines. f Nyquist plots and fitted circuit diagrams.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par32",
+   "section": "Device performance",
+   "text": "Passivation leads to simultaneous improvements in all photovoltaic parameters. As shown in Fig. 5d, overall, considering the mean, median, or extreme values, the passivated PSC device achieved a significant improvement in PCE. The statistical distributions of photovoltaic parameters in Supplementary Fig. 18 further reflect the enhancements. In particular, the open circuit voltage (Voc) and fill factor (FF) show significant improvements in their overall distribution.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par33",
+   "section": "Device performance",
+   "text": "The Voc changes with the various light intensities are recorded and plotted in Fig. 5e. In FAMA devices, 1.42 kBT/q (control) > 1.18 kBT/q (passivated), and 1.38 kBT/q (control) > 1.16 kBT/q (passivated) in CsFAMA devices, where kB is the Boltzmann constant, T is the temperature in Kelvin, and q is the elementary charge. The passivated devices exhibit ideality factors closer to unity, further confirming their improved device performance.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par34",
+   "section": "Device performance",
+   "text": "Charge carrier recombination processes were further examined by electrochemical impedance spectroscopy (EIS). The Nyquist plots and the corresponding equivalent circuit model are shown in Fig. 5f, with the fitted parameters summarized in Supplementary Table 5. Both passivated devices exhibit reduced series resistance (Rs) and increased recombination resistance (Rrec), indicating enhanced charge transport and suppressed interfacial recombination. Additional electrical measurements, including capacitance–voltage, and space-charge-limited-current (SCLC), are provided in Supplementary Figs. 19 and 20 as auxiliary device-level characterizations. Because these techniques can be influenced by device architecture, contacts, ionic motion, and interfacial charge accumulation, they are not used here as quantitative probes of built-in voltage, trap depth, or trap density49,50.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par35",
+   "section": "Evaluation of AI prediction",
+   "text": "In studies involving TrPL measurements of perovskite films, the temporal acquisition windows and PL decay cutoffs vary. Despite the widespread use of TrPL as a diagnostic tool, a community-wide standardized protocol for excitation conditions and data analysis is still lacking. Consequently, reported carrier lifetimes and recombination parameters often depend strongly on the selected measurement window and fitting methodology, rather than reflecting intrinsic material properties51,52.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par36",
+   "section": "Evaluation of AI prediction",
+   "text": "Here, we trained models using different time windows and different decay cutoffs. It is determined that a time window of 2 µs and a decay cutoff of 0.01 provide sufficient kinetic information. This setting applies to the N0 in the range of 1015–1017 cm−3, which corresponds to the excitation fluence range of 100–2000 nJ cm−2 in our model cases (500 nm thick polycrystalline film with absorption coefficient of 105 cm−1 at 532 nm wavelength). The criterion is not universal. For high-quality single crystals, 2D perovskites, and nanocrystals, we recommend using our proposed methodology to train their proprietary models. Further reductions in either the time window or the decay cutoff lead to a pronounced decrease in prediction accuracy, indicating the loss of critical kinetic information. Therefore, TrPL measurements employing a 2 μs time window and a cutoff of at least 0.01 are identified as a practical and reliable condition for AI-assisted kinetic analysis. This conclusion is further confirmed by the area retention analysis of the area under TrPL decay, where both the time window and the cutoff window retain more than 95% of the area information. A detailed discussion is provided in Supplementary Note 5, Supplementary Figs. 21 and 22.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par37",
+   "section": "Evaluation of AI prediction",
+   "text": "Combined with the initial photogenerated charge carrier density in TrPL (N0), the measured TrPL and PLQY profiles were imported to the trained DL model. To verify the accuracy of the model, the experimentally fitted (genetic algorithm) parameters and the DL-predicted parameters are presented in Fig. 6, and their numerical values are summarized in Supplementary Table 6. It can be seen that the model provides highly accurate predictions for the studied kinetic parameters. The close correspondence between the experimental and predicted histograms indicates that the DL model can successfully capture the main recombination and trap-related kinetic features from the PL data.Fig. 6Experimental verification of DL prediction.Kinetic bar chart comparisons between experimentally fitted and DL-predicted parameters of four studied perovskite films (FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (Passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (Passivated CsFAMA)): a bimolecular recombination coefficient (γeh), b electron capture coefficient (γec), c hole capture coefficient (γhc), d trap density (NT), e electron emission coefficient (γee), and f Auger recombination coefficient (γAug).",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par38",
+   "section": "Evaluation of AI prediction",
+   "text": "Figure 6a shows the comparison results of the bimolecular recombination coefficients. The strong agreement between the experimental and predicted values suggests the model can effectively identify changes in band-to-band radiative recombination behavior caused by compositional engineering and passivation treatment. The γehs of the passivated perovskites are all improved (1.87 × 10−11 cm3 s−1 to 2.65 × 10−11 cm3 s−1 in CsFAMA, 2.72 × 10−11 cm3 s−1 to 3.61 × 10−11 cm3 s−1 in FAMA), which is consistent with the enhanced radiative recombination observed after passivation.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par39",
+   "section": "Evaluation of AI prediction",
+   "text": "The comparison of trap-related kinetics is shown in Fig. 6b–e. The electron capture and hole capture processes are reasonably reproduced, as shown in Fig. 6b, c. Since these two parameters are directly related to carrier trapping and trap-assisted nonradiative recombination pathways, the agreement confirms that the model is sensitive to trap-mediated kinetic processes. Both coefficients decrease through passivation. The decrease in the γhc indicates the suppression of nonradiative recombination. Although the γec is not directly related to nonradiative recombination, its decrease reduces the probability of trap-assisted nonradiative recombination. NT is a key indicator of trap density in perovskite films. The Fig. 6d suggests that the model can distinguish differences in trap densities among the studied films. Compared to experimental values, the parameters predicted by DL clearly show the difference in trap density before and after passivation (CsFAMA reduced from 7.35 × 1015 cm−3 to 6.05 × 1015 cm−3, and FAMA reduced from 7.31 × 1015 cm−3 to 4.88 × 1015 cm−3). This is attributed to the model’s generalizable judgment based on large-scale data. In Fig. 6e, the γee is well predicted, indicating that the reverse release of trapped carriers back to the free carrier population is captured by the model. This is essential for describing delayed recombination and long tail features in TrPL decay curves. In general, differences in perovskite compositions have little effect on electron emission, while passivation slightly increases the probability of it.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par40",
+   "section": "Evaluation of AI prediction",
+   "text": "Although Auger recombination typically becomes significant at high carrier concentrations, the DL model exhibits high predictive sensitivity for the γAug and preserves the relative differences among the four films, see Fig. 6f. This demonstrates the model’s effectiveness in extracting higher-order recombination information. The predicted Auger recombination coefficients are lower for the passivated films, indicating a reduced intrinsic tendency toward Auger recombination within the investigated model.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par41",
+   "section": "Evaluation of AI prediction",
+   "text": "The kinetic parameters of the samples under 3000 nJ cm−2 fluence excitation in TrPL measurements were further predicted using the DL model, as shown in Supplementary Fig. 23. Although the carrier concentration generated by 3000 nJ cm−2 fluence excitation exceeds the modeling range of DL, the model still achieved fairly high accuracy. This result suggests a degree of robustness beyond the training range under the present experimental conditions.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par42",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "To further examine whether the DL-predicted parameters can provide physically meaningful information, we reconstruct the charge carrier kinetics in transient and steady-state recombination processes of four investigated film samples. As illustrated by Fig. 7, the reconstructed kinetic evolution reveals distinct charge carrier recombination, capture, and release behaviors of different films.Fig. 7Reconstructed carrier kinetics after photoexcitation of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (Passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (Passivated CsFAMA) samples based on DL predicted parameters.a Filled trap density (nT) as a function of time. b Cumulative carriers consumed by bimolecular electron–hole recombination. c Cumulative carriers consumed by hole capture. d Instantaneous bimolecular recombination rate (γehnenh). e Instantaneous trap-assisted hole capture rate (γhcnTnh). f Steady-state carrier concentration as a function of generation rate. g Trapped carrier concentration (nT) as a function of carrier concentration. h Trap-assisted hole capture rate (γhcnTnh) as a function of trapped carrier concentration.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par43",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "Figure 7a shows the evolution of the filled trap density nT after pulsed photoexcitation in TrPL. The filled-trap densities of all samples increase rapidly at the initial time. This is because free carriers are captured by empty trap states through the electron capture process. After reaching the maximum value, nT gradually decreases. This decrease is caused by the carrier removal through the trap-assisted hole capture and electron emission processes. The different values and decay trends reflect the competition between electron capture and emission. Specifically, the passivated samples exhibit lower filled trap populations, consistent with reduced involvement of trap-mediated pathways under the investigated conditions. This observation agrees with the expected role of passivation in suppressing trap-mediated carrier loss.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par44",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "Using bimolecular electron-hole recombination and hole capture as examples, we show the consumption of accumulated carriers in Fig. 7b, c. These two cumulative carrier loss channels can directly explain the redistribution of carrier recombination pathways between radiative and trap-assisted nonradiative channels. The cumulative number of carriers consumed by radiative recombination increases with time and gradually approaches saturation as the free carrier density decreases. Under the same excitation conditions, a larger cumulative radiative contribution indicates that a greater fraction of photogenerated carriers undergoes radiative rather than trap-assisted nonradiative recombination. This behavior is indicative of improved optoelectronic quality, because the effective radiative recombination is closely associated with higher PLQY and lower nonradiative voltage loss in perovskite absorbers. In contrast, the cumulative number of carriers consumed through hole capture corresponds to the trap-mediated nonradiative recombination term. The cumulative hole capture curves represent clear differences among the four films, demonstrating that trap-related loss is largely influenced by material composition and passivation. Lower cumulative hole capture contributions are favorable for longer carrier lifetime and higher luminescence efficiency.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par45",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "The instantaneous kinetics further clarify the temporal origin of these differences. As illustrated in Fig. 7d, the bimolecular recombination rate rapidly reaches a maximum after excitation, then decreases rapidly with time. Such behavior is expected for a second-order recombination process, in which the rate is proportional to the product of electron and hole concentrations. Consequently, when the carrier density is high, the bimolecular recombination dominates the early stage of the TrPL decay. In comparison, the hole capture rates show a different temporal behavior, which reaches its maximum rapidly and then decreases more slowly (Fig. 7e). This is because it depends not only on the free-carrier density but also on the instantaneous trap filling. Therefore, the trap-mediated processes become increasingly important at the late decay stage, especially when the trapped carriers still exist after the free carrier density has decreased. Under the same excitation condition, the passivated film shows a larger radiative contribution and a smaller trap-assisted hole capture contribution, consistent with reduced nonradiative loss.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par46",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "The cumulative carrier consumptions and instantaneous consumption rates for all kinetic pathways are shown in Supplementary Figs. 24 and 25. Overall, bimolecular recombination and trap-mediated hole capture remain on the same order of magnitude over time, but bimolecular recombination is larger. In contrast, Auger recombination is an order of magnitude smaller. Therefore, at a fluence of 1000 nJ cm⁻2, bimolecular recombination within the perovskite film dominates, followed by trap-mediated recombination, with Auger recombination being much weaker.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par47",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "We further performed kinetic calculations under steady-state excitation. The charge carrier concentration increases with the generation rate. However, the two do not simply follow a linear relationship, but are regulated by a balance among radiative recombination, trap-mediated recombination, and Auger recombination. We note that, in general, passivated samples sustain higher steady-state carrier concentrations (Fig. 7f). The carrier concentration begins to increase markedly when G exceeds approximately 1021 cm−3 s−1. Meanwhile, the filled trap density increases with the increase of carrier concentration, and gradually approaches trap-filling saturation (Fig. 7g), which corresponds to the steady-state trap balance:7\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\gamma }_{{ec}}{n}_{e}\\left({N}_{T}-{n}_{T}\\right)={\\gamma }_{{hc}}{n}_{T}{n}_{h}+{\\gamma }_{{ee}}{n}_{T}$$\\end{document}γecneNT−nT=γhcnTnh+γeenT",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par48",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "The passivated samples exhibit higher filled trap densities because their higher steady-state free carrier densities increase the electron capture flux, despite their lower total trap densities and capture coefficients. As we stated earlier, electron capture only indicates the probability of trap-mediated nonradiative recombination to a certain extent; specific kinetic insights can only be obtained by analyzing specific process channels. Taking the hole capture rate as an example, Fig. 7h shows its evolution with filled trap density. As the filled-trap density increases, the trap-assisted hole capture rate becomes progressively larger with increasing nT, confirming that the filled-trap density affects the intensity of trap-mediated nonradiative recombination. Compared to the control group, at a specific filled trap density, the hole capture rates of the passivated films are lower. Moreover, the passivated films reach a comparable hole-capture rate only at a higher filled trap density. The complete steady-state kinetic pathways of the studied samples under steady-state excitation are shown in Supplementary Fig. 26.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par49",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "In brief, our proposed method for resolving carrier dynamics using DL achieves high accuracy. The reconstructed kinetic evolution indicates that the DL-predicted parameters lead to physically consistent carrier dynamics. Compared with conventional fitting methods, this method exhibits several advantages: (1) It provides a deterministic parameter prediction for each input profile within the trained parameter space; (2) It reduces the data processing time requirement from tens of minutes to microseconds; (3) It allows batch data processing; (4) No large scale parallel computing is required, model training can be completed in hours on a local workstation (AMD Ryzen 7 5800H CPU, 16 GB RAM, NVIDIA GeForce RTX 3060 GPU); (5) Once trained, the packaged model can be repeatedly applied to new datasets acquired under conditions consistent with the training domain, without retraining for each individual sample. Systematic comparison workflows between conventional fitting and the DL methods are provided in Supplementary Fig. 27.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par50",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "In summary, we present a deep learning (DL) based framework for quantitatively extracting charge carrier recombination kinetics in metal halide perovskites using combined time-resolved photoluminescence (TrPL) and photoluminescence quantum yield (PLQY) measurements. We show that TrPL decay alone suffers from intrinsic parameter non-uniqueness, whereas excitation-dependent PLQY provides a critical complementary constraint. This complementary steady-state constraint enables more physically meaningful parameter determination while substantially alleviating parameter non-uniqueness.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par51",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "Based on physically grounded rate equations, we generated a high-throughput dataset comprising 200,000 paired TrPL and PLQY profiles. The optimized DL model achieves excellent predictive accuracy, with R2 values exceeding 0.9 for all six kinetic parameters (γeh, γec, γhc, NT, γee, and γAug) across multiple orders of magnitude. Experimental studies of FA0.9MA0.1PbI2.85Br0.15, Cs0.05FA0.90MA0.05PbI2.85Br0.15, and samples passivated with 4-MeO-PEAI further validate the approach. The extracted kinetics show strong agreement with experimental fitting results, confirming the reliability of the framework. Independent optical and electrical measurements further provide qualitative support.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par52",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "After introducing PLQY, we identify an appropriate TrPL acquisition window, namely a time range of 0–2 μs and a normalized TrPL intensity range of 1–0.01, for excitation fluences spanning 100–2000 nJ cm−2. This guideline provides a practical basis for standardized TrPL measurement protocols.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par53",
+   "section": "Kinetic evolution reconstructed from DL prediction",
+   "text": "More broadly, this work establishes DL as a powerful tool for data-driven kinetic analysis in semiconductors. Future work may incorporate physics-informed constraints, such as range constraint losses and kinetic consistency losses, to improve physical interpretability and generalization. However, a balance needs to be struck between model performance and computational cost. The framework may be extendable to other semiconductor systems, such as low-dimensional perovskites, colloidal quantum dots, direct bandgap III–V and II–VI semiconductors, and organic emissive semiconductors. Future integration with imaging-based models may enable direct extraction of kinetic mechanisms from spatially resolved characterization data.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par54",
+   "section": "DL algorithms",
+   "text": "Standardization: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\widetilde{x}}_{i}=\\frac{{x}_{i}-\\mu }{\\sigma },\\,\\mu=\\frac{1}{N}\\mathop{\\sum }_{j=1}^{N}{x}_{j},\\,\\sigma=\\sqrt{\\frac{1}{N}\\mathop{\\sum }_{j=1}^{N}{\\left({x}_{j}-\\mu \\right)}^{2}}$$\\end{document}x~i=xi−μσ,μ=1N∑j=1Nxj,σ=1N∑j=1Nxj−μ2.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par55",
+   "section": "DL algorithms",
+   "text": "Inverse transform: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\hat{y}={\\sigma }_{y}\\hat{y}+{\\mu }_{y}$$\\end{document}y^=σyy^+μy.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par56",
+   "section": "DL algorithms",
+   "text": "Fully connected layers and affine transformation: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$z={Wx}+b$$\\end{document}z=Wx+b, where \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$W\\in {R}^{1800\\times 401}$$\\end{document}W∈R1800×401, b is the bias vector.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par57",
+   "section": "DL algorithms",
+   "text": "Activation function (rectified linear unit (ReLU)): \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${{{\\rm{ReLU}}}}\\left(z\\right)=\\max \\left(0,z\\right)$$\\end{document}ReLUz=max0,z. During the backpropagation: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\frac{\\partial {{{\\rm{ReLU}}}}\\left(z\\right)}{\\partial {z}}=\\left\\{\\begin{array}{cc}1 & x > 0\\\\ 0 & x\\le 0\\end{array}\\right.$$\\end{document}∂ReLUz∂z=1x>00x≤0.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par58",
+   "section": "DL algorithms",
+   "text": "Dropout: for each input neuron, set its output to 0 with probability p, and scale the remaining outputs by 1/(1−p). If the retention probability is q = 1−p, then the output of neurons retained during training must be scaled to 1/q of their original value.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par59",
+   "section": "DL algorithms",
+   "text": "Loss function(MSE): \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${MSE}=\\frac{1}{B}\\mathop{\\sum }_{i=1}^{B}{{||}{\\hat{y}}_{i}-{y}_{i}{||}}_{2}^{2}=\\frac{1}{B}\\mathop{\\sum }_{i=1}^{B}\\mathop{\\sum }_{k=1}^{d}{\\left({\\hat{y}}_{i,k}-{y}_{i,k}\\right)}^{2}$$\\end{document}MSE=1B∑i=1B∣∣y^i−yi∣∣22=1B∑i=1B∑k=1dy^i,k−yi,k2. The gradient with respect to the prediction is y ̂: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\frac{\\partial {MSE}}{\\partial {\\hat{y}}_{i,k}}=\\frac{2}{B}\\left({\\hat{y}}_{i,k}-{y}_{i,k}\\right)$$\\end{document}∂MSE∂y^i,k=2By^i,k−yi,k.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par60",
+   "section": "DL algorithms",
+   "text": "Backpropagation and parameter optimization (Adam optimizer): Adam maintains the first order moment estimate mt and the second-order moment estimate vt.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par62",
+   "section": "DL algorithms",
+   "text": "Update at time step t: t ← t + 1, \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${g}_{t}={\\nabla }_{\\theta }{L}_{t}$$\\end{document}gt=∇θLt (current gradient), \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${m}_{t}={\\beta }_{1}{m}_{t-1}+\\left(1-{\\beta }_{1}\\right){g}_{t}$$\\end{document}mt=β1mt−1+1−β1gt, \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${v}_{t}={\\beta }_{2}{v}_{t-1}+\\left(1-{\\beta }_{2}\\right){g}_{t}^{2}$$\\end{document}vt=β2vt−1+1−β2gt2, where β1 = 0.9, β2 = 0.999;",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par63",
+   "section": "DL algorithms",
+   "text": "Deviation correction: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\hat{m}}_{t}=\\frac{{m}_{t}}{1-{\\beta }_{1}^{t}}$$\\end{document}m^t=mt1−β1t, \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\hat{v}}_{t}=\\frac{{v}_{t}}{1-{\\beta }_{2}^{t}}$$\\end{document}v^t=vt1−β2t;",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par64",
+   "section": "DL algorithms",
+   "text": "Parameter update: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${\\theta }_{i+1}={\\theta }_{t}-\\alpha \\frac{{\\hat{m}}_{t}}{\\sqrt{{\\hat{v}}_{t}}+\\epsilon }$$\\end{document}θi+1=θt−αm^tv^t+ϵ, where ϵ = 10−8.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par65",
+   "section": "DL algorithms",
+   "text": "Forward pass model prediction: \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\hat{y}={f}_{\\theta }\\left(x\\right)={L}_{3}\\left({{{\\rm{Droupout}}}}\\left({{{\\rm{ReLU}}}}\\left({L}_{2}\\left({{{\\rm{Dropout}}}}\\left({{{\\rm{ReLU}}}}\\left({L}_{1}\\left(x\\right)\\right)\\right)\\right)\\right)\\right)\\right)$$\\end{document}y^=fθx=L3DroupoutReLUL2DropoutReLUL1x, where L is the linear layer.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par66",
+   "section": "DL algorithms",
+   "text": "Evaluation indicator (coefficient of determination, R2): \\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$${R}^{2}=1-\\frac{\\mathop{\\sum }_{i=1}^{n}{\\left({y}_{i}-{\\hat{y}}_{i}\\right)}^{2}}{\\mathop{\\sum }_{i=1}^{n}{\\left({y}_{i}-\\bar{y}\\right)}^{2}}$$\\end{document}R2=1−∑i=1nyi−y^i2∑i=1nyi−ȳ2, where y ̅ is the mean of the y.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par67",
+   "section": "Materials",
+   "text": "All the solvents and reagents were purchased and used without further purification. Fluorine-doped tin oxide (SnO2:F, FTO) VU glass was purchased from Asahi (Japan). Hydrochloric acid (HCl, 35%), acetone (99.5%), and ethyl alcohol (EtOH, 99.5%) were purchased from DaeJung Chemicals & Metals (South Korea). Tin(IV) oxide (SnO2, 20% in H2O colloidal dispersion) and potassium chloride (KCl, 99.995%) were purchased from Alfa Aesar (United States of America, USA). Hellmanex III (detergent), deionized water (DI water), chlorobenzene (CB, anhydrous, 99%), dimethylformamide (DMF, anhydrous, 99.8%), dimethyl sulfoxide (DMSO, anhydrous, 99.9%), acetonitrile (anhydrous, 99.8%), anisole (anhydrous, 99.7%), 4-tert-butylpyridine (tBP, 99.8%), 2-propanol (IPA, anhydrous, 99.5%), cesium iodide (CsI, 99.9%), lithium bis(trifluoromethanesulfonyl)imide salt (Li-TFSI, 99.5%), 2-methoxyethanol (2ME, anhydrous, 99.8%) were purchased from Sigma-Aldrich (USA). Zinc (powder, 96%), lead iodide (PbI2, 99.99%), and lead bromide (PbBr2, 99.99%) were purchased from Tokyo Chemical Industry Chemicals (Japan). Formamidinium iodide (FAI, 99.9%), methylammonium bromide (MABr, 99.9%), methylammonium chloride (MACl, 98%), and 4-methoxy-phenethylammonium iodide (4-MeO-PEAI) were purchased from GreatCell Solar (Australia). 2,2′,7,7′-tetrakis[N,N-di(4-methoxyphenyl)-amino]-9,9′-spirobifluorene (spiro-OMeTAD, 99.5%, LT-S922) was purchased from Lumtec.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par68",
+   "section": "Film deposition",
+   "text": "Microscope slides were sonicated sequentially with 2 vol% Hellmanex in DI water, DI water, acetone, EtOH for 15 min each, and finally irradiated under UV-ozone for 40 min to remove the last traces of organic residues. Unless otherwise specified, precursor preparation was performed in an argon filled glovebox. 1.6 M FA0.9MA0.1PbI2.85Br0.15 perovskite precursor solution was prepared by dissolving 0.262 g FAI, 0.009 g MABr, 0.723 g PbI2 (3% excess in mol), 0.029 g PbBr2, 0.035 g MACl (as additive) in 1 mL DMF/DMSO (8:2, v/v) solution. 1.6 M Cs0.05FA0.90MA0.05PbI2.85Br0.15 perovskite precursor solution was prepared by dissolving 0.021 g CsI, 0.249 g FAI, 0.009 g MABr, 0.760 g PbI2 (3% excess in mol), 0.029 g PbBr2, 0.035 g MACl (as additive) in 1 mL DMF/DMSO (8:2, v/v) solution. Passivation solution was prepared by dissolving 3 mg of 4-MeO-PEAI in 1 mL of IPA. The precursor and passivation solutions were then transferred to a dry room with a controlled humidity lower than 20% and stirred for 40 min and 60 min. After filtration through a 0.2 μm polytetrafluoroethylene (PTFE) filter, 40 μL of the precursor solution was deposited on the microscope slide. After the precursor was spread on the surface, the solution was spin coated at a speed of 5000 rpm for 25 s, with an acceleration of 2000 rpm/s. At 19 s after the start of spin coating, 500 μL of anisole was continuously dispensed onto the center of the spinning substrate over approximately 1 s. After that, the substrates were moved to a hotplate at 100 °C and kept for 30 min. For passivated samples, 40 μL of passivation solution was dynamically spin-coated on the cooled perovskite film after filtration through the 0.2 μm pore size PTFE filter, without annealing.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par69",
+   "section": "Device fabrication",
+   "text": "2 × 2 cm2 FTO substrate glasses were etched by an acid solution (HCl: DI = 2: 1, v/v) and zinc powder as an etchant in a 2 × 0.4 cm2 side area. The etched area was covered with zinc powder first and followed by dropwise addition of the acid solution. The unetched area was protected by PTFE tape. After etching, the PTFE tape was removed and the substrates were cleaned by DI water. Before spin coating the electron transport layer (ETL), substrates were sonicated sequentially with 2 vol% Hellmanex in DI water, DI water, acetone, EtOH for 15 min each, and finally irradiated under UV-ozone for 40 min to remove the last traces of organic residues. The ETL material was prepared by adding 10 mM KCl into a solution with a volume ratio SnO2: DI water = 1:3. After stirring for 30 min and filtration through a 0.2 μm pore size polyvinylidene fluoride (PVDF) filter, the ETL solution was spin-coated on the substrates at 3000 rpm for 30 s with an acceleration rate of 1000 rpm/s. Next, a 2 × 0.5 cm2 area of the SnO2 film (opposite the etched area) was wiped off with a cotton swab dipped in DI water. Then the substrates were annealed at 100 °C for 10 min and moved to the dry room. Before depositing the perovskite layer, the substrates were irradiated under UV-ozone for 20 min. The perovskite precursor preparation and film deposition procedures were identical to those described in the “Film deposition” section. The hole transport layer (HTL) solution was prepared by mixing 0.090 g spiro-OMeTAD, 36 µL tBP, 23 µL of Li-TFSI solution (520 mg/mL in acetonitrile) with 1 mL CB in the argon glove box. Then the HTL solution was transferred to the dry room and stirred for 1 h. After filtration through a 0.2 μm pore size PTFE filter, 40 µL of the solution was dynamically spin coated on the surface at 4000 rpm for 30 s with an acceleration rate of 1000 rpm/s. Next, the same 2 × 0.5 cm2 area of the perovskite film and the HTL was wiped off with a cotton swab dipped in 2ME. The prepared samples were stored in the dry room for 2 days for oxidation. Finally, 80 nm of silver as the electrode was thermally evaporated on the HTL layer at a rate of 2 Å/s under a base pressure of approximately 10−6 Torr.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par70",
+   "section": "Characterization",
+   "text": "The J–V characteristics of the as-prepared solar cells were measured using a solar simulator (Newport Oriel Solar 3 A Class AAA, 64023 A) and potentiostat (CHI 660D, CH instruments) under 1 sun illumination of the AM 1.5 G spectrum (100 mW cm−2). The light intensity of the solar simulator was calibrated using a standard Si-based solar cell (Oriel, VLSI standards) and a light-sensor current controller (Newport Oriel digital exposure controller, Model 68 945). During testing, an antireflective film was attached to the rear side of the glass substrate. The performances of all the devices were measured after covering the active area with a thin mask (0.14 cm2). J–V curves were measured using reverse scanning at a rate of 200 mV s−1 under 1 sun illumination of the simulated AM 1.5 G spectrum (100 mW cm−2) in ambient air (room temperature (≈20 °C) and an RH in the range of 5–10%); all the devices were illuminated under 1 sun for 20–30 s before J–V measurements. SEM images and elemental-content mappings were recorded by a hot-field emission scanning electron microscope (JSM-7600F, JEOL, Japan). XRD patterns of the perovskite films were measured using a D8 Discover instrument with Cu Kα radiation (λ = 1.5418 Å). Absorbance spectra were measured using a UV–vis spectrometer (Lambda 45, Perkin Elmer). PL spectra were recorded using a fluorescence lifetime spectrometer (Quantaurus Tau C11367-12, HAMAMATSU) with 464-nm pulsed (10 MHz)-laser (PLP-10, HAMAMATSU) excitation. TrPL decays were measured using a pulsed Nd:YAG laser source (10 Hz) at 532 nm (Surelite, II-10), housed with the Cryogenic Femtosecond Transient Kerr-Gate Spectro-microscopy Facility (NFEC-2025-03-305124). To measure the PLQY, samples were placed in an integrating sphere (Newport, 819C-IS-3.3), and illuminated by a 532 nm continuous wave laser (CNI, MGL-III−532). Optical density filters were used to get low intensities and a focusing lens was placed between laser and sample to get high intensities. An optical fiber coupled to the integrating sphere was used to collect the emitted PL. An IPCE system for photovoltaic measurements in the DC mode with a monochromatic beam generated by a 75-W Xe lamp (USHIO) was used for IPCE spectral measurements.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par71",
+   "section": "Reporting summary",
+   "text": "Further information on research design is available in the Nature Portfolio Reporting Summary linked to this article.",
+   "id_derived": false
+  },
+  {
+   "source_id": "P2",
+   "paragraph_id": "Par74",
+   "section": "Supplementary information",
+   "text": "Supplenmentary information Reporting Summary Transparent Peer Review file",
+   "id_derived": false
+  }
+ ]
+}

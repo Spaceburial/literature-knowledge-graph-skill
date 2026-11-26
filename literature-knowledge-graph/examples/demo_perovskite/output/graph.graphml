@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+<key id="label" for="node" attr.name="label" attr.type="string"/>
+<key id="type" for="node" attr.name="type" attr.type="string"/>
+<key id="src" for="node" attr.name="source_ids" attr.type="string"/>
+<key id="ev" for="edge" attr.name="evidence_status" attr.type="string"/>
+<key id="rel" for="edge" attr.name="relation" attr.type="string"/>
+<key id="cond" for="edge" attr.name="condition" attr.type="string"/>
+<graph id="G" edgedefault="directed">
+<node id="N0001"><data key="label">perovskite solar cells</data><data key="type">task</data><data key="src">P1,P2</data></node>
+<node id="N0002"><data key="label">power conversion efficiency</data><data key="type">metric</data><data key="src">P1,P2</data></node>
+<node id="N0003"><data key="label">stability</data><data key="type">metric</data><data key="src">P1,P2</data></node>
+<node id="N0004"><data key="label">MAPbI3</data><data key="type">material</data><data key="src">P1</data></node>
+<node id="N0005"><data key="label">time-resolved photoluminescence</data><data key="type">method</data><data key="src">P2</data></node>
+<node id="N0006"><data key="label">rate-equation models</data><data key="type">method</data><data key="src">P2</data></node>
+<node id="N0007"><data key="label">Bayesian inference</data><data key="type">method</data><data key="src">P2</data></node>
+<node id="N0008"><data key="label">carrier kinetics</data><data key="type">other</data><data key="src">P2</data></node>
+<node id="N0009"><data key="label">photoluminescence quantum yield</data><data key="type">metric</data><data key="src">P2</data></node>
+<node id="N0010"><data key="label">PLQY provides an orthogonal constraint against parameter non-uniqueness</data><data key="type">conclusion</data><data key="src">P2</data></node>
+<node id="N0011"><data key="label">TrPL alone is insufficient to determine carrier kinetics</data><data key="type">conclusion</data><data key="src">P2</data></node>
+<node id="N0012"><data key="label">coefficient of determination</data><data key="type">metric</data><data key="src">P2</data></node>
+<node id="N0013"><data key="label">covalent organic frameworks</data><data key="type">material</data><data key="src">P1</data></node>
+<node id="N0014"><data key="label">deep learning framework</data><data key="type">method</data><data key="src">P2</data></node>
+<node id="N0015"><data key="label">perovskite absorber</data><data key="type">material</data><data key="src">P1,P2</data></node>
+<node id="N0016"><data key="label">bimolecular recombination coefficient</data><data key="type">metric</data><data key="src">P2</data></node>
+<node id="N0017"><data key="label">non-radiative recombination</data><data key="type">other</data><data key="src">P1,P2</data></node>
+<node id="N0018"><data key="label">spin-coating</data><data key="type">method</data><data key="src">P1</data></node>
+<node id="N0019"><data key="label">mesoscopic device architecture</data><data key="type">model</data><data key="src">P1</data></node>
+<node id="N0020"><data key="label">Spiro-OMeTAD</data><data key="type">material</data><data key="src">P1,P2</data></node>
+<node id="N0021"><data key="label">Cs0.05FA0.90MA0.05PbI2.85Br0.15</data><data key="type">material</data><data key="src">P2</data></node>
+<node id="N0022"><data key="label">FA0.9MA0.1PbI2.85Br0.15</data><data key="type">material</data><data key="src">P2</data></node>
+<node id="N0023"><data key="label">trap density</data><data key="type">metric</data><data key="src">P2</data></node>
+<node id="N0024"><data key="label">passivation</data><data key="type">method</data><data key="src">P1,P2</data></node>
+<node id="N0025"><data key="label">photoluminescence spectroscopy</data><data key="type">method</data><data key="src">P1</data></node>
+<node id="N0026"><data key="label">Boc-PDA-COF</data><data key="type">material</data><data key="src">P1</data></node>
+<node id="N0027"><data key="label">Tp-COF</data><data key="type">material</data><data key="src">P1</data></node>
+<node id="N0028"><data key="label">DMTH-COF</data><data key="type">material</data><data key="src">P1</data></node>
+<node id="N0029"><data key="label">PCE retention after 500 h</data><data key="type">metric</data><data key="src">P1</data></node>
+<node id="N0030"><data key="label">efficiencies from different studies are not directly comparable</data><data key="type">conclusion</data><data key="src">P1</data></node>
+<node id="N0031"><data key="label">triazine-based COF additive</data><data key="type">material</data><data key="src">P1</data></node>
+<node id="N0032"><data key="label">fill factor</data><data key="type">metric</data><data key="src">P1</data></node>
+<node id="N0033"><data key="label">open-circuit voltage</data><data key="type">metric</data><data key="src">P1</data></node>
+<node id="N0034"><data key="label">bulk additive engineering</data><data key="type">method</data><data key="src">P1</data></node>
+<node id="N0035"><data key="label">COFs act as crystallization regulators and defect passivators</data><data key="type">conclusion</data><data key="src">P1</data></node>
+<edge id="E0001" source="N0028" target="N0034"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">MAPbI3 precursor solution, single solution-processing step</data></edge>
+<edge id="E0002" source="N0035" target="N0004"><data key="rel">supports</data><data key="ev">verified</data><data key="cond">three COFs as bulk additives in MAPbI3 films</data></edge>
+<edge id="E0003" source="N0013" target="N0024"><data key="rel">supports</data><data key="ev">verified</data><data key="cond">COF functional groups passivate defects</data></edge>
+<edge id="E0004" source="N0028" target="N0002"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">MAPbI3, mesoscopic, 0.50 cm2, champion 20.78% vs pristine 14.7%</data></edge>
+<edge id="E0005" source="N0028" target="N0033"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">Voc 1.183 V; pristine 1.142 V</data></edge>
+<edge id="E0006" source="N0028" target="N0032"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">FF 76.46%, below 79.4% and 81.2% of prior additive studies</data></edge>
+<edge id="E0007" source="N0028" target="N0029"><data key="rel">improves</data><data key="ev">verified</data><data key="cond">500 h aging; normalized retention ~0.50 vs ~0.20 pristine</data></edge>
+<edge id="E0008" source="N0028" target="N0017"><data key="rel">improves</data><data key="ev">verified</data><data key="cond">film PL intensity, bulk</data></edge>
+<edge id="E0009" source="N0028" target="N0031"><data key="rel">compares</data><data key="ev">verified</data><data key="cond">PCE 20.78% vs 20.04% in MAPbI3; margin small</data></edge>
+<edge id="E0010" source="N0026" target="N0002"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">MAPbI3, champion 18.88%</data></edge>
+<edge id="E0011" source="N0027" target="N0002"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">MAPbI3, champion 15.88%</data></edge>
+<edge id="E0012" source="N0004" target="N0018"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">two-step spin-coating on m-TiO2/FTO</data></edge>
+<edge id="E0013" source="N0019" target="N0020"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">HTL in FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au</data></edge>
+<edge id="E0014" source="N0002" target="N0019"><data key="rel">evaluated_on</data><data key="ev">verified</data><data key="cond">0.50 cm2 active area, AM1.5G</data></edge>
+<edge id="E0015" source="N0025" target="N0017"><data key="rel">measures</data><data key="ev">verified</data><data key="cond">steady-state PL, 532 nm excitation</data></edge>
+<edge id="E0016" source="N0029" target="N0003"><data key="rel">measures</data><data key="ev">verified</data><data key="cond">500 h degradation tracking</data></edge>
+<edge id="E0017" source="N0030" target="N0002"><data key="rel">other</data><data key="ev">verified</data><data key="cond">methodological caution</data></edge>
+<edge id="E0018" source="N0014" target="N0005"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">TrPL decay profiles as input</data></edge>
+<edge id="E0019" source="N0014" target="N0009"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">excitation-dependent PLQY as orthogonal constraint</data></edge>
+<edge id="E0020" source="N0014" target="N0012"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">six kinetic parameters, all R2 &gt; 0.9, simulated pool</data></edge>
+<edge id="E0021" source="N0014" target="N0023"><data key="rel">measures</data><data key="ev">verified</data><data key="cond">NT among six extracted parameters</data></edge>
+<edge id="E0022" source="N0014" target="N0008"><data key="rel">measures</data><data key="ev">verified</data><data key="cond">extracts six kinetic parameters from TrPL+PLQY</data></edge>
+<edge id="E0023" source="N0009" target="N0010"><data key="rel">supports</data><data key="ev">verified</data><data key="cond">simulation + experiment</data></edge>
+<edge id="E0024" source="N0011" target="N0005"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">non-unique solutions when TrPL is the only input</data></edge>
+<edge id="E0025" source="N0010" target="N0008"><data key="rel">improves</data><data key="ev">verified</data><data key="cond">alleviates parameter non-uniqueness</data></edge>
+<edge id="E0026" source="N0014" target="N0007"><data key="rel">outperforms</data><data key="ev">verified</data><data key="cond">computational cost of inversion</data></edge>
+<edge id="E0027" source="N0022" target="N0018"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">deposited films; passivation layer spin-coated</data></edge>
+<edge id="E0028" source="N0022" target="N0020"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">HTL in device stack</data></edge>
+<edge id="E0029" source="N0022" target="N0002"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">15 devices, box/distribution plot only (no single value in text)</data></edge>
+<edge id="E0030" source="N0021" target="N0002"><data key="rel">reports</data><data key="ev">verified</data><data key="cond">part of 15-device PCE comparison</data></edge>
+<edge id="E0031" source="N0008" target="N0017"><data key="rel">measures</data><data key="ev">verified</data><data key="cond">γhc and γAug describe nonradiative pathways</data></edge>
+<edge id="E0032" source="N0006" target="N0008"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">mechanistic description of recombination</data></edge>
+<edge id="E0033" source="N0007" target="N0008"><data key="rel">uses</data><data key="ev">verified</data><data key="cond">invert kinetic behaviour</data></edge>
+<edge id="E0034" source="N0024" target="N0002"><data key="rel">improves</data><data key="ev">verified</data><data key="cond">passivated FAMA/CsFAMA films (P2); COF bulk passivation (P1)</data></edge>
+</graph>
+</graphml>

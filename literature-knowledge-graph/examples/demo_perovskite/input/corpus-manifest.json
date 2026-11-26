@@ -1,0 +1,45 @@
+{
+ "papers": [
+  {
+   "source_id": "P1",
+   "doi": "10.3390/polym18202535",
+   "title": "Engineering Larger Grains in MAPbI3 Solar Cells via Covalent Organic Framework (COF)-Assisted Crystallization: High-Performance Devices with Superior Stability Under Prolonged Illumination",
+   "authors": [
+    "E. M. Mkawi",
+    "Saif M. H. Qaid",
+    "Abdullah S. Aldwayyan",
+    "Prastika Krisma Jiwanti",
+    "Chia Ching Kee",
+    "Sok Kuan Wong",
+    "E. Bekyarova",
+    "Yew Hoong Wong"
+   ],
+   "license": "Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license.",
+   "sha256": "137f995a2379641599fc87d13534e5146775552345e8bed5ce63870ed41588f3",
+   "role": "primary",
+   "journal": "Polymers",
+   "year": "2026"
+  },
+  {
+   "source_id": "P2",
+   "doi": "10.1038/s41467-026-77052-8",
+   "title": "Resolving carrier kinetics in perovskite through deep-learning-assisted photoluminescence analysis",
+   "authors": [
+    "Wenning Chen",
+    "Hui Chan Ahn",
+    "Bonghyun Jo",
+    "Sijia Li",
+    "Zheyu Zhang",
+    "Kelvian T. Mularso",
+    "Jong In Huh",
+    "Sae Byeok Jo",
+    "Hyun Suk Jung"
+   ],
+   "license": "Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reprodu",
+   "sha256": "5082ea3cda7b148776d3d3931f01cdf82c41d066ef49ff650e904556f1f3cdfb",
+   "role": "secondary",
+   "journal": "Nature Communications",
+   "year": "2026"
+  }
+ ]
+}

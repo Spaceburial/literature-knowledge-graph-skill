@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {
+      "label": "<canonical surface form as it appears, or the full form>",
+      "type": "material",
+      "aliases": ["<other surface forms seen in the text>"],
+      "mentions": [
+        {"source_id": "<P1>", "paragraph_id": "<provider paragraph id>",
+         "quote": "<verbatim 8-300 char substring of that paragraph>", "attribution": "self"}
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source_label": "<label of the source node>",
+      "target_label": "<label of the target node>",
+      "type": "reports",
+      "condition": "<sample + metric + setting, e.g. MAPbI3, mesoscopic, 0.50 cm2, champion 20.78%>",
+      "direction_note": "<only if direction is ambiguous>",
+      "evidence": [
+        {"source_id": "<P1>", "paragraph_id": "<id>",
+         "quote": "<verbatim substring that supports this exact relation>", "attribution": "self"}
+      ]
+    }
+  ],
+  "merge_candidates": [
+    {"surfaces": ["<A>", "<B>"], "decision": "merged", "basis": "<same chemical identity / abbreviation / variant>"},
+    {"surfaces": ["<generic term>", "<specific instance>"], "decision": "kept_separate",
+     "basis": "<generic class vs specific instance / different physical sample or condition>"}
+  ],
+  "source_conflicts": [
+    {"kind": "non_comparable_efficiency",
+     "detail": "<what differs: absorber, architecture, area, metric semantics>",
+     "items": ["<P1/pid>", "<P2/pid>"]}
+  ],
+  "uncertainty": [
+    {"kind": "value_not_reported_in_text",
+     "detail": "<value shown only in a figure / not stated in body text>", "items": ["<P2/pid>"]}
+  ]
+}

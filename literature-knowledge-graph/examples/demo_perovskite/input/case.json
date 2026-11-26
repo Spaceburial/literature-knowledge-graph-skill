@@ -1,0 +1,14 @@
+{
+ "case_id": "demo-perovskite-2papers",
+ "output_contract": {
+  "entities": "entity nodes with type, aliases and evidence (source_id, paragraph_id, quote)",
+  "relations": "typed, directed relation edges with condition and evidence",
+  "queries": "at least three executed queries with results and evidence",
+  "evidence": "evidence index keyed by source_id/paragraph_id",
+  "merge_log": "cross-paper alias merge decisions and non-merge justifications",
+  "conflict_log": "contradictions or condition conflicts between the two papers",
+  "uncertainty": "unreported items and undetermined relations",
+  "status": "success | partial | undetermined",
+  "case_id": "input identifier"
+ }
+}

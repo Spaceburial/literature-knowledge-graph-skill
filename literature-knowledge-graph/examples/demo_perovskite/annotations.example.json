@@ -1,0 +1,1234 @@
+{
+ "nodes": [
+  {
+   "label": "perovskite solar cells",
+   "type": "task",
+   "aliases": [
+    "PSCs",
+    "perovskite photovoltaics"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0001",
+     "quote": "Organic-inorganic halide perovskite solar cells (PSCs) have emerged as one of the most promising photovoltaic technologies, driven by their rapid increase in power conversion efficiency (PCE) and compatibility with low-cost solution processing [1,2].",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par31",
+     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "power conversion efficiency",
+   "type": "metric",
+   "aliases": [
+    "PCE"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0001",
+     "quote": "Organic-inorganic halide perovskite solar cells (PSCs) have emerged as one of the most promising photovoltaic technologies, driven by their rapid increase in power conversion efficiency (PCE) and compatibility with low-cost solution processing [1,2].",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par9",
+     "quote": "The high power conversion efficiency (PCE) of metal halide perovskites originates from their long carrier diffusion lengths, strong optical absorption, and high charge carrier densities under operating conditions31-33.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "Spiro-OMeTAD",
+   "type": "material",
+   "aliases": [
+    "spiro-OMeTAD",
+    "Spiro-OMeTAD"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0021",
+     "quote": "The resulting mesoscopic PSCs with the architecture FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au were fabricated.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par69",
+     "quote": "The hole transport layer (HTL) solution was prepared by mixing 0.090 g spiro-OMeTAD, 36 µL tBP, 23 µL of Li-TFSI solution (520 mg/mL in acetonitrile) with 1 mL CB in the argon glove box.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "passivation",
+   "type": "method",
+   "aliases": [
+    "passivated",
+    "defect passivation"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0045",
+     "quote": "Photoluminescence spectroscopy provides a direct probe of radiative and non-radiative recombination processes in perovskite absorbers and is therefore a sensitive indicator of defect density, trap passivation, and carrier dynamics.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par68",
+     "quote": "For passivated samples, 40 μL of passivation solution was dynamically spin-coated on the cooled perovskite film after filtration through the 0.2 μm pore size PTFE filter, without annealing.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "non-radiative recombination",
+   "type": "other",
+   "aliases": [
+    "nonradiative recombination",
+    "non-radiative recombination"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0057",
+     "quote": "The Voc enhancement from 1.142 V to 1.183 V reflects a reduction in non-radiative recombination losses in the bulk and at the interfaces.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par12",
+     "quote": "In summary, within this framework, γeh describes the radiative recombination pathway; γhc and γAug describe the nonradiative recombination pathways; γec and γee describe interactions between electrons and traps beyond recombination.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "stability",
+   "type": "metric",
+   "aliases": [
+    "long-term stability",
+    "operational stability"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0069",
+     "quote": "The stability trends across pristine, Tp-, Boc-PDA-, and DMTH-doped devices mirror the way each COF modifies crystallization, defect chemistry, and surface wettability.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par3",
+     "quote": "However, a quantitative understanding of charge carrier recombination dynamics remains a key bottleneck for further improving performance and long-term stability5-8.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "perovskite absorber",
+   "type": "material",
+   "aliases": [
+    "perovskite film",
+    "perovskite films"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0032",
+     "quote": "All samples were prepared by spin-coating on TiO2-based substrates under identical conditions, with low loadings of COFs chosen to promote crystallization while preserving the underlying perovskite lattice.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par8",
+     "quote": "The model is adopted to predict kinetics for four deposited perovskite films.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "covalent organic frameworks",
+   "type": "material",
+   "aliases": [
+    "COFs",
+    "COF"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0006",
+     "quote": "Covalent organic frameworks (COFs) have emerged as highly attractive candidates for rational control of perovskite crystallization and defect chemistry in this regard [23].",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "DMTH-COF",
+   "type": "material",
+   "aliases": [
+    "DMTH"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0070",
+     "quote": "The DMTH-containing device achieved a PCE of 20.78%, close to the 20.04% reported for a triazine-based COF additive in MAPbI3 and the 21.35% obtained using MAOCN in the same absorber system.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0063",
+     "quote": "The mean Voc increased from 1.142 V for pristine samples to 1.183 V for the DMTH-COF device, a 3.59% increase.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "Boc-PDA-COF",
+   "type": "material",
+   "aliases": [
+    "Boc-PDA"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0056",
+     "quote": "The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and the DMTH-based device achieves the highest performance with Voc = 1.183 V, Jsc = 22.98 mA cm−2, FF = 76.46%, and PCE = 20.78%.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "Tp-COF",
+   "type": "material",
+   "aliases": [
+    "Tp"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0056",
+     "quote": "The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and the DMTH-based device achieves the highest performance with Voc = 1.183 V, Jsc = 22.98 mA cm−2, FF = 76.46%, and PCE = 20.78%.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "MAPbI3",
+   "type": "material",
+   "aliases": [
+    "methylammonium lead iodide",
+    "MAPbI3 perovskite"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0002",
+     "quote": "MAPbI3 films typically contain a range of defects including undercoordinated halide ions, undercoordinated Pb2+ centers, Pb clusters, Pb-I antisite defects (PbI3), and vacancies of I− or MA+, which act as non-radiative recombination centers and accelerate degradation [7,8,9].",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0011",
+     "quote": "By integrating these COFs directly into the MAPbI3 precursor and employing a controlled spin-coating process, we perform a comparative study of how COF chemistry influences crystallization kinetics, grain size, film morphology, defect passivation, optical properties, and device stability.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "bulk additive engineering",
+   "type": "method",
+   "aliases": [
+    "bulk additives",
+    "bulk dopants"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0072",
+     "quote": "Unlike most previous reports where COFs are confined to surface passivation layers or used as inert scaffolds, our approach uses COFs as bulk additives to tune film formation and electronic structure in a single solution-processing step, without sacrificing phase purity or process simplicity.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "spin-coating",
+   "type": "method",
+   "aliases": [
+    "spin-coated",
+    "spin coating"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0020",
+     "quote": "Perovskite films were deposited onto the m-TiO2/FTO substrates by a two-step spin-coating protocol.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "mesoscopic device architecture",
+   "type": "model",
+   "aliases": [
+    "FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0021",
+     "quote": "The resulting mesoscopic PSCs with the architecture FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au were fabricated.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "open-circuit voltage",
+   "type": "metric",
+   "aliases": [
+    "Voc"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0071",
+     "quote": "Among the MAPbI3 devices listed in Table 5, the DMTH-modified cell exhibits the highest open-circuit voltage, reaching 1.183 V compared with 1.04 and 1.126 V in the two most closely related additive studies.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "fill factor",
+   "type": "metric",
+   "aliases": [
+    "FF"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0071",
+     "quote": "By contrast, its fill factor of 76.5% remains below the previously reported values of 79.4% and 81.2%.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "PCE retention after 500 h",
+   "type": "metric",
+   "aliases": [
+    "normalized PCE retention"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0069",
+     "quote": "After 500 h, the normalized PCE retention values were approximately 0.20 for pristine MAPbI3, 0.50 for DMTH-COF, 0.41 for Boc-PDA-COF, and 0.30 for Tp-COF.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "photoluminescence spectroscopy",
+   "type": "method",
+   "aliases": [
+    "PL"
+   ],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0045",
+     "quote": "Photoluminescence spectroscopy provides a direct probe of radiative and non-radiative recombination processes in perovskite absorbers and is therefore a sensitive indicator of defect density, trap passivation, and carrier dynamics.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "triazine-based COF additive",
+   "type": "material",
+   "aliases": [],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0070",
+     "quote": "The DMTH-containing device achieved a PCE of 20.78%, close to the 20.04% reported for a triazine-based COF additive in MAPbI3 and the 21.35% obtained using MAOCN in the same absorber system.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "time-resolved photoluminescence",
+   "type": "method",
+   "aliases": [
+    "TrPL"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "In this work, we show that TrPL decay profiles alone are insufficient to uniquely determine carrier kinetics in perovskites.",
+     "attribution": "self"
+    },
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par4",
+     "quote": "Particularly, time-resolved photoluminescence (TrPL) is widely used to probe perovskite carrier lifetimes9-11.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "photoluminescence quantum yield",
+   "type": "metric",
+   "aliases": [
+    "PLQY"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "deep learning framework",
+   "type": "method",
+   "aliases": [
+    "DL framework",
+    "DL"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par8",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "carrier kinetics",
+   "type": "other",
+   "aliases": [
+    "charge carrier recombination dynamics"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "In this work, we show that TrPL decay profiles alone are insufficient to uniquely determine carrier kinetics in perovskites.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "bimolecular recombination coefficient",
+   "type": "metric",
+   "aliases": [
+    "γeh"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par12",
+     "quote": "In summary, within this framework, γeh describes the radiative recombination pathway; γhc and γAug describe the nonradiative recombination pathways; γec and γee describe interactions between electrons and traps beyond recombination.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "trap density",
+   "type": "metric",
+   "aliases": [
+    "NT"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par39",
+     "quote": "NT is a key indicator of trap density in perovskite films.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "coefficient of determination",
+   "type": "metric",
+   "aliases": [
+    "R2",
+    "R²"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par8",
+     "quote": "The finalized DL model achieves high accuracy across target parameters, with all coefficients of determination (R2s) over 0.9.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "FA0.9MA0.1PbI2.85Br0.15",
+   "type": "material",
+   "aliases": [
+    "FAMA"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par24",
+     "quote": "In the present work, perovskite films with compositions of FA0.9MA0.1PbI2.85Br0.15 (FAMA) and Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA) are deposited to verify the functionality of the established model.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "Cs0.05FA0.90MA0.05PbI2.85Br0.15",
+   "type": "material",
+   "aliases": [
+    "CsFAMA"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par24",
+     "quote": "In the present work, perovskite films with compositions of FA0.9MA0.1PbI2.85Br0.15 (FAMA) and Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA) are deposited to verify the functionality of the established model.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "rate-equation models",
+   "type": "method",
+   "aliases": [
+    "rate equations"
+   ],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par5",
+     "quote": "In contrast, charge carrier models based on rate equations provide a physical framework for the kinetic interpretation.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "Bayesian inference",
+   "type": "method",
+   "aliases": [],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par6",
+     "quote": "For example, Bayesian inference has been adopted to invert kinetic behaviors in several semiconductors21-23.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "COFs act as crystallization regulators and defect passivators",
+   "type": "conclusion",
+   "aliases": [],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0072",
+     "quote": "By integrating three structurally distinct frameworks, DMTH-COF, Boc-PDA-COF and Tp-COF, each prepared from commercially available building blocks, directly into the MAPbI3 precursor solution, we demonstrate that COFs can act simultaneously as crystallization regulators and defect passivators.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "efficiencies from different studies are not directly comparable",
+   "type": "conclusion",
+   "aliases": [],
+   "mentions": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0070",
+     "quote": "These values, however, should not be compared solely on the basis of efficiency because the studies differ in absorber composition, device architecture, active area, and measurement conditions.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "TrPL alone is insufficient to determine carrier kinetics",
+   "type": "conclusion",
+   "aliases": [],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "In this work, we show that TrPL decay profiles alone are insufficient to uniquely determine carrier kinetics in perovskites.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
+   "type": "conclusion",
+   "aliases": [],
+   "mentions": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness.",
+     "attribution": "self"
+    }
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "bulk additive engineering",
+   "type": "uses",
+   "condition": "MAPbI3 precursor solution, single solution-processing step",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0072",
+     "quote": "Unlike most previous reports where COFs are confined to surface passivation layers or used as inert scaffolds, our approach uses COFs as bulk additives to tune film formation and electronic structure in a single solution-processing step, without sacrificing phase purity or process simplicity.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "COFs act as crystallization regulators and defect passivators",
+   "target_label": "MAPbI3",
+   "type": "supports",
+   "condition": "three COFs as bulk additives in MAPbI3 films",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0072",
+     "quote": "By integrating three structurally distinct frameworks, DMTH-COF, Boc-PDA-COF and Tp-COF, each prepared from commercially available building blocks, directly into the MAPbI3 precursor solution, we demonstrate that COFs can act simultaneously as crystallization regulators and defect passivators.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "covalent organic frameworks",
+   "target_label": "passivation",
+   "type": "supports",
+   "condition": "COF functional groups passivate defects",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0072",
+     "quote": "By integrating three structurally distinct frameworks, DMTH-COF, Boc-PDA-COF and Tp-COF, each prepared from commercially available building blocks, directly into the MAPbI3 precursor solution, we demonstrate that COFs can act simultaneously as crystallization regulators and defect passivators.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "power conversion efficiency",
+   "type": "reports",
+   "condition": "MAPbI3, mesoscopic, 0.50 cm2, champion 20.78% vs pristine 14.7%",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0063",
+     "quote": "The increase in PCE is even more significant, with a rise from 14.7% for pristine to 20.78% for the DMTH-COF device, resulting in a 41.36% increase.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "open-circuit voltage",
+   "type": "reports",
+   "condition": "Voc 1.183 V; pristine 1.142 V",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0071",
+     "quote": "Among the MAPbI3 devices listed in Table 5, the DMTH-modified cell exhibits the highest open-circuit voltage, reaching 1.183 V compared with 1.04 and 1.126 V in the two most closely related additive studies.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "fill factor",
+   "type": "reports",
+   "condition": "FF 76.46%, below 79.4% and 81.2% of prior additive studies",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0071",
+     "quote": "By contrast, its fill factor of 76.5% remains below the previously reported values of 79.4% and 81.2%.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "PCE retention after 500 h",
+   "type": "improves",
+   "condition": "500 h aging; normalized retention ~0.50 vs ~0.20 pristine",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0069",
+     "quote": "After 500 h, the normalized PCE retention values were approximately 0.20 for pristine MAPbI3, 0.50 for DMTH-COF, 0.41 for Boc-PDA-COF, and 0.30 for Tp-COF.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "non-radiative recombination",
+   "type": "improves",
+   "condition": "film PL intensity, bulk",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0071",
+     "quote": "This result agrees with the stronger photoluminescence observed for the DMTH-containing film, which suggests that non-radiative recombination was reduced.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "DMTH-COF",
+   "target_label": "triazine-based COF additive",
+   "type": "compares",
+   "condition": "PCE 20.78% vs 20.04% in MAPbI3; margin small",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0070",
+     "quote": "The DMTH-containing device achieved a PCE of 20.78%, close to the 20.04% reported for a triazine-based COF additive in MAPbI3 and the 21.35% obtained using MAOCN in the same absorber system.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "Boc-PDA-COF",
+   "target_label": "power conversion efficiency",
+   "type": "reports",
+   "condition": "MAPbI3, champion 18.88%",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0056",
+     "quote": "The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and the DMTH-based device achieves the highest performance with Voc = 1.183 V, Jsc = 22.98 mA cm−2, FF = 76.46%, and PCE = 20.78%.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "Tp-COF",
+   "target_label": "power conversion efficiency",
+   "type": "reports",
+   "condition": "MAPbI3, champion 15.88%",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0056",
+     "quote": "The Tp-modified device reaches 15.88% PCE, Boc-PDA-COF-modified devices reach 18.88%, and the DMTH-based device achieves the highest performance with Voc = 1.183 V, Jsc = 22.98 mA cm−2, FF = 76.46%, and PCE = 20.78%.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "MAPbI3",
+   "target_label": "spin-coating",
+   "type": "uses",
+   "condition": "two-step spin-coating on m-TiO2/FTO",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0020",
+     "quote": "Perovskite films were deposited onto the m-TiO2/FTO substrates by a two-step spin-coating protocol.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "mesoscopic device architecture",
+   "target_label": "Spiro-OMeTAD",
+   "type": "uses",
+   "condition": "HTL in FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0021",
+     "quote": "The resulting mesoscopic PSCs with the architecture FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au were fabricated.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "power conversion efficiency",
+   "target_label": "mesoscopic device architecture",
+   "type": "evaluated_on",
+   "condition": "0.50 cm2 active area, AM1.5G",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0021",
+     "quote": "The resulting mesoscopic PSCs with the architecture FTO/c-TiO2/m-TiO2/perovskite/Spiro-OMeTAD/Au were fabricated.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "photoluminescence spectroscopy",
+   "target_label": "non-radiative recombination",
+   "type": "measures",
+   "condition": "steady-state PL, 532 nm excitation",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0045",
+     "quote": "Photoluminescence spectroscopy provides a direct probe of radiative and non-radiative recombination processes in perovskite absorbers and is therefore a sensitive indicator of defect density, trap passivation, and carrier dynamics.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "PCE retention after 500 h",
+   "target_label": "stability",
+   "type": "measures",
+   "condition": "500 h degradation tracking",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0069",
+     "quote": "The stability trends across pristine, Tp-, Boc-PDA-, and DMTH-doped devices mirror the way each COF modifies crystallization, defect chemistry, and surface wettability.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "efficiencies from different studies are not directly comparable",
+   "target_label": "power conversion efficiency",
+   "type": "other",
+   "condition": "methodological caution",
+   "direction_note": "caveat: absorber composition, architecture, active area and measurement differ",
+   "evidence": [
+    {
+     "source_id": "P1",
+     "paragraph_id": "d0070",
+     "quote": "These values, however, should not be compared solely on the basis of efficiency because the studies differ in absorber composition, device architecture, active area, and measurement conditions.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "deep learning framework",
+   "target_label": "time-resolved photoluminescence",
+   "type": "uses",
+   "condition": "TrPL decay profiles as input",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par8",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "deep learning framework",
+   "target_label": "photoluminescence quantum yield",
+   "type": "uses",
+   "condition": "excitation-dependent PLQY as orthogonal constraint",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "deep learning framework",
+   "target_label": "coefficient of determination",
+   "type": "reports",
+   "condition": "six kinetic parameters, all R2 > 0.9, simulated pool",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par8",
+     "quote": "The finalized DL model achieves high accuracy across target parameters, with all coefficients of determination (R2s) over 0.9.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "deep learning framework",
+   "target_label": "trap density",
+   "type": "measures",
+   "condition": "NT among six extracted parameters",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par39",
+     "quote": "NT is a key indicator of trap density in perovskite films.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "deep learning framework",
+   "target_label": "carrier kinetics",
+   "type": "measures",
+   "condition": "extracts six kinetic parameters from TrPL+PLQY",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par8",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "photoluminescence quantum yield",
+   "target_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
+   "type": "supports",
+   "condition": "simulation + experiment",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "TrPL alone is insufficient to determine carrier kinetics",
+   "target_label": "time-resolved photoluminescence",
+   "type": "reports",
+   "condition": "non-unique solutions when TrPL is the only input",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "In this work, we show that TrPL decay profiles alone are insufficient to uniquely determine carrier kinetics in perovskites.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
+   "target_label": "carrier kinetics",
+   "type": "improves",
+   "condition": "alleviates parameter non-uniqueness",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par7",
+     "quote": "We demonstrate that incorporating excitation-dependent PLQY provides an orthogonal constraint that greatly alleviates parameter non-uniqueness.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "deep learning framework",
+   "target_label": "Bayesian inference",
+   "type": "outperforms",
+   "condition": "computational cost of inversion",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par6",
+     "quote": "In contrast, deep learning (DL) provides a more computationally economical and efficient data-driven approach.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "spin-coating",
+   "type": "uses",
+   "condition": "deposited films; passivation layer spin-coated",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par68",
+     "quote": "For passivated samples, 40 μL of passivation solution was dynamically spin-coated on the cooled perovskite film after filtration through the 0.2 μm pore size PTFE filter, without annealing.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "Spiro-OMeTAD",
+   "type": "uses",
+   "condition": "HTL in device stack",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par69",
+     "quote": "The hole transport layer (HTL) solution was prepared by mixing 0.090 g spiro-OMeTAD, 36 µL tBP, 23 µL of Li-TFSI solution (520 mg/mL in acetonitrile) with 1 mL CB in the argon glove box.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "power conversion efficiency",
+   "type": "reports",
+   "condition": "15 devices, box/distribution plot only (no single value in text)",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par31",
+     "quote": "d Power conversion efficiency (PCE) box and distribution plots of 15 devices.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "Cs0.05FA0.90MA0.05PbI2.85Br0.15",
+   "target_label": "power conversion efficiency",
+   "type": "reports",
+   "condition": "part of 15-device PCE comparison",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par31",
+     "quote": "d Power conversion efficiency (PCE) box and distribution plots of 15 devices.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "carrier kinetics",
+   "target_label": "non-radiative recombination",
+   "type": "measures",
+   "condition": "γhc and γAug describe nonradiative pathways",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par12",
+     "quote": "In summary, within this framework, γeh describes the radiative recombination pathway; γhc and γAug describe the nonradiative recombination pathways; γec and γee describe interactions between electrons and traps beyond recombination.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "rate-equation models",
+   "target_label": "carrier kinetics",
+   "type": "uses",
+   "condition": "mechanistic description of recombination",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par5",
+     "quote": "In contrast, charge carrier models based on rate equations provide a physical framework for the kinetic interpretation.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "Bayesian inference",
+   "target_label": "carrier kinetics",
+   "type": "uses",
+   "condition": "invert kinetic behaviour",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par6",
+     "quote": "For example, Bayesian inference has been adopted to invert kinetic behaviors in several semiconductors21-23.",
+     "attribution": "self"
+    }
+   ]
+  },
+  {
+   "source_label": "passivation",
+   "target_label": "power conversion efficiency",
+   "type": "improves",
+   "condition": "passivated FAMA/CsFAMA films (P2); COF bulk passivation (P1)",
+   "direction_note": "",
+   "evidence": [
+    {
+     "source_id": "P2",
+     "paragraph_id": "Par68",
+     "quote": "For passivated samples, 40 μL of passivation solution was dynamically spin-coated on the cooled perovskite film after filtration through the 0.2 μm pore size PTFE filter, without annealing.",
+     "attribution": "self"
+    }
+   ]
+  }
+ ],
+ "merge_candidates": [
+  {
+   "surfaces": [
+    "Spiro-OMeTAD",
+    "spiro-OMeTAD"
+   ],
+   "decision": "merged",
+   "basis": "same chemical species (2,2',7,7'-tetrakis[N,N-di(4-methoxyphenyl)amino]-9,9'-spirobifluorene) used as hole-transport layer in both papers; name differs only in capitalisation"
+  },
+  {
+   "surfaces": [
+    "power conversion efficiency",
+    "PCE"
+   ],
+   "decision": "merged",
+   "basis": "explicit abbreviation defined in both texts"
+  },
+  {
+   "surfaces": [
+    "time-resolved photoluminescence",
+    "TrPL"
+   ],
+   "decision": "merged",
+   "basis": "explicit abbreviation in P2"
+  },
+  {
+   "surfaces": [
+    "covalent organic frameworks",
+    "COFs"
+   ],
+   "decision": "merged",
+   "basis": "explicit abbreviation in P1"
+  },
+  {
+   "surfaces": [
+    "covalent organic frameworks",
+    "DMTH-COF"
+   ],
+   "decision": "kept_separate",
+   "basis": "generic framework class vs one specific framework; merging would erase the distinction"
+  },
+  {
+   "surfaces": [
+    "perovskite absorber",
+    "MAPbI3"
+   ],
+   "decision": "kept_separate",
+   "basis": "MAPbI3 is one specific composition; the generic absorber term also covers P2 compositions"
+  },
+  {
+   "surfaces": [
+    "perovskite absorber",
+    "FA0.9MA0.1PbI2.85Br0.15"
+   ],
+   "decision": "kept_separate",
+   "basis": "different absorber composition and deposition; not the same physical sample as P1"
+  },
+  {
+   "surfaces": [
+    "MAPbI3",
+    "FA0.9MA0.1PbI2.85Br0.15"
+   ],
+   "decision": "kept_separate",
+   "basis": "different chemical compositions (MA-only vs FA/MA/Cs mixed-cation, I/Br mixed-halide)"
+  },
+  {
+   "surfaces": [
+    "non-radiative recombination",
+    "nonradiative recombination"
+   ],
+   "decision": "merged",
+   "basis": "same concept, hyphenation variant"
+  }
+ ],
+ "source_conflicts": [
+  {
+   "kind": "non_comparable_efficiency",
+   "detail": "P1 reports champion PCE 20.78% for a MAPbI3 mesoscopic device (0.50 cm2); P2 reports only a 15-device PCE distribution for FAMA/CsFAMA films (0.14 cm2 active area). P1 itself states that efficiencies should not be compared across studies that differ in absorber, architecture and area. The two PCE values are therefore recorded per source and NOT ranked.",
+   "items": [
+    "P1/d0070",
+    "P1/d0063",
+    "P2/Par31"
+   ]
+  },
+  {
+   "kind": "sample_identity_conflict",
+   "detail": "The generic term \"perovskite\" denotes MAPbI3 in P1 and FA0.9MA0.1PbI2.85Br0.15 / Cs0.05FA0.90MA0.05PbI2.85Br0.15 in P2; treated as distinct samples, never as one material instance.",
+   "items": [
+    "P1/d0002",
+    "P2/Par24"
+   ]
+  },
+  {
+   "kind": "metric_semantics_conflict",
+   "detail": "P2 \"R2 > 0.9\" is the coefficient of determination of the DL model on simulated kinetic parameters, not a device performance metric; it must not be compared with P1 device PCE/Voc/FF.",
+   "items": [
+    "P2/Par8",
+    "P1/d0063"
+   ]
+  },
+  {
+   "kind": "method_term_conflict",
+   "detail": "\"passivation\" in P1 denotes bulk COF additive defect passivation inside the MAPbI3 film; in P2 it denotes a surface passivation solution spin-coated on cooled films. Same word, different procedure.",
+   "items": [
+    "P1/d0072",
+    "P2/Par68"
+   ]
+  }
+ ],
+ "uncertainty": [
+  {
+   "kind": "value_not_reported_in_text",
+   "detail": "P2 device PCE is presented only as a box/distribution plot (15 devices); no single numeric PCE is stated in the body text, so no PCE node value was extracted for P2.",
+   "items": [
+    "P2/Par31"
+   ]
+  },
+  {
+   "kind": "value_not_reported_in_text",
+   "detail": "P1 aging conditions (illumination, humidity, encapsulation) for the 500 h retention are not specified in the cited paragraph; only retention fractions were extracted.",
+   "items": [
+    "P1/d0069"
+   ]
+  },
+  {
+   "kind": "undetermined_relation",
+   "detail": "No paper compares its devices against the other paper; no cross-paper outperforms relation is asserted.",
+   "items": [
+    "cross-paper"
+   ]
+  }
+ ],
+ "extractor": "curated close reading (agent path)"
+}

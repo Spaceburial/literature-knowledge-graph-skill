@@ -1,0 +1,8 @@
+{"queries":[
+ {"qid":"Q1","type":"entity","name":"Spiro-OMeTAD","purpose":"cross-paper shared hole-transport material and its neighbourhood"},
+ {"qid":"Q2","type":"relation_search","relation":"outperforms","purpose":"which items are claimed to outperform others, and under what condition"},
+ {"qid":"Q3","type":"cross_paper","purpose":"shared vs source-exclusive entities and recorded conflicts"},
+ {"qid":"Q4","type":"evidence_trace","id":"E0004","purpose":"trace the DMTH-COF PCE claim back to the original passage"},
+ {"qid":"Q5","type":"metric_compare","name":"power conversion efficiency","purpose":"per-source PCE values without cross-paper aggregation"},
+ {"qid":"Q6","type":"path","from":"DMTH-COF","to":"stability","max_hops":3,"purpose":"how the COF additive connects to stability"}
+]}
