@@ -32,3 +32,13 @@
   fallback yields nodes with few edges. The agent reading path is language-agnostic.
 - **Not a truth judgement.** `supports`/`contradicts` record what the papers assert, not which
   claim is correct.
+
+## PDF paragraph boundaries are inferred
+
+A PDF carries no paragraph ids and often no blank lines. `prepare_case.py` infers block boundaries
+from blank lines, headings, a sentence-final line followed by a new sentence, and page breaks. The
+inference is good on ordinary single-column body text and on the layouts in R12; it can over-split
+dense two-column text or under-split a page whose lines all end mid-sentence. Whatever the split,
+the id is a derived `d####` and `pdf_page` is recorded beside it as a reading aid — never as the
+paragraph id, and never presented as the publisher's location. When a JATS or JSON paragraph set is
+available for the same paper, prefer it: the provider ids are exact.
