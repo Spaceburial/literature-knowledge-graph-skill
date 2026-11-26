@@ -68,6 +68,14 @@ closes one hole in the evidence gate.
   *before* de-duplication, so two distinct records can no longer collide on `(source, None)` and
   overwrite each other. `heuristic_extract.py` proposes CJK phrase candidates, so a Chinese corpus
   no longer produces an empty graph. R10 covers the four input-shape fixes.
+- `prepare_case.py`, JATS text fidelity (found by parsing the two demo papers straight from
+  Europe PMC full-text XML, 282 KB + 217 KB): inline markup no longer splits a token, so
+  `MAPbI<sub>3</sub>` yields `MAPbI3` and a quote a reader copies verifies as `exact` instead of
+  failing; back-matter sections that publishers place inside `<body>` (author contributions,
+  funding, competing interests, data availability, acknowledgements, footnotes) are excluded and
+  counted in `bundle.warnings`. 172 raw blocks → 166 body paragraphs, 6 back-matter blocks named.
+- `prepare_case.py`: warnings about skipped blocks are recorded in `bundle.warnings` before the
+  bundle is written (they were appended after the dump, so only stdout showed them).
 - `finalize.py`: the no-graph result keeps the full `result.json` shape (empty `nodes`/`edges`,
   `validation` keys) instead of a three-key stub.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
