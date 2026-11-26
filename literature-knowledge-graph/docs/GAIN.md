@@ -98,3 +98,45 @@ Reproduce:
 ```bash
 python3 bench/run_ab.py verify-bench --case-dir examples/demo_perovskite/input
 ```
+
+## A real two-paper run on this machine, against the same questions without the skill
+
+The demo above is a synthetic corpus. This section is a run on two published open-access papers,
+with the extraction step done by the model (not by the deterministic extractor), which is the path
+the challenge actually exercises:
+
+| | value |
+|---|---|
+| P1 | *Activation-Induced Turbostratic Ordering in pDCPD-Derived Hard Carbon*, DOI 10.1002/advs.78311, CC BY 4.0, 43 body paragraphs |
+| P2 | *PET Waste-Derived Hard Carbon with Superior Rate Capability for Sodium-Ion Battery Anodes*, DOI 10.3390/ma19122457, CC BY 4.0, 44 body paragraphs |
+| input shape | the documented revision: `case.json`, `task.md`, `corpus-manifest.json` (with a `root` block), `material.json` as an index, per-paper JSON **and** the publisher XML |
+| normalisation | 88 paragraphs, provider ids kept, 12 back-matter blocks skipped, root block merged into P1, no phantom source |
+| extraction | model close reading, 42 evidence items, `extraction_mode="agent"` |
+| build | 21 nodes, 16 edges, 8 merge decisions (5 merged, 3 kept separate), 2 cross-paper conflicts, 7 uncertainty entries |
+| verification | 42/42 quotes located verbatim; 0 rejected |
+| queries | 7 executed, 6 answered, 1 undetermined (no `outperforms` edge exists) |
+| result | `status=success`, coverage 1.0, all 6 declared `output_contract` fields present |
+
+The same case and the same four task questions answered without the skill (base-agent condition, one
+prose answer, 247 words, written by the same model):
+
+| metric | base agent | this skill |
+|---|---:|---:|
+| task questions answered | 4 / 4 | 4 / 4 |
+| claims bound to `source_id + paragraph_id` + verbatim quote | 0 | **42** |
+| node / edge records | 0 | 21 / 16 |
+| merge decisions with a written basis | 0 | 8 |
+| cross-paper conflicts / open questions recorded | 0 | 2 / 7 |
+| numeric values listed per source without pooling | no (prose mixes both) | 4 records, both sources |
+| machine-queryable afterwards | no | 7 queries over `graph.json` |
+
+Two limits on that table, stated rather than implied. The prose answer is not wrong — it is a
+reasonable answer to the questions — so the difference is not "correct vs incorrect" but "auditable
+vs not": nothing in it can be traced back to a paragraph without re-reading the papers. And it is a
+self-run comparison written by the same model in both conditions, **not** the platform's whiteboard;
+the challenge supplies the whiteboard itself, and this table does not stand in for it.
+
+The run also changed the skill, which is the point of doing it: the model wrote `increases` and
+`decreases` as relation types, the schema coerced them to `other`, and the schema now carries them
+(they are ordinary measurement relations, and the challenge's relation list is explicitly a set of
+examples). Without the real run that loss would have stayed invisible.
