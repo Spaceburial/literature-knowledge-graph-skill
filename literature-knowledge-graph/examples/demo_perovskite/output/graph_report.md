@@ -1,3 +1,10 @@
+<!-- run-facts -->
+
+- **status: `success`**
+- extraction mode: `agent`; paragraphs kept 141/141; characters 166815
+- stage seconds: prepare 0.211, build 0.05, finalize 0.009
+- validation checks failed: none
+<!-- end run-facts -->
 # Knowledge graph report — case `demo-perovskite-2papers`
 
 - nodes: **35** (verified 35)
