@@ -150,8 +150,10 @@ the paragraph above (verified: 2 nodes, 1 edge, `metric_compare` answers `21.3%`
 bash run.sh build --bundle work/case_bundle.json --annotations mycase/annotations.json --out work/graph.json
 ```
 
-`quote` must be copied verbatim from the cited paragraph; a quote that is not found is rejected and
-the item is kept but labelled `unverified`. The full shape is `schema/graph.schema.json`, a
+`quote` must be copied verbatim from the cited paragraph, 8–300 characters. A quote that is not
+found is rejected and the item is kept but labelled `rejected`; a longer quote is verified in full
+and stored as a word-boundary prefix of itself (`quote_truncated`, `quote_chars`) so the stored
+text still lies inside the paragraph. The full shape is `schema/graph.schema.json`, a
 fill-in file is `templates/annotations.template.json`, and the reading procedure is `SKILL.md`
 §Procedure. With no annotations file, `build_graph.py` stops and names both routes instead of
 writing an empty graph.
@@ -161,7 +163,7 @@ writing an empty graph.
 | Path | Role |
 |---|---|
 | `SKILL.md` | the skill: purpose, applicability, invocation, procedure, rules, error handling, self-check |
-| `schema/graph.schema.json` | JSON Schema for `annotations.json` and `graph.json` |
+| `schema/graph.schema.json` | JSON Schema for `annotations.json` and `graph.json` (either shape validates; `tests/regression/regression.py R11` checks the shipped and freshly built artifacts against it) |
 | `scripts/prepare_case.py` | normalise heterogeneous inputs → `case_bundle.json` (sources + paragraphs + output_contract) |
 | `scripts/verify_evidence.py` | the only component allowed to declare a quote verified (exact/normalized/fuzzy/not_found) |
 | `scripts/build_graph.py` | verify evidence, assign ids, merge aliases, log conflicts → `graph.json` |
@@ -236,7 +238,7 @@ conflicts, 6/6 queries answered, `status="success"`.
 
 ```bash
 bash run.sh test                      # 25 checks, exit 0 = pass
-python3 tests/regression/regression.py   # R1–R10, 49 checks
+python3 tests/regression/regression.py   # R1–R11, 55 checks
 ```
 
 ## Version and provenance
