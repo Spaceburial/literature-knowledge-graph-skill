@@ -174,7 +174,7 @@ writing an empty graph.
 | `scripts/heuristic_extract.py` | deterministic fallback extractor (baseline, not the quality path) |
 | `scripts/run_all.py` | one-command pipeline for the demo and for fallback runs |
 | `scripts/render_png.py` | optional `graph.png` preview (needs matplotlib; skipped if absent) |
-| `run.sh` | stage dispatcher: `prepare \| build \| query \| export \| finalize \| extract \| test \| all` (`extract` takes `--bundle`/`--out`) |
+| `run.sh` | stage dispatcher: `prepare \| build \| query \| export \| finalize \| extract \| test \| verify \| all` (`extract` takes `--bundle`/`--out`; `verify` runs both suites) |
 | `templates/` | fill-in annotation JSON + a per-window extraction prompt |
 | `examples/demo_perovskite/` | a real two-paper worked example (inputs, curated annotations, outputs) |
 | `tests/selftest.py` | 25 checks: quote verification, merge safety, type conflicts, end-to-end |
@@ -237,8 +237,9 @@ conflicts, 6/6 queries answered, `status="success"`.
 ## Testing
 
 ```bash
-bash run.sh test                      # 25 checks, exit 0 = pass
-python3 tests/regression/regression.py   # R1–R11, 55 checks
+bash run.sh verify                       # the gate: 25 self-test + 57 regression checks, exit 0 = pass
+bash run.sh test                         # self-test only
+python3 tests/regression/regression.py    # regression only (R1–R11)
 ```
 
 ## Version and provenance
