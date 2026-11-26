@@ -197,6 +197,44 @@ class Graph:
         status = "answered" if edges else "undetermined"
         return status, nodes, edges, ev, [] if edges else [f"no '{relation}' relations"], []
 
+    def q_keyword(self, term):
+        """Free-text lookup over node names, relation conditions and the verified quotes.
+
+        Task questions rarely name a node exactly, so the last resort has to be the text itself: a
+        question about stability is answerable from the quotes that mention stability even when no
+        node carries that label. Nothing is returned without the passage it came from.
+        """
+        kw = canon(term)
+        if not kw:
+            return "undetermined", [], [], [], {}, ["empty search term"], []
+        nodes, edges, ev, notes = [], [], [], []
+        for nid, n in self.nodes.items():
+            if kw in canon(n["label"]) or any(kw in canon(a) for a in n.get("aliases") or []):
+                nodes.append(self.node_brief(nid))
+        for e in self.edges.values():
+            if kw in canon(e["type"]) or kw in canon(e.get("condition", "")):
+                edges.append(self.edge_brief(e["id"]))
+                continue
+            for m in e["evidence"]:
+                if kw in canon(m.get("quote", "")) or kw in canon(m.get("context", "")):
+                    edges.append(self.edge_brief(e["id"]))
+                    break
+        seen_edge = set()
+        for e in self.edges.values():
+            for m in e["evidence"]:
+                if kw in canon(m.get("quote", "")) or kw in canon(m.get("context", "")):
+                    if e["id"] not in seen_edge:
+                        seen_edge.add(e["id"])
+                        for x in (e["source"], e["target"]):
+                            if x not in [nn["id"] for nn in nodes]:
+                                nodes.append(self.node_brief(x))
+                    ev.append({"edge_id": e["id"], **m})
+        edges = _uniq(edges)
+        if not nodes and not edges and not ev:
+            notes.append(f"the text of this graph contains no passage matching '{term}'")
+        status = "answered" if (nodes or edges or ev) else "undetermined"
+        return status, nodes, edges, ev, [{"term": term}], notes, []
+
     def q_cross_paper(self):
         srcs = [s for s in self.sources.values()]
         sid_list = [s["source_id"] for s in srcs]
@@ -307,6 +345,8 @@ def run_one(G, q):
         res = G.q_path(q.get("from", ""), q.get("to", ""), int(q.get("max_hops", 3)))
     elif t == "relation_search":
         res = G.q_relation_search(q.get("relation", ""), q.get("keyword", ""))
+    elif t == "keyword":
+        res = G.q_keyword(q.get("keyword", ""))
     elif t == "cross_paper":
         res = G.q_cross_paper()
     elif t == "evidence_trace":
@@ -318,10 +358,91 @@ def run_one(G, q):
     return _normalize_result(res)
 
 
-def default_queries(G):
-    """Generate a sensible 3+ query set when the case does not specify any."""
+QUESTION_HINT = re.compile(
+    r"[?\uff1f]|\u54ea\u4e9b|\u4ec0\u4e48|\u591a\u5c11|\u5982\u4f55|\u662f\u5426|\u6bd4\u8f83|\u67e5\u8be2|\u5217\u51fa|"
+    r"\bwhich\b|\bwhat\b|\bhow\b|\bcompare\b|\blist\b|\bfind\b|\bdoes\b|\bis there\b|\bare there\b", re.I)
+CROSS_HINT = re.compile(r"\bboth papers?\b|\beach paper\b|\bcommon to\b|\bshared\b|\bacross (the )?(two )?papers?\b|"
+                        r"\u4e24\u7bc7|\u5171\u540c|\u4e24\u8005|\u540c\u4e00\u4e2a?")
+STOPWORDS = set("""which what where when who whom whose how why does do did is are was were the a an of
+for and or in on to with from that this these those there paper papers two both study studies article
+articles results result please list find compare give show report describe summarise summarize main
+between each other any all""".split())
+
+
+def _candidate_questions(task_text):
+    """Lines of the case task that read like a question. Nothing is invented: the text is quoted."""
+    out = []
+    for raw in re.split(r"[\n\r]+", task_text or ""):
+        line = raw.strip(" \t-*\u2022#>")
+        line = re.sub(r"^\d+[.)]\s*", "", line)
+        if len(line) >= 12 and QUESTION_HINT.search(line):
+            out.append(line)
+    if not out:
+        for sent in re.split(r"(?<=[.?\uff1f\uff01])\s+", task_text or ""):
+            sent = sent.strip()
+            if len(sent) >= 12 and QUESTION_HINT.search(sent):
+                out.append(sent)
+    return out[:6]
+
+
+def _salient_term(line, G=None):
+    """The word a question is about: the longest candidate that the graph has text for, if any."""
+    toks = [t for t in re.findall(r"[A-Za-z][A-Za-z0-9\-]{3,}", line) if t.lower() not in STOPWORDS]
+    cjk = re.findall(r"[\u4e00-\u9fff]{2,}", line)
+    cands = sorted(toks, key=len, reverse=True) + sorted(cjk, key=len, reverse=True)
+    if not cands:
+        return ""
+    if G is not None:
+        blobs = [canon(n["label"]) for n in G.nodes.values()]
+        blobs += [canon(a) for n in G.nodes.values() for a in (n.get("aliases") or [])]
+        blobs += [canon(m.get("quote", "")) for e in G.edges.values() for m in e["evidence"]]
+        blob = " ".join(blobs)
+        for c in cands:
+            if canon(c) and canon(c) in blob:
+                return c
+    return cands[0]
+
+
+def task_queries(G, task_text):
+    """Answer the questions the case asks, not only the structural ones we would pick ourselves."""
+    if not task_text:
+        return []
+    surfaces = []
+    for nid, n in G.nodes.items():
+        for s in [n["label"]] + list(n.get("aliases") or []):
+            if s:
+                surfaces.append((s, nid))
+    surfaces.sort(key=lambda t: -len(t[0]))
     qs = []
-    # 1. highest-degree verified entity
+    for i, line in enumerate(_candidate_questions(task_text), 1):
+        low = line.lower()
+        hit = None
+        for surf, nid in surfaces:
+            if surf.lower() in low:
+                hit = surf, nid
+                break
+        base = {"qid": f"T{i}", "derived_from": "task", "task_question": line[:240],
+                "purpose": "question taken from the case task text"}
+        if CROSS_HINT.search(line) and not hit:
+            # "which material appears in both papers", "两篇共同…": that is the alignment question,
+            # and answering it with a free-text miss would understate what the graph can do
+            qs.append(dict(base, type="cross_paper"))
+            continue
+        if hit:
+            qs.append(dict(base, type="entity", name=G.nodes[hit[1]]["label"]))
+        else:
+            term = _salient_term(line, G)
+            if term:
+                qs.append(dict(base, type="keyword", keyword=term))
+    return qs
+
+
+def default_queries(G, task_text=None):
+    """Task questions first, then structural queries, deduplicated; at least three in total."""
+    qs = task_queries(G, task_text or "")
+    seen = {(q.get("type"), (q.get("name") or q.get("keyword") or "").lower()) for q in qs}
+    extra = []
+
     deg = defaultdict(int)
     for e in G.edges.values():
         if e["evidence_status"] == "verified":
@@ -329,20 +450,23 @@ def default_queries(G):
             deg[e["target"]] += 1
     if deg:
         top = max(deg, key=deg.get)
-        qs.append({"qid": "Q1", "type": "entity", "name": G.nodes[top]["label"],
-                   "purpose": "neighbourhood of the most connected entity"})
-    # 2. relation search on outperforms
-    qs.append({"qid": "Q2", "type": "relation_search", "relation": "outperforms",
-               "purpose": "which items are claimed to outperform others"})
-    # 3. cross-paper alignment
-    qs.append({"qid": "Q3", "type": "cross_paper",
-               "purpose": "shared vs source-exclusive entities and conflicts"})
-    # 4. evidence trace on one edge
+        extra.append({"qid": "Q1", "type": "entity", "name": G.nodes[top]["label"],
+                      "purpose": "neighbourhood of the most connected entity"})
+    extra.append({"qid": "Q2", "type": "relation_search", "relation": "outperforms",
+                  "purpose": "which items are claimed to outperform others"})
+    extra.append({"qid": "Q3", "type": "cross_paper",
+                  "purpose": "shared vs source-exclusive entities and conflicts"})
     for e in G.edges.values():
         if e["evidence"]:
-            qs.append({"qid": "Q4", "type": "evidence_trace", "id": e["id"],
-                       "purpose": "trace one relation back to its original passage"})
+            extra.append({"qid": "Q4", "type": "evidence_trace", "id": e["id"],
+                          "purpose": "trace one relation back to its original passage"})
             break
+    for q in extra:
+        key = (q.get("type"), (q.get("name") or q.get("keyword") or "").lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        qs.append(q)
     return qs
 
 
@@ -438,7 +562,7 @@ def main():
             sys.exit(2)
         qs = [q]
     else:
-        qs = default_queries(G)
+        qs = default_queries(G, g.get("task"))
 
     results = []
     for q in qs:
