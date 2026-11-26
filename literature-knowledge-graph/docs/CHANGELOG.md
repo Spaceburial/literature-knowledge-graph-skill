@@ -57,6 +57,9 @@ closes one hole in the evidence gate.
   `success`; the check guards its stated intent instead of one spelling of it.
 - `build_graph.py`: the audit report defaults to `build_report.txt` next to `--out` rather than a
   fixed `/app/work` path.
+- `prepare_case.py`: warns at normalisation time when the corpus exceeds ~56 reading windows
+  (the 64-request / 900 s contract), so a cap is chosen deliberately instead of discovered
+  mid-run. The input is untouched unless the flag is passed.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
   contract with a verified minimal `primary-material.json` and `annotations.json`, the seven query
   types, and the `success`/`partial`/`undetermined` vocabulary.
