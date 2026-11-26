@@ -79,9 +79,17 @@ Query types (`--type`, or the `type` field of a query object):
 
 With no `--queries`, a built-in set of four runs (`entity`, `relation_search`, `cross_paper`,
 `evidence_trace`); a `--queries` path that does not exist is an error, not a silent fallback.
-On the command line only `--type` and `--name` are settable; `path`, `neighbors` and
-`relation_search` need their other fields, so pass those as a query file
-(`{"queries":[{"qid":"Q1","type":"path","from":"A","to":"B","max_hops":3}]}`).
+A single query of any type works from the command line — `--name`, `--id`, `--relation`,
+`--keyword`, `--direction in|out|both`, `--from`, `--to`, `--max-hops` — and a missing required
+field is an error rather than an unasked question:
+
+```bash
+bash run.sh query --graph work/graph.json --type path \
+       --from "MAPbI3" --to "power conversion efficiency" --max-hops 3 --out work/path.json
+```
+
+For several queries at once use a file:
+`{"queries":[{"qid":"Q1","type":"path","from":"A","to":"B","max_hops":3}]}`.
 
 Evidence is labelled by what verification actually achieved: a node or edge is `verified` when a
 quote was located, `unverified` when it carries no quote at all, and `rejected` when the quotes it
@@ -221,7 +229,7 @@ conflicts, 6/6 queries answered, `status="success"`.
 
 ```bash
 bash run.sh test                      # 25 checks, exit 0 = pass
-python3 tests/regression/regression.py   # R1–R9, 40 checks
+python3 tests/regression/regression.py   # R1–R9, 41 checks
 ```
 
 ## Version and provenance
