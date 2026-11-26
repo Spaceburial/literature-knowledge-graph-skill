@@ -117,6 +117,10 @@ mycase/
                  "text": "The passivated film reached a power conversion efficiency of 21.3% with PEAI passivation under AM1.5G illumination."}]}
 ```
 
+A single `material.json` may hold several papers instead — keyed by source id, or as a list of
+paper objects whose paragraphs or abstract are nested — and each paper keeps its `doi`/`title`.
+A record nested under a paper object inherits that paper's `source_id`.
+
 `paragraph_id` must be the provider's own id where one exists (JATS `p` id, database id); ids
 generated from PDF/plain text are `d####` and every item built from them carries
 `paragraph_id_kind="derived"`. Paragraph text shorter than 40 characters is skipped (the count is
@@ -229,7 +233,7 @@ conflicts, 6/6 queries answered, `status="success"`.
 
 ```bash
 bash run.sh test                      # 25 checks, exit 0 = pass
-python3 tests/regression/regression.py   # R1–R9, 41 checks
+python3 tests/regression/regression.py   # R1–R10, 46 checks
 ```
 
 ## Version and provenance
