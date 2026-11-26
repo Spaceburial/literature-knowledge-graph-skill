@@ -343,23 +343,32 @@ def r9(work):
     check("it carries no evidence records", res["n_evidence"] == 0, res["n_evidence"])
 
     # a failed validation check must move the status off success
-    graph = jload(g)
-    for n in graph["nodes"]:
-        for m in n["mentions"]:
-            m["paragraph_id_kind"] = "derived"
-            m["paragraph_id"] = "p12"
-    gp = os.path.join(work, "g_badcheck.json")
-    jdump(graph, gp)
-    out = os.path.join(work, "out2")
-    os.makedirs(out, exist_ok=True)
-    rp = os.path.join(out, "result.json")
-    sh([os.path.join(SCRIPTS, "finalize.py"), "--bundle", b, "--graph", gp, "--queries", q,
-        "--out", rp, "--outdir", out])
-    rj = jload(rp)
-    reasons = " ".join(rj.get("status_reasons") or [])
-    check("failed validation check is not success", rj["status"] != "success", rj["status"])
+    def run_check(pid):
+        graph = jload(g)
+        for n in graph["nodes"]:
+            for m in n["mentions"]:
+                m["paragraph_id_kind"] = "derived"
+                m["paragraph_id"] = pid
+        gp = os.path.join(work, f"g_check_{pid}.json")
+        jdump(graph, gp)
+        out = os.path.join(work, f"out_{pid}")
+        os.makedirs(out, exist_ok=True)
+        rp = os.path.join(out, "result.json")
+        sh([os.path.join(SCRIPTS, "finalize.py"), "--bundle", b, "--graph", gp, "--queries", q,
+            "--out", rp, "--outdir", out])
+        rj = jload(rp)
+        return rj["status"], " ".join(rj.get("status_reasons") or [])
+
+    # a bare integer derived id could be read as a PDF page number: that must fail
+    page_check = "never asserted as PDF pages"
+    status, reasons = run_check("12")
+    check("failed validation check is not success", status != "success", status)
     check("the failed check is named in status_reasons",
-          "validation check(s) failed" in reasons, reasons)
+          "validation check(s) failed" in reasons and page_check in reasons, reasons)
+    # a namespaced derived id is not a page number and must not be flagged
+    _, reasons2 = run_check("p12")
+    check("namespaced derived id is not flagged as a page number",
+          page_check not in reasons2, reasons2)
 
 
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
