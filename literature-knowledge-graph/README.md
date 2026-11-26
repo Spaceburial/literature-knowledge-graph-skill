@@ -49,7 +49,7 @@ Q1 metric_compare -> answered
 
 Command 1 writes `out/result.json` (the graded deliverable: `status`, `summary`,
 `evidence_index`, `uncertainty`, `validation`) plus `nodes.csv`, `edges.csv`, `evidence.csv`,
-`graph.mmd` and `graph.graphml`. The single-query form prints the answer; a whole query file
+`graph.mmd`, `graph.graphml` and `graph.svg`. The single-query form prints the answer; a whole query file
 stays in `queries_result.json`, the source of truth (`-v` prints every answer).
 
 The same pipeline stage by stage, when you need to inspect the intermediates:
@@ -73,11 +73,13 @@ Query types (`--type`, or the `type` field of a query object):
 | `neighbors` | `name`, `relation`, `direction` | what one entity is linked to, filtered by relation |
 | `path` | `from`, `to`, `max_hops` | a chain of relations between two entities (or `undetermined`) |
 | `relation_search` | `relation`, `keyword` | all relations of a type, optionally keyword-filtered |
+| `keyword` | `keyword` | anything the graph's names, conditions or verified quotes say about a term |
 | `cross_paper` | — | shared vs source-exclusive entities, plus recorded conflicts |
 | `evidence_trace` | `id` (node or edge) | the paragraph and quote behind one item |
 | `metric_compare` | `name` | per-source/per-paragraph values, never aggregated |
 
-With no `--queries`, a built-in set of four runs (`entity`, `relation_search`, `cross_paper`,
+With no `--queries`, the questions in the case's task text are answered first (each record quotes
+the question it came from), then a built-in set of four runs (`entity`, `relation_search`, `cross_paper`,
 `evidence_trace`); a `--queries` path that does not exist is an error, not a silent fallback.
 A single query of any type works from the command line — `--name`, `--id`, `--relation`,
 `--keyword`, `--direction in|out|both`, `--from`, `--to`, `--max-hops` — and a missing required
@@ -169,11 +171,12 @@ writing an empty graph.
 | `scripts/build_graph.py` | verify evidence, assign ids, merge aliases, log conflicts → `graph.json` |
 | `scripts/query_graph.py` | 7 query types, each returning evidence and an explicit `undetermined` branch |
 | `scripts/export_graph.py` | `graph.mmd`, `graph.graphml`, `nodes.csv`, `edges.csv`, `evidence.csv`, `graph_report.md` |
+| `scripts/render_svg.py` | `graph.svg` preview: standard library only, deterministic, drawn even when no image stack exists |
 | `scripts/finalize.py` | `result.json` with every `output_contract` field + honest status + validation |
 | `scripts/add_paper.py` | incremental update: merge a new paper, preserve existing ids, log added/merged/conflicts |
 | `scripts/heuristic_extract.py` | deterministic fallback extractor (baseline, not the quality path) |
 | `scripts/run_all.py` | one-command pipeline for the demo and for fallback runs |
-| `scripts/render_png.py` | optional `graph.png` preview (needs matplotlib; skipped if absent) |
+| `scripts/render_png.py` | optional `graph.png` preview (needs matplotlib; skipped with a message if absent) |
 | `run.sh` | stage dispatcher: `prepare \| build \| query \| export \| finalize \| extract \| test \| verify \| all` (`extract` takes `--bundle`/`--out`; `verify` runs both suites) |
 | `templates/` | fill-in annotation JSON + a per-window extraction prompt |
 | `examples/demo_perovskite/` | a real two-paper worked example (inputs, curated annotations, outputs) |
@@ -237,9 +240,9 @@ conflicts, 6/6 queries answered, `status="success"`.
 ## Testing
 
 ```bash
-bash run.sh verify                       # the gate: 25 self-test + 57 regression checks, exit 0 = pass
+bash run.sh verify                       # the gate: 25 self-test + 68 regression checks, exit 0 = pass
 bash run.sh test                         # self-test only
-python3 tests/regression/regression.py    # regression only (R1–R11)
+python3 tests/regression/regression.py    # regression only (R1–R13)
 ```
 
 ## Version and provenance
