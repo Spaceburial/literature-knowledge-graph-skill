@@ -113,6 +113,8 @@ def main():
 
     # status
     reasons = []
+    budget = bundle.get("budget") or {}
+    truncated = bool(budget.get("truncated"))
     if len(nodes) == 0:
         status = "undetermined"
         reasons.append("no nodes extracted")
@@ -134,6 +136,14 @@ def main():
             reasons.append(f"source metadata incomplete (no DOI/title) for: {missing_meta}")
         if not case_id_val:
             reasons.append("case_id absent from case.json/corpus-manifest.json")
+
+    if truncated:
+        reasons.insert(0,
+                       f"input truncated by the budget guard: kept {budget.get('kept_paragraphs')} of "
+                       f"{budget.get('total_paragraphs')} paragraphs "
+                       f"(dropped {budget.get('dropped_by_source')}); the graph covers only the kept text")
+        if status == "success":
+            status = "partial"
 
     evidence_index = {}
     for n in nodes:
