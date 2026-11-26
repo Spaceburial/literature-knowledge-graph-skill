@@ -849,6 +849,13 @@ def main():
                 f"  {len(SHORT_DROPPED)} block(s) were found but skipped: paragraph text shorter\n"
                 f"  than 40 characters is ignored (longest skipped: {max(c for _, c in SHORT_DROPPED)}\n"
                 "  chars). Split or join the text so each paragraph is a full sentence.\n")
+        # The reason a file produced nothing (PDF without pdftotext, an unparseable XML, a manifest
+        # whose files were never parsed) is in the warnings; print them here instead of leaving the
+        # reader to open case_bundle.json for a message that was already computed.
+        if warnings:
+            sys.stderr.write("  what was found, and why it produced no text:\n")
+            for wmsg in warnings:
+                sys.stderr.write("    ! " + wmsg + "\n")
         sys.exit(2)
     print(f"[prepare_case] case_id={case_id} sources={len(sources)} paragraphs={len(paragraphs)} "
           f"derived_ids={bundle['stats']['n_id_derived']} warnings={len(warnings)}")
