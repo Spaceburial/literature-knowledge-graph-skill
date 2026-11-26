@@ -23,7 +23,7 @@ Three repeats per condition; the table reports medians. Produced by
 | edges with verified evidence | 92 | 34 |
 | evidence coverage | 1.00 | 1.00 |
 | unresolved edge endpoints | 68 | 0 |
-| merge decisions recorded | 0 | 4 |
+| merge decisions recorded | 0 | 9 |
 | kept-separate decisions | 0 | 4 |
 | conflicts recorded | 68 | 4 |
 | queries answered (of 6) | 6 | 6 |
