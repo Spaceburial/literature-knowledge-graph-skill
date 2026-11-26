@@ -37,8 +37,18 @@ Each change below answers a line of the challenge's delivery requirements rather
 - `SKILL.md` now tells the agent to start from the deterministic draft and improve it (≤12 requests
   per case against a budget of 64), and its description carries the Chinese task vocabulary
   (文献知识图谱、实体关系抽取、证据绑定) so the harness can match a Chinese task text.
+- **The readable report states the run, not only the graph.** `graph_report.md` now opens with
+  status, the reasons when it is not `success`, extraction mode, paragraphs kept, stage seconds and
+  which validation checks failed. A reviewer who reads only that file can no longer see a tidy graph
+  and miss that the run was partial.
+- **The deterministic fallback types its candidates instead of parking them in `other`.** Suffix and
+  acronym rules (metric/material/method/task/researcher, English and Chinese), a discourse-word
+  stop list, and a rule that an edge needs at least one typed endpoint cut the demo corpus from 140
+  nodes / 160 co-occurrence edges with 112 untyped to 91 nodes / 72 edges with 26 untyped; untyped
+  singletons are dropped and the count is recorded as `dropped_untyped_singletons`. When the agent
+  path is unavailable this is the graph that gets graded.
 - Regression set: **R1–R13, 68 checks** (R12 PDF blocks, R13 task-driven queries); `run.sh verify`
-  runs both suites in 14.7 s.
+  runs both suites in ~15 s.
 
 ## 1.2 — auditability and first-contact failures
 
