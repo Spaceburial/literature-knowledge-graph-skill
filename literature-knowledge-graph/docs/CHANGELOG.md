@@ -13,6 +13,15 @@
   submission. Covers the full run, a single paper with no `case.json`, an altered quote,
   same-label different objects, a missing paragraph id, and budget truncation.
 - `docs/ATTEMPTS.md`: submission ledger written by `tools/poll_attempt.py`.
+- `finalize.py`: a graph that dropped candidate edges for unresolved endpoints no longer reports
+  `success`; the count is a status reason. (Found by the new A/B harness: the deterministic baseline
+  was reporting `success` while discarding 68 edges.)
+- `bench/metrics.py`: one run directory → one row of metrics, every value read from files the
+  pipeline already writes; a missing source is `null` and listed, not `0`.
+- `bench/run_ab.py`: `ab` compares two extraction conditions on the same normalized bundle with
+  repeats and medians; `budget` models requests/windows against 64 requests / 900 s and recommends a
+  `--max-paragraphs` cap. Thresholds documented in `docs/BUDGET.md`; the demo needs ~33 requests and
+  ~620 s at a 6,000-character window.
 
 ## 1.0 — initial release
 - Input normaliser for JSON paragraph lists, id-keyed dicts, JATS XML, and aggregate +
