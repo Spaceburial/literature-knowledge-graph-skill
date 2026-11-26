@@ -17,7 +17,7 @@
 | Incremental/new-paper handling | `scripts/add_paper.py` preserves all existing `N/E` ids, merges by canonical key+type, unions evidence, logs added/merged/conflicts; self-test asserts incremental == full build | `python tests/selftest.py` section [3] |
 | Robustness: missing files, unparseable PDF, same-name, evidence conflict, empty query | `prepare_case.py` warnings; `finalize.py` status; `query_graph.py` `undetermined` | run the PDF/Markdown and single-paper cases in `docs/METHOD.md` |
 | Documentation completeness / reuse | `README.md`, `docs/`, `schema/`, `templates/` | — |
-| GitHub public link (bonus 5) | `GITHUB_URL.txt` — **placeholder, must be replaced**; `scripts/publish_github.sh` pushes once credentials exist | see README §GitHub link |
+| GitHub public link (bonus 5) | `GITHUB_URL.txt` — first line `https://github.com/Spaceburial/literature-knowledge-graph-skill/tree/main/literature-knowledge-graph`, second line `literature-knowledge-graph`; the same directory is published in that public repository | open the link in a logged-out browser, or `curl -s https://api.github.com/repos/Spaceburial/literature-knowledge-graph-skill` → `"visibility": "public"` |
 
 ## Honest limits of this submission
 
@@ -25,4 +25,5 @@
   here is a real two-paper case used for validation, not a stand-in for them.
 - The quantitative comparison in `docs/GAIN.md` is curated-vs-heuristic on the same example,
   not curated-vs-base-agent on the hidden cases; the platform measures the latter.
-- No GitHub repository is claimed; the link file is a placeholder.
+- The public repository holds exactly this directory; anonymous access to the link was checked at
+  submission time, and the 5-point bonus depends on it staying open.
