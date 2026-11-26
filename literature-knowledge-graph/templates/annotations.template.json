@@ -3,6 +3,7 @@
     {
       "label": "<canonical surface form as it appears, or the full form>",
       "type": "material",
+      "canonical_key": "<optional; set it when two objects share a display label but are not the same thing, e.g. perovskite|MAPbI3 vs perovskite|CsFAMA>",
       "aliases": ["<other surface forms seen in the text>"],
       "mentions": [
         {"source_id": "<P1>", "paragraph_id": "<provider paragraph id>",
