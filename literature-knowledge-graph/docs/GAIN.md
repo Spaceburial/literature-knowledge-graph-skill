@@ -68,3 +68,33 @@ python3 bench/run_ab.py ab \
     --repeats 3 --out /tmp/ab
 python3 bench/metrics.py --run-dir /tmp/ab/treatment/rep1/out --work-dir /tmp/ab/treatment/rep1/work
 ```
+
+## Method improvement, measured: the quote gate against plain matching
+
+The claim "our verification is stricter than substring matching" is only worth something with
+numbers. `bench/run_ab.py verify-bench` derives five perturbations from the case's own paragraphs —
+each a real sentence, altered in exactly one way the label names — and applies three rules to the
+same text with the same window scan: naive substring, best-window similarity ≥ 0.90, and this
+skill's gate (similarity plus an exact comparison of every number in the window).
+
+| perturbation | n | naive substring | similarity ≥ 0.90 | this skill's gate |
+|---|---:|---:|---:|---:|
+| exact quote | 40 | 100% | 100% | 100% |
+| extra whitespace | 40 | 0% | 100% | 100% |
+| terminal punctuation changed | 40 | 0% | 100% | 100% |
+| one digit changed | 24 | 0% | **100%** | **0%** |
+| one word replaced | 40 | 0% | 95% | 90% |
+
+Two things follow. Substring matching throws away 100% of quotes whose line wrapping or closing
+punctuation the agent normalised — real quotes, lost. Similarity matching recovers them and also
+certifies **every** quote whose number was altered, which is the failure the challenge warns about
+("关键结果回到原文证据"). Adding the numeric comparison keeps the recovery and removes that
+acceptance. The `word` row is honest about the cost: a paraphrase with unchanged numbers is still
+accepted, at 0.90–0.95 similarity, and is stored as `match="fuzzy"` with the paragraph's own wording
+in `matched_text` so a reviewer can see that it is not verbatim.
+
+Reproduce:
+
+```bash
+python3 bench/run_ab.py verify-bench --case-dir examples/demo_perovskite/input
+```
