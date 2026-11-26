@@ -1,122 +1,417 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Literature knowledge graph schema",
-  "description": "Schema for annotations.json (agent extraction) and graph.json (validated graph). Node/edge evidence always carries source_id, paragraph_id and a verbatim quote.",
-  "$defs": {
-    "evidence": {
-      "type": "object",
-      "required": ["source_id", "paragraph_id", "quote"],
-      "properties": {
-        "source_id": {"type": "string", "description": "paper identifier from corpus-manifest.json"},
-        "paragraph_id": {"type": "string", "description": "provider JATS paragraph id, or d#### when derived"},
-        "paragraph_id_kind": {"enum": ["jats", "derived"], "description": "set by build_graph.py"},
-        "quote": {"type": "string", "minLength": 8, "maxLength": 300, "description": "verbatim substring of the cited paragraph"},
-        "attribution": {"enum": ["self", "other"], "description": "self = authors' own claim; other = cited/summarised work"},
-        "strength": {"enum": ["direct", "reported", "weak", "inferred"]},
-        "match": {"enum": ["exact", "normalized", "fuzzy"]},
-        "match_score": {"type": "number", "minimum": 0, "maximum": 1},
-        "context": {"type": "string", "description": "surrounding original sentence(s)"},
-        "section": {"type": "string"}
-      },
-      "additionalProperties": true
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Literature knowledge graph schema",
+ "description": "Schema for annotations.json (agent extraction) and graph.json (validated graph). Node/edge evidence always carries source_id, paragraph_id and a verbatim quote.",
+ "$defs": {
+  "evidence": {
+   "type": "object",
+   "required": [
+    "source_id",
+    "paragraph_id",
+    "quote"
+   ],
+   "properties": {
+    "source_id": {
+     "type": "string",
+     "description": "paper identifier from corpus-manifest.json"
     },
-    "node": {
-      "type": "object",
-      "required": ["label", "type", "mentions"],
-      "properties": {
-        "id": {"type": "string", "pattern": "^N[0-9]{4}$"},
-        "label": {"type": "string", "minLength": 1},
-        "type": {"enum": ["researcher", "material", "method", "task", "metric", "conclusion", "dataset", "model", "other"]},
-        "aliases": {"type": "array", "items": {"type": "string"}},
-        "canonical_key": {"type": "string"},
-        "mentions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
-        "evidence_status": {"enum": ["verified", "unverified", "rejected"]},
-        "source_ids": {"type": "array", "items": {"type": "string"}},
-        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
-        "notes": {"type": "string"}
-      },
-      "additionalProperties": true
+    "paragraph_id": {
+     "type": "string",
+     "description": "provider JATS paragraph id, or d#### when derived"
     },
-    "edge": {
-      "type": "object",
-      "required": ["source_label", "target_label", "type", "evidence"],
-      "properties": {
-        "id": {"type": "string", "pattern": "^E[0-9]{4}$"},
-        "source_label": {"type": "string"},
-        "target_label": {"type": "string"},
-        "source": {"type": "string", "description": "resolved node id in graph.json"},
-        "target": {"type": "string", "description": "resolved node id in graph.json"},
-        "type": {"enum": ["uses", "compares", "outperforms", "supports", "contradicts", "measures", "evaluated_on", "reports", "improves", "part_of", "produces", "based_on", "cites", "other"]},
-        "condition": {"type": "string", "description": "sample, metric, setting, and scope of the claim"},
-        "direction_note": {"type": "string"},
-        "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
-        "evidence_status": {"enum": ["verified", "unverified", "rejected"]},
-        "source_ids": {"type": "array", "items": {"type": "string"}},
-        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
-        "notes": {"type": "string"}
-      },
-      "additionalProperties": true
+    "paragraph_id_kind": {
+     "enum": [
+      "jats",
+      "derived"
+     ],
+     "description": "set by build_graph.py"
     },
-    "merge_decision": {
-      "type": "object",
-      "required": ["surfaces", "decision", "basis"],
-      "properties": {
-        "surfaces": {"type": "array", "minItems": 2, "items": {"type": "string"}},
-        "decision": {"enum": ["merged", "kept_separate"]},
-        "basis": {"type": "string", "description": "why the merge or the non-merge is justified"},
-        "type": {"type": ["string", "null"]}
-      }
+    "quote": {
+     "type": "string",
+     "minLength": 8,
+     "maxLength": 300,
+     "description": "verbatim substring of the cited paragraph"
     },
-    "conflict": {
-      "type": "object",
-      "required": ["kind"],
-      "properties": {
-        "kind": {"type": "string", "description": "e.g. relation_conflict, bidirectional_outperforms, source_disagreement, non_comparable_efficiency, sample_identity_conflict, metric_semantics_conflict, method_term_conflict"},
-        "detail": {"type": "string"},
-        "items": {"type": "array", "items": {"type": "string"}},
-        "pair": {"type": "array", "items": {"type": "string"}}
-      },
-      "additionalProperties": true
+    "attribution": {
+     "enum": [
+      "self",
+      "other"
+     ],
+     "description": "self = authors' own claim; other = cited/summarised work"
     },
-    "uncertainty_item": {
-      "type": "object",
-      "required": ["kind"],
-      "properties": {
-        "kind": {"type": "string", "description": "e.g. value_not_reported_in_text, undetermined_relation, quote_not_found, cross_paper_generic_term, explicit_limitation"},
-        "detail": {"type": "string"},
-        "items": {"type": "array", "items": {"type": "string"}},
-        "label": {"type": "string"}
-      },
-      "additionalProperties": true
+    "strength": {
+     "enum": [
+      "direct",
+      "reported",
+      "weak",
+      "inferred"
+     ]
+    },
+    "match": {
+     "enum": [
+      "exact",
+      "normalized",
+      "fuzzy"
+     ]
+    },
+    "match_score": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "context": {
+     "type": "string",
+     "description": "surrounding original sentence(s)"
+    },
+    "section": {
+     "type": "string"
+    },
+    "matched_text": {
+     "type": "string",
+     "description": "present only for a fuzzy match: the paragraph's own wording at the matched span, so the submitted quote can be compared with it"
     }
+   },
+   "additionalProperties": true
   },
-  "oneOf": [
-    {
-      "title": "annotations.json",
-      "type": "object",
-      "required": ["nodes", "edges"],
-      "properties": {
-        "nodes": {"type": "array", "items": {"$ref": "#/$defs/node"}},
-        "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}},
-        "merge_candidates": {"type": "array", "items": {"$ref": "#/$defs/merge_decision"}},
-        "source_conflicts": {"type": "array", "items": {"$ref": "#/$defs/conflict"}},
-        "uncertainty": {"type": "array", "items": {"$ref": "#/$defs/uncertainty_item"}}
-      }
+  "node": {
+   "type": "object",
+   "required": [
+    "label",
+    "type",
+    "mentions"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^N[0-9]{4}$"
     },
-    {
-      "title": "graph.json",
-      "type": "object",
-      "required": ["case_id", "sources", "nodes", "edges", "merge_log", "conflict_log", "uncertainty"],
-      "properties": {
-        "case_id": {"type": ["string", "null"]},
-        "sources": {"type": "array", "items": {"type": "object"}},
-        "nodes": {"type": "array", "items": {"$ref": "#/$defs/node"}},
-        "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}},
-        "merge_log": {"type": "array", "items": {"$ref": "#/$defs/merge_decision"}},
-        "conflict_log": {"type": "array", "items": {"$ref": "#/$defs/conflict"}},
-        "uncertainty": {"type": "array", "items": {"$ref": "#/$defs/uncertainty_item"}},
-        "stats": {"type": "object"}
-      }
+    "label": {
+     "type": "string",
+     "minLength": 1
+    },
+    "type": {
+     "enum": [
+      "researcher",
+      "material",
+      "method",
+      "task",
+      "metric",
+      "conclusion",
+      "dataset",
+      "model",
+      "other"
+     ]
+    },
+    "aliases": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "canonical_key": {
+     "type": "string"
+    },
+    "mentions": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "$ref": "#/$defs/evidence"
+     }
+    },
+    "evidence_status": {
+     "enum": [
+      "verified",
+      "unverified",
+      "rejected"
+     ]
+    },
+    "source_ids": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "confidence": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "notes": {
+     "type": "string"
     }
-  ]
+   },
+   "additionalProperties": true
+  },
+  "edge": {
+   "type": "object",
+   "required": [
+    "source_label",
+    "target_label",
+    "type",
+    "evidence"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^E[0-9]{4}$"
+    },
+    "source_label": {
+     "type": "string"
+    },
+    "target_label": {
+     "type": "string"
+    },
+    "source": {
+     "type": "string",
+     "description": "resolved node id in graph.json"
+    },
+    "target": {
+     "type": "string",
+     "description": "resolved node id in graph.json"
+    },
+    "type": {
+     "enum": [
+      "uses",
+      "compares",
+      "outperforms",
+      "supports",
+      "contradicts",
+      "measures",
+      "evaluated_on",
+      "reports",
+      "improves",
+      "part_of",
+      "produces",
+      "based_on",
+      "cites",
+      "other"
+     ]
+    },
+    "condition": {
+     "type": "string",
+     "description": "sample, metric, setting, and scope of the claim"
+    },
+    "direction_note": {
+     "type": "string"
+    },
+    "evidence": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "$ref": "#/$defs/evidence"
+     }
+    },
+    "evidence_status": {
+     "enum": [
+      "verified",
+      "unverified",
+      "rejected"
+     ]
+    },
+    "source_ids": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "confidence": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "notes": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": true
+  },
+  "merge_decision": {
+   "type": "object",
+   "required": [
+    "surfaces",
+    "decision",
+    "basis"
+   ],
+   "properties": {
+    "surfaces": {
+     "type": "array",
+     "minItems": 2,
+     "items": {
+      "type": "string"
+     }
+    },
+    "decision": {
+     "enum": [
+      "merged",
+      "kept_separate"
+     ]
+    },
+    "basis": {
+     "type": "string",
+     "description": "why the merge or the non-merge is justified"
+    },
+    "type": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "conflict": {
+   "type": "object",
+   "required": [
+    "kind"
+   ],
+   "properties": {
+    "kind": {
+     "type": "string",
+     "description": "e.g. relation_conflict, bidirectional_outperforms, source_disagreement, non_comparable_efficiency, sample_identity_conflict, metric_semantics_conflict, method_term_conflict"
+    },
+    "detail": {
+     "type": "string"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "pair": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "additionalProperties": true
+  },
+  "uncertainty_item": {
+   "type": "object",
+   "required": [
+    "kind"
+   ],
+   "properties": {
+    "kind": {
+     "type": "string",
+     "description": "e.g. value_not_reported_in_text, undetermined_relation, quote_not_found, cross_paper_generic_term, explicit_limitation"
+    },
+    "detail": {
+     "type": "string"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "label": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": true
+  }
+ },
+ "oneOf": [
+  {
+   "title": "annotations.json",
+   "type": "object",
+   "required": [
+    "nodes",
+    "edges"
+   ],
+   "properties": {
+    "nodes": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/node"
+     }
+    },
+    "edges": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/edge"
+     }
+    },
+    "merge_candidates": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/merge_decision"
+     }
+    },
+    "source_conflicts": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/conflict"
+     }
+    },
+    "uncertainty": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/uncertainty_item"
+     }
+    }
+   }
+  },
+  {
+   "title": "graph.json",
+   "type": "object",
+   "required": [
+    "case_id",
+    "sources",
+    "nodes",
+    "edges",
+    "merge_log",
+    "conflict_log",
+    "uncertainty"
+   ],
+   "properties": {
+    "case_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "sources": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "nodes": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/node"
+     }
+    },
+    "edges": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/edge"
+     }
+    },
+    "merge_log": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/merge_decision"
+     }
+    },
+    "conflict_log": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/conflict"
+     }
+    },
+    "uncertainty": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/uncertainty_item"
+     }
+    },
+    "stats": {
+     "type": "object"
+    }
+   }
+  }
+ ]
 }
