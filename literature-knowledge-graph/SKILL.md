@@ -64,6 +64,18 @@ python $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/case
 This assigns stable ids and flags `id_derived=true` for paragraphs that had no provider id.
 Read the printed warnings; they are part of your report.
 
+**Budget guard.** If the material is large enough to threaten the run budget (64 model requests,
+900 s), cap it instead of overrunning:
+
+```bash
+python $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/case_bundle.json \
+       --max-paragraphs 120 --max-chars 400000
+```
+
+The bundle then carries `budget.truncated=true`, the dropped paragraphs per paper, and a warning;
+`finalize.py` downgrades the status to `partial` and says so in `status_reasons`. Truncation is
+visible, never silent — report the missing text as a limitation.
+
 ### Step 2 — Extract (your job, the LLM step)
 
 Read the paragraphs in `case_bundle.json` in windows (by source, then by section). Produce
@@ -120,6 +132,11 @@ Apply these rules and record each decision in `merge_candidates`:
 2. **Do not merge** a generic class with a specific instance (`COFs` vs `DMTH-COF`), or the same
    generic term when the papers study different physical samples (`perovskite` = MAPbI3 in P1 vs
    FA/MA/Cs mixed-cation in P2). Mark `kept_separate` and say why.
+   A `kept_separate` decision only holds if the two objects can be apart: nodes are keyed by
+   `canonical_key` (default: the label). When two objects share a display label, give each its own
+   key — `"label": "perovskite"` with `"canonical_key": "perovskite|MAPbI3"` and
+   `"perovskite|CsFAMA"`. If the surfaces collapse to one key, the build reports
+   `kept_separate_single_key` rather than logging a decision that was never applied.
 3. Do **not** merge two papers' conditions, samples or numeric results into one conclusion.
    “Same method name” never means “same experiment”.
 4. Same-name different-entity (e.g. two different “P1” devices, or a person and a material with
@@ -212,11 +229,14 @@ summary, the 3+ query results and the uncertainty items.
 
 ## Self-check before finishing
 
-1. `python $SKILL_DIR/tests/selftest.py` passes (checks schema, evidence, merge, query).
-2. `result.json.validation.checks` are all `true`.
-3. Every `output_contract` key is present in `result.json` (see `output_contract_mapping`).
-4. `evidence.csv` rows all have non-empty `quote` and a `match` in {exact, normalized, fuzzy}.
-5. `uncertainty` names every unreported value and every undetermined relation you met.
+1. `python $SKILL_DIR/tests/regression/regression.py` passes: six cases covering the full run,
+   a single paper with no `case.json`, an altered quote, same-label different objects, missing
+   paragraph ids, and budget truncation.
+2. `python $SKILL_DIR/tests/selftest.py` passes (checks schema, evidence, merge, query).
+3. `result.json.validation.checks` are all `true`.
+4. Every `output_contract` key is present in `result.json` (see `output_contract_mapping`).
+5. `evidence.csv` rows all have non-empty `quote` and a `match` in {exact, normalized, fuzzy}.
+6. `uncertainty` names every unreported value and every undetermined relation you met.
 
 ## Minimal example (illustrative, not a graded answer)
 
