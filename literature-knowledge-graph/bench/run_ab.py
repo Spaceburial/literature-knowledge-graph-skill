@@ -32,6 +32,7 @@ import statistics
 import subprocess
 import sys
 import tempfile
+import re
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -237,6 +238,79 @@ def cmd_budget(args):
     return 0
 
 
+def cmd_verifier(args):
+    """How much a quote check earns over plain substring matching, measured, not asserted.
+
+    Every perturbation is derived from a real paragraph of the case, so the "true" quotes are
+    genuine and the false ones differ from the text only where the label says. The point of the
+    table is the last column: string similarity alone certifies a quote whose numbers were altered.
+    """
+    sys.path.insert(0, SCRIPTS)
+    import verify_evidence as ve
+
+    work = args.work or tempfile.mkdtemp(prefix="lkg-verify-")
+    if args.bundle:
+        with open(args.bundle, "r", encoding="utf-8") as f:
+            paras = json.load(f)["paragraphs"]
+    else:
+        paras = prepare(args.case_dir, os.path.join(work, "case_bundle.json"))["paragraphs"]
+    paras = [p for p in paras if len(p["text"]) > 180][: args.samples]
+    if not paras:
+        sys.stderr.write("[verify-bench] no paragraph long enough; nothing measured\n")
+        return 2
+
+    def perturb(text, kind, i):
+        words = text.split()
+        if kind == "exact":
+            return " ".join(words[: min(18, len(words))])
+        if kind == "whitespace":
+            return "  ".join(words[: min(18, len(words))]).replace(" ", "   ", 2)
+        if kind == "punctuation":
+            return " ".join(words[: min(18, len(words))]).rstrip(".") + "!"
+        if kind == "digit":
+            base = " ".join(words[: min(18, len(words))])
+            m = re.search(r"\d", base)
+            if not m:
+                return None
+            pos = m.start()
+            repl = str((int(base[pos]) + 1) % 10)
+            return base[:pos] + repl + base[pos + 1:]
+        if kind == "word":
+            base = words[: min(18, len(words))]
+            if len(base) < 6:
+                return None
+            base[len(base) // 2] = "however"
+            return " ".join(base)
+        return None
+
+    kinds = ["exact", "whitespace", "punctuation", "digit", "word"]
+    rows = []
+    for kind in kinds:
+        cases = [(q, p) for p in paras for q in [perturb(p["text"], kind, 0)] if q]
+        if not cases:
+            continue
+        naive = sum(1 for q, p in cases if q in p["text"])
+        # same window scan, same threshold: the only difference from the gate is the numeric check
+        results = [ve.verify_quote(q, p["text"]) for q, p in cases]
+        sim = sum(1 for r in results if r["score"] >= 0.90)
+        guarded = sum(1 for r in results if r["status"] in ("exact", "normalized", "fuzzy"))
+        n = len(cases)
+        rows.append((kind, n, naive / n, sim / n, guarded / n))
+
+    print(f"[verify-bench] {len(paras)} paragraphs, {len(kinds)} perturbation kinds\n")
+    print("| perturbation | n | naive substring | similarity >= 0.90 | this skill's gate |")
+    print("|---|---:|---:|---:|---:|")
+    for kind, n, a, b, c in rows:
+        print(f"| {kind} | {n} | {a:.0%} | {b:.0%} | {c:.0%} |")
+    print("\nBenign rows should be accepted, the 'digit' row must not be: similarity alone accepts an "
+          "altered number, which is why the gate compares the numbers it can see.\n")
+    if args.json_out:
+        with open(args.json_out, "w", encoding="utf-8") as f:
+            json.dump({"rows": [dict(zip(("perturbation", "n", "naive", "normalized", "guarded"), r))
+                                for r in rows]}, f, indent=1)
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -260,6 +334,14 @@ def main():
     b.add_argument("--fixed-seconds", type=float, default=60.0)
     b.add_argument("--max-seconds", type=float, default=900.0)
     b.add_argument("--json-out")
+    v = sub.add_parser("verify-bench", help="perturbed-quote comparison: naive substring vs the gate")
+    v.add_argument("--case-dir")
+    v.add_argument("--bundle")
+    v.add_argument("--work", default=None)
+    v.add_argument("--samples", type=int, default=40)
+    v.add_argument("--strict-numeric", action="store_true", default=True)
+    v.add_argument("--json-out")
+    v.set_defaults(func=cmd_verifier)
     b.set_defaults(func=cmd_budget)
 
     args = ap.parse_args()
