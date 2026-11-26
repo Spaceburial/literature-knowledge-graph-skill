@@ -255,6 +255,35 @@ def iter_dicts(node):
 
 
 SHORT_DROPPED = []          # (origin_file, chars) for blocks under the 40-character minimum
+DISCOVERED_META = {}        # source_id -> metadata found inside a material file (no manifest needed)
+
+META_KEYS = ("doi", "title", "authors", "author", "journal", "year", "publication_year",
+             "license", "licence", "sha256", "hash", "role")
+
+
+def discover_source_meta(obj):
+    """Collect per-source metadata carried by an aggregate material file.
+
+    Two layouts occur in practice: a list/dict of paper records that each name their source, and a
+    mapping keyed by source id whose values hold doi/title. Neither has a manifest, so without this
+    the sources end up as metadata-less stubs and finalize calls the run partial for a missing DOI
+    that was in the input all along.
+    """
+    def take(d, sid=None):
+        if not isinstance(d, dict):
+            return
+        meta = {k: d[k] for k in META_KEYS if k in d}
+        sid = sid or d.get("source_id") or d.get("paper_id") or d.get("id")
+        if meta and sid:
+            DISCOVERED_META.setdefault(str(sid), {}).update(meta)
+
+    for d in iter_dicts(obj):
+        take(d)
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(v, dict):
+                take(v, sid=str(v.get("source_id") or k))
+
 
 
 def note_short(origin, text):
@@ -278,16 +307,26 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
     out = []
     seen = set()
 
-    # (a) explicit paragraph records
-    for d in iter_dicts(obj):
-        if not looks_like_paragraph(d):
-            t = first_key(d, TEXT_KEYS) if isinstance(d, dict) else None
+    # (a) explicit paragraph records; a record nested under a paper object inherits its source_id
+    def walk(node, inherited_sid=None):
+        if isinstance(node, dict):
+            sid_here = first_key(node, SRC_KEYS) or inherited_sid
+            if looks_like_paragraph(node):
+                yield node, sid_here
+                return
+            t = first_key(node, TEXT_KEYS)
             if isinstance(t, str) and 0 < len(norm_ws(t)) < 40:
                 note_short(os.path.basename(path_label), t)
-            continue
+            for v in node.values():
+                yield from walk(v, sid_here)
+        elif isinstance(node, list):
+            for v in node:
+                yield from walk(v, inherited_sid)
+
+    for d, inherited in walk(obj):
         text = norm_ws(first_key(d, TEXT_KEYS))
         pid = first_key(d, ID_KEYS)
-        sid = first_key(d, SRC_KEYS) or default_source
+        sid = first_key(d, SRC_KEYS) or inherited or default_source
         sec = first_key(d, SEC_KEYS) or ""
         pid = str(pid) if pid is not None else None
         key = (str(sid), pid, text[:80])
@@ -306,12 +345,19 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
         })
 
     # (b) dict keyed by paragraph id -> {text: ...}
+    STRUCTURAL = {"abstract", "fulltext", "full_text", "body", "text", "content", "sections",
+                  "paragraphs", "papers", "records", "items", "data", "result", "results"}
+
     def walk_keyed(node, src_hint):
         if isinstance(node, dict):
+            hint = first_key(node, SRC_KEYS) or src_hint
             for k, v in node.items():
+                if str(k).lower() in STRUCTURAL:
+                    walk_keyed(v, hint)
+                    continue
                 if isinstance(v, dict) and first_key(v, TEXT_KEYS) and len(norm_ws(first_key(v, TEXT_KEYS))) >= 40:
                     text = norm_ws(first_key(v, TEXT_KEYS))
-                    sid = first_key(v, SRC_KEYS) or src_hint or default_source
+                    sid = first_key(v, SRC_KEYS) or hint or default_source
                     sec = first_key(v, SEC_KEYS) or ""
                     key = (str(sid), str(k), text[:80])
                     if key not in seen:
@@ -326,7 +372,7 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
                             "origin_file": os.path.basename(path_label),
                         })
                 else:
-                    walk_keyed(v, src_hint)
+                    walk_keyed(v, hint)
         elif isinstance(node, list):
             for v in node:
                 walk_keyed(v, src_hint)
@@ -509,10 +555,14 @@ def main():
         ("secondary_material.json", "secondary"),
         ("material.txt", None),
     ]
-    # discover PDFs / Markdown material files not covered by the fixed names
+    # discover PDFs / XML / Markdown / plain-text material files not covered by the fixed names
     for f in sorted(os.listdir(case_dir)):
         low = f.lower()
-        if low.endswith(".pdf") and f not in [m[0] for m in material_files]:
+        if low.endswith(".xml") and f not in [m[0] for m in material_files]:
+            # JATS full text downloaded from PMC arrives as one .xml per paper
+            role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
+            material_files.append((f, role))
+        elif low.endswith(".pdf") and f not in [m[0] for m in material_files]:
             role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
             material_files.append((f, role))
         elif low.endswith(".txt") and not re.match(r"(requirements|license|licence|readme)\.txt$", low) \
@@ -557,6 +607,8 @@ def main():
                                    "id_derived": True, "origin_file": fname, "order_in_source": i + 1})
             continue
         obj = load_json(path)
+        if isinstance(obj, (dict, list)):
+            discover_source_meta(obj)
         if isinstance(obj, dict) and "__load_error__" in obj:
             warnings.append(f"{fname} unparseable JSON: {obj['__load_error__']}")
             continue
@@ -566,6 +618,17 @@ def main():
 
     if not loaded_any:
         warnings.append("No material files (material.json/primary-/secondary-) found.")
+
+    # ---- an id-less paragraph gets its derived id before de-duplication ----
+    # Otherwise two distinct records share the key (source_id, None) and the second silently
+    # replaces the first, which is how a two-abstract corpus became a one-paragraph corpus.
+    _cnt = {}
+    for p in paragraphs:
+        if not p.get("paragraph_id"):
+            n = _cnt.get(p["source_id"], 0) + 1
+            _cnt[p["source_id"]] = n
+            p["paragraph_id"] = f"d{n:04d}"
+            p["id_derived"] = True
 
     # ---- de-duplicate: the same paragraph may appear in material.json and in a per-paper file ----
     by_pid = {}
@@ -582,6 +645,23 @@ def main():
                 p["order_in_source"] = prev.get("order_in_source")
                 by_pid[key] = p
     paragraphs = list(by_pid.values())
+
+    # ---- one paragraph read twice must not become two ----
+    # `{"p1": {"text": ...}}` is picked up both as a keyed paragraph (id p1) and as a bare record
+    # without an id (derived id), which doubled the corpus and split one claim over two quotes.
+    seen_text = {}
+    deduped = []
+    for p in paragraphs:
+        k = (p["source_id"], norm_ws(p["text"])[:80])
+        prev = seen_text.get(k)
+        if prev is None:
+            seen_text[k] = p
+            deduped.append(p)
+            continue
+        if prev.get("id_derived") and not p.get("id_derived"):
+            deduped[deduped.index(prev)] = p
+            seen_text[k] = p
+    paragraphs = deduped
 
     # ---- attach xml originals if present (do not parse; keep for cross-check) ----
     xml_originals = {}
@@ -604,12 +684,30 @@ def main():
             if not p["paragraph_id"].startswith("d"):
                 p["paragraph_id"] = p["paragraph_id"]  # keep explicit-but-flagged
 
+    # ---- backfill manifest sources with metadata found inside the material files ----
+    for src in sources:
+        dm = DISCOVERED_META.get(src["source_id"], {})
+        for k in ("doi", "title", "journal", "year"):
+            if not src.get(k) and dm.get(k):
+                src[k] = dm[k]
+        if not src.get("license") and (dm.get("license") or dm.get("licence")):
+            src["license"] = dm.get("license") or dm.get("licence")
+        if not src.get("authors") and dm.get("authors"):
+            a = dm["authors"]
+            src["authors"] = [a] if isinstance(a, str) else a
+
     # ---- ensure every paragraph source exists in sources[] ----
     known = {s["source_id"] for s in sources}
     for sid in sorted({p["source_id"] for p in paragraphs}):
         if sid not in known:
-            sources.append({"source_id": sid, "role": "unknown", "doi": None, "title": None,
-                            "authors": [], "license": None, "sha256": None, "raw": {}})
+            dm = DISCOVERED_META.get(sid, {})
+            authors = dm.get("authors") or dm.get("author") or []
+            if isinstance(authors, str):
+                authors = [a.strip() for a in re.split(r"[;,]", authors) if a.strip()]
+            sources.append({"source_id": sid, "role": dm.get("role") or "unknown",
+                            "doi": dm.get("doi"), "title": dm.get("title"), "authors": authors,
+                            "license": dm.get("license") or dm.get("licence"),
+                            "sha256": dm.get("sha256") or dm.get("hash"), "raw": dm})
             warnings.append(f"Source '{sid}' appeared in material but not in manifest; added stub.")
 
     # ---- role reconciliation: if manifest has 2 sources and roles unknown, assign ----
