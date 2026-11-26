@@ -1,7 +1,7 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
  "title": "Literature knowledge graph schema",
- "description": "Schema for annotations.json (agent extraction) and graph.json (validated graph). Node/edge evidence always carries source_id, paragraph_id and a verbatim quote.",
+ "description": "Schema for annotations.json (agent extraction) and graph.json (validated graph). Node/edge evidence always carries source_id, paragraph_id and a verbatim quote. A file matching either shape is valid: an annotation set (label-based edges, the input) or a built graph (id-based edges that also carry their endpoint labels).",
  "$defs": {
   "evidence": {
    "type": "object",
@@ -243,8 +243,10 @@
     "decision": {
      "enum": [
       "merged",
-      "kept_separate"
-     ]
+      "kept_separate",
+      "not_applicable"
+     ],
+     "description": "merged = one node; kept_separate = deliberately two; not_applicable = an annotated merge whose surfaces appear in no node of this graph"
     },
     "basis": {
      "type": "string",
@@ -312,7 +314,7 @@
    "additionalProperties": true
   }
  },
- "oneOf": [
+ "anyOf": [
   {
    "title": "annotations.json",
    "type": "object",
