@@ -89,8 +89,13 @@ def main():
     must(run(qargs, "Stage 4 query_graph"), "Stage 4 query_graph")
     must(run([PY, os.path.join(HERE, "export_graph.py"), "--graph", graph, "--queries", qres,
               "--outdir", args.out], "Stage 5 export_graph"), "Stage 5 export_graph")
+    # SVG first: it needs nothing but the standard library, so the preview exists even when the
+    # image stack is missing. PNG is a second, optional form for viewers that prefer a bitmap.
+    must(run([PY, os.path.join(HERE, "render_svg.py"), "--graph", graph,
+              "--out", os.path.join(args.out, "graph.svg")], "Stage 5b render_svg"),
+         "Stage 5b render_svg")
     run([PY, os.path.join(HERE, "render_png.py"), "--graph", graph,
-         "--out", os.path.join(args.out, "graph.png")], "Stage 5b render_png (optional)")
+         "--out", os.path.join(args.out, "graph.png")], "Stage 5c render_png (optional)")
     must(run([PY, os.path.join(HERE, "finalize.py"), "--bundle", bundle, "--graph", graph,
               "--queries", qres, "--out", os.path.join(args.out, "result.json"), "--outdir", args.out],
              "Stage 6 finalize"), "Stage 6 finalize")
