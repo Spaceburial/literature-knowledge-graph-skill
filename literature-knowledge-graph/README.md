@@ -97,7 +97,13 @@ python tests/selftest.py      # 25 checks, exit 0 = pass
 
 ## GitHub link
 
-`GITHUB_URL.txt` holds the link for this submission. This working copy was produced in a
-sandbox with no GitHub credentials, so `OWNER/REPO` in that file is a placeholder to be
-replaced before pushing; `scripts/publish_github.sh` performs the push once `GITHUB_TOKEN`
-is set. No repository is claimed to exist until that push succeeds.
+This work is published at
+
+```
+https://github.com/Spaceburial/literature-knowledge-graph-skill/tree/main/literature-knowledge-graph
+```
+
+`GITHUB_URL.txt` carries that link on its first line and the repository-relative directory
+`literature-knowledge-graph` on its second. The repository is public, and that directory holds
+exactly the files shipped in this submission. `scripts/publish_github.sh` re-publishes the
+current directory when `GITHUB_TOKEN` is set; that script is how this copy was published.
