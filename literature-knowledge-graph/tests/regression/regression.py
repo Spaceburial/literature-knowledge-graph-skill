@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the ten cases a change must not break before a submission.
+"""regression.py — the eleven cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -13,6 +13,9 @@ R7 silent-failure gates        -> an empty corpus, missing annotations, node-les
                                   missing query file each exit non-zero with a reason (they used to
                                   report nothing and succeed)
 R8 one digit edited in a quote -> rejected as a numeric mismatch even at 0.95 string similarity
+R11 schema conformance       -> the shipped annotations, the shipped example graph and a freshly
+                                built graph all satisfy schema/graph.schema.json, a corrupted graph
+                                does not, and no stored quote exceeds the documented limit
 R10 input shapes             -> JATS .xml is discovered, an aggregate material.json keeps its
                                 metadata, a dict-of-dicts corpus is counted once, inline markup
                                 does not split tokens, back matter stays out of the body, and a
@@ -23,13 +26,14 @@ R9 no silent empty results   -> annotations that match no paragraph stop the bui
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all ten
+    python3 tests/regression/regression.py          # all eleven
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -458,8 +462,124 @@ def r10(work):
           len(bundle["paragraphs"]))
 
 
+# ---------------------------------------------------------------- R11
+NODE_TYPES = {"researcher", "material", "method", "task", "metric", "conclusion", "dataset",
+              "model", "other"}
+EDGE_TYPES = {"uses", "compares", "outperforms", "supports", "contradicts", "measures",
+              "evaluated_on", "reports", "improves", "part_of", "produces", "based_on", "cites",
+              "other"}
+MERGE_DECISIONS = {"merged", "kept_separate", "not_applicable"}
+
+
+def _evidence_problems(ev, where):
+    out = []
+    for k in ("source_id", "paragraph_id", "quote"):
+        if not isinstance(ev.get(k), str) or not ev.get(k):
+            out.append(f"{where}: missing {k}")
+    q = ev.get("quote") or ""
+    if len(q) < 8 or len(q) > 300:
+        out.append(f"{where}: quote length {len(q)} outside 8..300")
+    if ev.get("match") not in (None, "exact", "normalized", "fuzzy"):
+        out.append(f"{where}: bad match {ev.get('match')!r}")
+    return out
+
+
+def mini_validate_graph(g):
+    """The subset of schema/graph.schema.json that a stdlib-only run can check.
+
+    The schema accepts either shape, so the required top-level keys depend on which one this is:
+    an annotation set (nodes + edges) or a built graph (case_id, sources, logs).
+    """
+    problems = []
+    is_graph = "merge_log" in g or "sources" in g
+    required = (("case_id", "sources", "nodes", "edges", "merge_log", "conflict_log", "uncertainty")
+                if is_graph else ("nodes", "edges"))
+    for k in required:
+        if k not in g:
+            problems.append(f"missing top-level key {k}")
+    for i, n in enumerate(g.get("nodes", [])):
+        if not n.get("label"):
+            problems.append(f"node[{i}]: empty label")
+        if n.get("type") not in NODE_TYPES:
+            problems.append(f"node[{i}]: type {n.get('type')!r} not in schema")
+        if n.get("id") and not re.fullmatch(r"N\d{4}", str(n["id"])):
+            problems.append(f"node[{i}]: id {n.get('id')!r}")
+        for j, m in enumerate(n.get("mentions") or []):
+            problems += _evidence_problems(m, f"node[{i}].mention[{j}]")
+    for i, e in enumerate(g.get("edges", [])):
+        for k in ("source_label", "target_label"):
+            if not e.get(k):
+                problems.append(f"edge[{i}]: missing {k}")
+        if e.get("type") not in EDGE_TYPES:
+            problems.append(f"edge[{i}]: type {e.get('type')!r} not in schema")
+        for j, m in enumerate(e.get("evidence") or []):
+            problems += _evidence_problems(m, f"edge[{i}].evidence[{j}]")
+    for i, m in enumerate(g.get("merge_log", []) if is_graph else []):
+        if not isinstance(m.get("surfaces"), list) or len(m["surfaces"]) < 2:
+            problems.append(f"merge_log[{i}]: surfaces < 2")
+        if m.get("decision") not in MERGE_DECISIONS:
+            problems.append(f"merge_log[{i}]: decision {m.get('decision')!r}")
+        if not isinstance(m.get("basis"), (str, type(None))):
+            problems.append(f"merge_log[{i}]: basis not a string")
+    for i, m in enumerate(g.get("merge_candidates", []) if not is_graph else []):
+        if not isinstance(m.get("surfaces"), list) or len(m["surfaces"]) < 2:
+            problems.append(f"merge_candidates[{i}]: surfaces < 2")
+        if m.get("decision") not in MERGE_DECISIONS:
+            problems.append(f"merge_candidates[{i}]: decision {m.get('decision')!r}")
+    return problems
+
+
+def schema_verdict(obj, schema):
+    """(ok, detail). Uses jsonschema when installed, and always runs the stdlib subset."""
+    problems = mini_validate_graph(obj) if isinstance(obj, dict) and "nodes" in obj else []
+    detail = "; ".join(problems[:3])
+    ok = not problems
+    try:
+        import jsonschema
+        try:
+            jsonschema.validate(obj, schema)
+            return ok, detail or "jsonschema"
+        except jsonschema.ValidationError as e:
+            return False, f"jsonschema: {list(e.absolute_path)[:4]} {e.message[:120]}"
+    except ImportError:
+        return ok, (detail + " (stdlib subset only)").strip()
+
+
+def r11(work):
+    print("[R11] produced artifacts satisfy schema/graph.schema.json")
+    schema = jload(os.path.join(ROOT, "schema", "graph.schema.json"))
+
+    ann = jload(os.path.join(DEMO, "annotations.example.json"))
+    ok, detail = schema_verdict(ann, schema)
+    check("shipped annotations.example.json is valid", ok, detail)
+
+    shipped = jload(os.path.join(DEMO, "output", "graph.json"))
+    ok, detail = schema_verdict(shipped, schema)
+    check("shipped example graph.json is valid", ok, detail)
+
+    b = os.path.join(work, "bundle.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b])
+    g, q, r = pipeline(b, os.path.join(DEMO, "annotations.example.json"), work,
+                       os.path.join(DEMO, "queries.example.json"))
+    ok, detail = schema_verdict(g, schema)
+    check("a freshly built graph is valid", ok, detail)
+
+    broken = json.loads(json.dumps(g))
+    if broken["edges"]:
+        broken["edges"][0]["type"] = "banana"
+    ok, _ = schema_verdict(broken, schema)
+    check("a graph with an out-of-schema relation type is rejected", not ok)
+
+    longest = max([len(m["quote"]) for n in g["nodes"] for m in n.get("mentions", [])]
+                  + [len(m["quote"]) for e in g["edges"] for m in e.get("evidence", [])] + [0])
+    check("no stored quote exceeds the documented 300-character limit", longest <= 300, longest)
+    check("result.json repeats the graph's nodes and edges",
+          len(r["nodes"]) == len(g["nodes"]) and len(r["edges"]) == len(g["edges"]),
+          (len(r["nodes"]), len(g["nodes"])))
+
+
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
-         "R9": r9, "R10": r10}
+         "R9": r9, "R10": r10, "R11": r11}
 
 
 def main(argv):
