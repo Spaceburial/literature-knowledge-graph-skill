@@ -5,7 +5,9 @@
   that reaches 0.90 similarity is accepted as `fuzzy` and marked weak evidence; the stored text is
   then the submitted string, so a fuzzy match is *not* proof of a verbatim quote — only an exact or
   normalized match is. Numbers are checked separately: a quote whose numeric tokens differ from the
-  matched window is rejected outright, whatever its similarity.
+  matched window is rejected outright, whatever its similarity. For a fuzzy record the
+  paragraph's own wording is kept in `matched_text`, so the difference from the submitted
+  quote stays visible.
 - **Paragraph granularity.** Long paragraphs are not split; a quote must fit inside one
   paragraph and be ≤300 characters after folding.
 - **Extraction quality is bounded by the reading step.** The deterministic fallback produces
