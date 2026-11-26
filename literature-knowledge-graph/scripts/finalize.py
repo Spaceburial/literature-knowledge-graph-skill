@@ -194,6 +194,13 @@ def main():
         ],
     }
 
+    failed_checks = [c["name"] for c in validation["checks"] if not c["pass"]]
+    if failed_checks:
+        # A check that fails is the clearest statement of a shortfall the pipeline can make; it
+        # used to be reported in validation.checks while status stayed "success".
+        status = "partial" if status == "success" else status
+        reasons.append("validation check(s) failed: " + "; ".join(failed_checks))
+
     summary = (f"Built a {len(nodes)}-node / {len(edges)}-edge evidence-bound knowledge graph over "
                f"{len(srcs)} paper(s); {n_verified_nodes} nodes and {n_verified_edges} edges carry a "
                f"verified quote ({int(coverage*100)}% coverage, {validation['n_paragraphs_cited']} distinct "
