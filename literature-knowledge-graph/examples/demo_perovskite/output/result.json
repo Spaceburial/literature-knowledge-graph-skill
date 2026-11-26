@@ -120,7 +120,7 @@
       "source_id": "P2",
       "paragraph_id": "Par31",
       "paragraph_id_kind": "jats",
-      "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+      "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC",
       "match": "exact",
       "match_score": 1.0,
       "context": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer i",
@@ -547,10 +547,10 @@
       "source_id": "P2",
       "paragraph_id": "Par8",
       "paragraph_id_kind": "jats",
-      "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+      "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
       "match": "exact",
       "match_score": 1.0,
-      "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+      "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
       "attribution": "self",
       "strength": "direct",
       "section": "Introduction"
@@ -1237,6 +1237,8 @@
    {
     "source": "N0028",
     "target": "N0034",
+    "source_label": "DMTH-COF",
+    "target_label": "bulk additive engineering",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -1266,6 +1268,8 @@
    {
     "source": "N0035",
     "target": "N0004",
+    "source_label": "COFs act as crystallization regulators and defect passivators",
+    "target_label": "MAPbI3",
     "type": "supports",
     "raw_type": "supports",
     "direction_note": "",
@@ -1295,6 +1299,8 @@
    {
     "source": "N0013",
     "target": "N0024",
+    "source_label": "covalent organic frameworks",
+    "target_label": "passivation",
     "type": "supports",
     "raw_type": "supports",
     "direction_note": "",
@@ -1324,6 +1330,8 @@
    {
     "source": "N0028",
     "target": "N0002",
+    "source_label": "DMTH-COF",
+    "target_label": "power conversion efficiency",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1353,6 +1361,8 @@
    {
     "source": "N0028",
     "target": "N0033",
+    "source_label": "DMTH-COF",
+    "target_label": "open-circuit voltage",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1382,6 +1392,8 @@
    {
     "source": "N0028",
     "target": "N0032",
+    "source_label": "DMTH-COF",
+    "target_label": "fill factor",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1411,6 +1423,8 @@
    {
     "source": "N0028",
     "target": "N0029",
+    "source_label": "DMTH-COF",
+    "target_label": "PCE retention after 500 h",
     "type": "improves",
     "raw_type": "improves",
     "direction_note": "",
@@ -1440,6 +1454,8 @@
    {
     "source": "N0028",
     "target": "N0017",
+    "source_label": "DMTH-COF",
+    "target_label": "non-radiative recombination",
     "type": "improves",
     "raw_type": "improves",
     "direction_note": "",
@@ -1469,6 +1485,8 @@
    {
     "source": "N0028",
     "target": "N0031",
+    "source_label": "DMTH-COF",
+    "target_label": "triazine-based COF additive",
     "type": "compares",
     "raw_type": "compares",
     "direction_note": "",
@@ -1498,6 +1516,8 @@
    {
     "source": "N0026",
     "target": "N0002",
+    "source_label": "Boc-PDA-COF",
+    "target_label": "power conversion efficiency",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1527,6 +1547,8 @@
    {
     "source": "N0027",
     "target": "N0002",
+    "source_label": "Tp-COF",
+    "target_label": "power conversion efficiency",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1556,6 +1578,8 @@
    {
     "source": "N0004",
     "target": "N0018",
+    "source_label": "MAPbI3",
+    "target_label": "spin-coating",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -1585,6 +1609,8 @@
    {
     "source": "N0019",
     "target": "N0020",
+    "source_label": "mesoscopic device architecture",
+    "target_label": "Spiro-OMeTAD",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -1614,6 +1640,8 @@
    {
     "source": "N0002",
     "target": "N0019",
+    "source_label": "power conversion efficiency",
+    "target_label": "mesoscopic device architecture",
     "type": "evaluated_on",
     "raw_type": "evaluated_on",
     "direction_note": "",
@@ -1643,6 +1671,8 @@
    {
     "source": "N0025",
     "target": "N0017",
+    "source_label": "photoluminescence spectroscopy",
+    "target_label": "non-radiative recombination",
     "type": "measures",
     "raw_type": "measures",
     "direction_note": "",
@@ -1672,6 +1702,8 @@
    {
     "source": "N0029",
     "target": "N0003",
+    "source_label": "PCE retention after 500 h",
+    "target_label": "stability",
     "type": "measures",
     "raw_type": "measures",
     "direction_note": "",
@@ -1701,6 +1733,8 @@
    {
     "source": "N0030",
     "target": "N0002",
+    "source_label": "efficiencies from different studies are not directly comparable",
+    "target_label": "power conversion efficiency",
     "type": "other",
     "raw_type": "other",
     "direction_note": "caveat: absorber composition, architecture, active area and measurement differ",
@@ -1730,6 +1764,8 @@
    {
     "source": "N0014",
     "target": "N0005",
+    "source_label": "deep learning framework",
+    "target_label": "time-resolved photoluminescence",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -1739,10 +1775,10 @@
       "source_id": "P2",
       "paragraph_id": "Par8",
       "paragraph_id_kind": "jats",
-      "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+      "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
       "match": "exact",
       "match_score": 1.0,
-      "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+      "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
       "attribution": "self",
       "strength": "direct",
       "section": "Introduction"
@@ -1759,6 +1795,8 @@
    {
     "source": "N0014",
     "target": "N0009",
+    "source_label": "deep learning framework",
+    "target_label": "photoluminescence quantum yield",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -1788,6 +1826,8 @@
    {
     "source": "N0014",
     "target": "N0012",
+    "source_label": "deep learning framework",
+    "target_label": "coefficient of determination",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1817,6 +1857,8 @@
    {
     "source": "N0014",
     "target": "N0023",
+    "source_label": "deep learning framework",
+    "target_label": "trap density",
     "type": "measures",
     "raw_type": "measures",
     "direction_note": "",
@@ -1846,6 +1888,8 @@
    {
     "source": "N0014",
     "target": "N0008",
+    "source_label": "deep learning framework",
+    "target_label": "carrier kinetics",
     "type": "measures",
     "raw_type": "measures",
     "direction_note": "",
@@ -1855,10 +1899,10 @@
       "source_id": "P2",
       "paragraph_id": "Par8",
       "paragraph_id_kind": "jats",
-      "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+      "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
       "match": "exact",
       "match_score": 1.0,
-      "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+      "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
       "attribution": "self",
       "strength": "direct",
       "section": "Introduction"
@@ -1875,6 +1919,8 @@
    {
     "source": "N0009",
     "target": "N0010",
+    "source_label": "photoluminescence quantum yield",
+    "target_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
     "type": "supports",
     "raw_type": "supports",
     "direction_note": "",
@@ -1904,6 +1950,8 @@
    {
     "source": "N0011",
     "target": "N0005",
+    "source_label": "TrPL alone is insufficient to determine carrier kinetics",
+    "target_label": "time-resolved photoluminescence",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -1933,6 +1981,8 @@
    {
     "source": "N0010",
     "target": "N0008",
+    "source_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
+    "target_label": "carrier kinetics",
     "type": "improves",
     "raw_type": "improves",
     "direction_note": "",
@@ -1962,6 +2012,8 @@
    {
     "source": "N0014",
     "target": "N0007",
+    "source_label": "deep learning framework",
+    "target_label": "Bayesian inference",
     "type": "outperforms",
     "raw_type": "outperforms",
     "direction_note": "",
@@ -1991,6 +2043,8 @@
    {
     "source": "N0022",
     "target": "N0018",
+    "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+    "target_label": "spin-coating",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -2020,6 +2074,8 @@
    {
     "source": "N0022",
     "target": "N0020",
+    "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+    "target_label": "Spiro-OMeTAD",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -2049,6 +2105,8 @@
    {
     "source": "N0022",
     "target": "N0002",
+    "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+    "target_label": "power conversion efficiency",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -2078,6 +2136,8 @@
    {
     "source": "N0021",
     "target": "N0002",
+    "source_label": "Cs0.05FA0.90MA0.05PbI2.85Br0.15",
+    "target_label": "power conversion efficiency",
     "type": "reports",
     "raw_type": "reports",
     "direction_note": "",
@@ -2107,6 +2167,8 @@
    {
     "source": "N0008",
     "target": "N0017",
+    "source_label": "carrier kinetics",
+    "target_label": "non-radiative recombination",
     "type": "measures",
     "raw_type": "measures",
     "direction_note": "",
@@ -2136,6 +2198,8 @@
    {
     "source": "N0006",
     "target": "N0008",
+    "source_label": "rate-equation models",
+    "target_label": "carrier kinetics",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -2165,6 +2229,8 @@
    {
     "source": "N0007",
     "target": "N0008",
+    "source_label": "Bayesian inference",
+    "target_label": "carrier kinetics",
     "type": "uses",
     "raw_type": "uses",
     "direction_note": "",
@@ -2194,6 +2260,8 @@
    {
     "source": "N0024",
     "target": "N0002",
+    "source_label": "passivation",
+    "target_label": "power conversion efficiency",
     "type": "improves",
     "raw_type": "improves",
     "direction_note": "",
@@ -2248,7 +2316,7 @@
      "source_id": "P2",
      "paragraph_id": "Par31",
      "paragraph_id_kind": "jats",
-     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC",
      "match": "exact",
      "match_score": 1.0,
      "context": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer i",
@@ -2675,10 +2743,10 @@
      "source_id": "P2",
      "paragraph_id": "Par8",
      "paragraph_id_kind": "jats",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "match": "exact",
      "match_score": 1.0,
-     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
      "attribution": "self",
      "strength": "direct",
      "section": "Introduction"
@@ -3365,6 +3433,8 @@
   {
    "source": "N0028",
    "target": "N0034",
+   "source_label": "DMTH-COF",
+   "target_label": "bulk additive engineering",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -3394,6 +3464,8 @@
   {
    "source": "N0035",
    "target": "N0004",
+   "source_label": "COFs act as crystallization regulators and defect passivators",
+   "target_label": "MAPbI3",
    "type": "supports",
    "raw_type": "supports",
    "direction_note": "",
@@ -3423,6 +3495,8 @@
   {
    "source": "N0013",
    "target": "N0024",
+   "source_label": "covalent organic frameworks",
+   "target_label": "passivation",
    "type": "supports",
    "raw_type": "supports",
    "direction_note": "",
@@ -3452,6 +3526,8 @@
   {
    "source": "N0028",
    "target": "N0002",
+   "source_label": "DMTH-COF",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -3481,6 +3557,8 @@
   {
    "source": "N0028",
    "target": "N0033",
+   "source_label": "DMTH-COF",
+   "target_label": "open-circuit voltage",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -3510,6 +3588,8 @@
   {
    "source": "N0028",
    "target": "N0032",
+   "source_label": "DMTH-COF",
+   "target_label": "fill factor",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -3539,6 +3619,8 @@
   {
    "source": "N0028",
    "target": "N0029",
+   "source_label": "DMTH-COF",
+   "target_label": "PCE retention after 500 h",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -3568,6 +3650,8 @@
   {
    "source": "N0028",
    "target": "N0017",
+   "source_label": "DMTH-COF",
+   "target_label": "non-radiative recombination",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -3597,6 +3681,8 @@
   {
    "source": "N0028",
    "target": "N0031",
+   "source_label": "DMTH-COF",
+   "target_label": "triazine-based COF additive",
    "type": "compares",
    "raw_type": "compares",
    "direction_note": "",
@@ -3626,6 +3712,8 @@
   {
    "source": "N0026",
    "target": "N0002",
+   "source_label": "Boc-PDA-COF",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -3655,6 +3743,8 @@
   {
    "source": "N0027",
    "target": "N0002",
+   "source_label": "Tp-COF",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -3684,6 +3774,8 @@
   {
    "source": "N0004",
    "target": "N0018",
+   "source_label": "MAPbI3",
+   "target_label": "spin-coating",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -3713,6 +3805,8 @@
   {
    "source": "N0019",
    "target": "N0020",
+   "source_label": "mesoscopic device architecture",
+   "target_label": "Spiro-OMeTAD",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -3742,6 +3836,8 @@
   {
    "source": "N0002",
    "target": "N0019",
+   "source_label": "power conversion efficiency",
+   "target_label": "mesoscopic device architecture",
    "type": "evaluated_on",
    "raw_type": "evaluated_on",
    "direction_note": "",
@@ -3771,6 +3867,8 @@
   {
    "source": "N0025",
    "target": "N0017",
+   "source_label": "photoluminescence spectroscopy",
+   "target_label": "non-radiative recombination",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -3800,6 +3898,8 @@
   {
    "source": "N0029",
    "target": "N0003",
+   "source_label": "PCE retention after 500 h",
+   "target_label": "stability",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -3829,6 +3929,8 @@
   {
    "source": "N0030",
    "target": "N0002",
+   "source_label": "efficiencies from different studies are not directly comparable",
+   "target_label": "power conversion efficiency",
    "type": "other",
    "raw_type": "other",
    "direction_note": "caveat: absorber composition, architecture, active area and measurement differ",
@@ -3858,6 +3960,8 @@
   {
    "source": "N0014",
    "target": "N0005",
+   "source_label": "deep learning framework",
+   "target_label": "time-resolved photoluminescence",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -3867,10 +3971,10 @@
      "source_id": "P2",
      "paragraph_id": "Par8",
      "paragraph_id_kind": "jats",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "match": "exact",
      "match_score": 1.0,
-     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
      "attribution": "self",
      "strength": "direct",
      "section": "Introduction"
@@ -3887,6 +3991,8 @@
   {
    "source": "N0014",
    "target": "N0009",
+   "source_label": "deep learning framework",
+   "target_label": "photoluminescence quantum yield",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -3916,6 +4022,8 @@
   {
    "source": "N0014",
    "target": "N0012",
+   "source_label": "deep learning framework",
+   "target_label": "coefficient of determination",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -3945,6 +4053,8 @@
   {
    "source": "N0014",
    "target": "N0023",
+   "source_label": "deep learning framework",
+   "target_label": "trap density",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -3974,6 +4084,8 @@
   {
    "source": "N0014",
    "target": "N0008",
+   "source_label": "deep learning framework",
+   "target_label": "carrier kinetics",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -3983,10 +4095,10 @@
      "source_id": "P2",
      "paragraph_id": "Par8",
      "paragraph_id_kind": "jats",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "match": "exact",
      "match_score": 1.0,
-     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
      "attribution": "self",
      "strength": "direct",
      "section": "Introduction"
@@ -4003,6 +4115,8 @@
   {
    "source": "N0009",
    "target": "N0010",
+   "source_label": "photoluminescence quantum yield",
+   "target_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
    "type": "supports",
    "raw_type": "supports",
    "direction_note": "",
@@ -4032,6 +4146,8 @@
   {
    "source": "N0011",
    "target": "N0005",
+   "source_label": "TrPL alone is insufficient to determine carrier kinetics",
+   "target_label": "time-resolved photoluminescence",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -4061,6 +4177,8 @@
   {
    "source": "N0010",
    "target": "N0008",
+   "source_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
+   "target_label": "carrier kinetics",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -4090,6 +4208,8 @@
   {
    "source": "N0014",
    "target": "N0007",
+   "source_label": "deep learning framework",
+   "target_label": "Bayesian inference",
    "type": "outperforms",
    "raw_type": "outperforms",
    "direction_note": "",
@@ -4119,6 +4239,8 @@
   {
    "source": "N0022",
    "target": "N0018",
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "spin-coating",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -4148,6 +4270,8 @@
   {
    "source": "N0022",
    "target": "N0020",
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "Spiro-OMeTAD",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -4177,6 +4301,8 @@
   {
    "source": "N0022",
    "target": "N0002",
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -4206,6 +4332,8 @@
   {
    "source": "N0021",
    "target": "N0002",
+   "source_label": "Cs0.05FA0.90MA0.05PbI2.85Br0.15",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -4235,6 +4363,8 @@
   {
    "source": "N0008",
    "target": "N0017",
+   "source_label": "carrier kinetics",
+   "target_label": "non-radiative recombination",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -4264,6 +4394,8 @@
   {
    "source": "N0006",
    "target": "N0008",
+   "source_label": "rate-equation models",
+   "target_label": "carrier kinetics",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -4293,6 +4425,8 @@
   {
    "source": "N0007",
    "target": "N0008",
+   "source_label": "Bayesian inference",
+   "target_label": "carrier kinetics",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -4322,6 +4456,8 @@
   {
    "source": "N0024",
    "target": "N0002",
+   "source_label": "passivation",
+   "target_label": "power conversion efficiency",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -6115,7 +6251,7 @@
    {
     "owner": "N0001",
     "kind": "node",
-    "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+    "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC",
     "match": "exact"
    },
    {
@@ -6297,7 +6433,7 @@
    {
     "owner": "N0014",
     "kind": "node",
-    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
     "match": "exact"
    },
    {
@@ -6309,7 +6445,7 @@
    {
     "owner": "E0018",
     "kind": "edge",
-    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
     "match": "exact"
    },
    {
@@ -6321,7 +6457,7 @@
    {
     "owner": "E0022",
     "kind": "edge",
-    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
     "match": "exact"
    }
   ],
@@ -6944,7 +7080,7 @@
      "source_id": "P2",
      "paragraph_id": "Par31",
      "paragraph_id_kind": "jats",
-     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+     "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC",
      "match": "exact",
      "match_score": 1.0,
      "context": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer i",
@@ -7371,10 +7507,10 @@
      "source_id": "P2",
      "paragraph_id": "Par8",
      "paragraph_id_kind": "jats",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "match": "exact",
      "match_score": 1.0,
-     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
      "attribution": "self",
      "strength": "direct",
      "section": "Introduction"
@@ -8061,6 +8197,8 @@
   {
    "source": "N0028",
    "target": "N0034",
+   "source_label": "DMTH-COF",
+   "target_label": "bulk additive engineering",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8090,6 +8228,8 @@
   {
    "source": "N0035",
    "target": "N0004",
+   "source_label": "COFs act as crystallization regulators and defect passivators",
+   "target_label": "MAPbI3",
    "type": "supports",
    "raw_type": "supports",
    "direction_note": "",
@@ -8119,6 +8259,8 @@
   {
    "source": "N0013",
    "target": "N0024",
+   "source_label": "covalent organic frameworks",
+   "target_label": "passivation",
    "type": "supports",
    "raw_type": "supports",
    "direction_note": "",
@@ -8148,6 +8290,8 @@
   {
    "source": "N0028",
    "target": "N0002",
+   "source_label": "DMTH-COF",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8177,6 +8321,8 @@
   {
    "source": "N0028",
    "target": "N0033",
+   "source_label": "DMTH-COF",
+   "target_label": "open-circuit voltage",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8206,6 +8352,8 @@
   {
    "source": "N0028",
    "target": "N0032",
+   "source_label": "DMTH-COF",
+   "target_label": "fill factor",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8235,6 +8383,8 @@
   {
    "source": "N0028",
    "target": "N0029",
+   "source_label": "DMTH-COF",
+   "target_label": "PCE retention after 500 h",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -8264,6 +8414,8 @@
   {
    "source": "N0028",
    "target": "N0017",
+   "source_label": "DMTH-COF",
+   "target_label": "non-radiative recombination",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -8293,6 +8445,8 @@
   {
    "source": "N0028",
    "target": "N0031",
+   "source_label": "DMTH-COF",
+   "target_label": "triazine-based COF additive",
    "type": "compares",
    "raw_type": "compares",
    "direction_note": "",
@@ -8322,6 +8476,8 @@
   {
    "source": "N0026",
    "target": "N0002",
+   "source_label": "Boc-PDA-COF",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8351,6 +8507,8 @@
   {
    "source": "N0027",
    "target": "N0002",
+   "source_label": "Tp-COF",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8380,6 +8538,8 @@
   {
    "source": "N0004",
    "target": "N0018",
+   "source_label": "MAPbI3",
+   "target_label": "spin-coating",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8409,6 +8569,8 @@
   {
    "source": "N0019",
    "target": "N0020",
+   "source_label": "mesoscopic device architecture",
+   "target_label": "Spiro-OMeTAD",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8438,6 +8600,8 @@
   {
    "source": "N0002",
    "target": "N0019",
+   "source_label": "power conversion efficiency",
+   "target_label": "mesoscopic device architecture",
    "type": "evaluated_on",
    "raw_type": "evaluated_on",
    "direction_note": "",
@@ -8467,6 +8631,8 @@
   {
    "source": "N0025",
    "target": "N0017",
+   "source_label": "photoluminescence spectroscopy",
+   "target_label": "non-radiative recombination",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -8496,6 +8662,8 @@
   {
    "source": "N0029",
    "target": "N0003",
+   "source_label": "PCE retention after 500 h",
+   "target_label": "stability",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -8525,6 +8693,8 @@
   {
    "source": "N0030",
    "target": "N0002",
+   "source_label": "efficiencies from different studies are not directly comparable",
+   "target_label": "power conversion efficiency",
    "type": "other",
    "raw_type": "other",
    "direction_note": "caveat: absorber composition, architecture, active area and measurement differ",
@@ -8554,6 +8724,8 @@
   {
    "source": "N0014",
    "target": "N0005",
+   "source_label": "deep learning framework",
+   "target_label": "time-resolved photoluminescence",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8563,10 +8735,10 @@
      "source_id": "P2",
      "paragraph_id": "Par8",
      "paragraph_id_kind": "jats",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "match": "exact",
      "match_score": 1.0,
-     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
      "attribution": "self",
      "strength": "direct",
      "section": "Introduction"
@@ -8583,6 +8755,8 @@
   {
    "source": "N0014",
    "target": "N0009",
+   "source_label": "deep learning framework",
+   "target_label": "photoluminescence quantum yield",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8612,6 +8786,8 @@
   {
    "source": "N0014",
    "target": "N0012",
+   "source_label": "deep learning framework",
+   "target_label": "coefficient of determination",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8641,6 +8817,8 @@
   {
    "source": "N0014",
    "target": "N0023",
+   "source_label": "deep learning framework",
+   "target_label": "trap density",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -8670,6 +8848,8 @@
   {
    "source": "N0014",
    "target": "N0008",
+   "source_label": "deep learning framework",
+   "target_label": "carrier kinetics",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -8679,10 +8859,10 @@
      "source_id": "P2",
      "paragraph_id": "Par8",
      "paragraph_id_kind": "jats",
-     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+     "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
      "match": "exact",
      "match_score": 1.0,
-     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug. The finalized DL model achieves high accuracy across target parameters, with all coefficients ",
+     "context": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
      "attribution": "self",
      "strength": "direct",
      "section": "Introduction"
@@ -8699,6 +8879,8 @@
   {
    "source": "N0009",
    "target": "N0010",
+   "source_label": "photoluminescence quantum yield",
+   "target_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
    "type": "supports",
    "raw_type": "supports",
    "direction_note": "",
@@ -8728,6 +8910,8 @@
   {
    "source": "N0011",
    "target": "N0005",
+   "source_label": "TrPL alone is insufficient to determine carrier kinetics",
+   "target_label": "time-resolved photoluminescence",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8757,6 +8941,8 @@
   {
    "source": "N0010",
    "target": "N0008",
+   "source_label": "PLQY provides an orthogonal constraint against parameter non-uniqueness",
+   "target_label": "carrier kinetics",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -8786,6 +8972,8 @@
   {
    "source": "N0014",
    "target": "N0007",
+   "source_label": "deep learning framework",
+   "target_label": "Bayesian inference",
    "type": "outperforms",
    "raw_type": "outperforms",
    "direction_note": "",
@@ -8815,6 +9003,8 @@
   {
    "source": "N0022",
    "target": "N0018",
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "spin-coating",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8844,6 +9034,8 @@
   {
    "source": "N0022",
    "target": "N0020",
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "Spiro-OMeTAD",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8873,6 +9065,8 @@
   {
    "source": "N0022",
    "target": "N0002",
+   "source_label": "FA0.9MA0.1PbI2.85Br0.15",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8902,6 +9096,8 @@
   {
    "source": "N0021",
    "target": "N0002",
+   "source_label": "Cs0.05FA0.90MA0.05PbI2.85Br0.15",
+   "target_label": "power conversion efficiency",
    "type": "reports",
    "raw_type": "reports",
    "direction_note": "",
@@ -8931,6 +9127,8 @@
   {
    "source": "N0008",
    "target": "N0017",
+   "source_label": "carrier kinetics",
+   "target_label": "non-radiative recombination",
    "type": "measures",
    "raw_type": "measures",
    "direction_note": "",
@@ -8960,6 +9158,8 @@
   {
    "source": "N0006",
    "target": "N0008",
+   "source_label": "rate-equation models",
+   "target_label": "carrier kinetics",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -8989,6 +9189,8 @@
   {
    "source": "N0007",
    "target": "N0008",
+   "source_label": "Bayesian inference",
+   "target_label": "carrier kinetics",
    "type": "uses",
    "raw_type": "uses",
    "direction_note": "",
@@ -9018,6 +9220,8 @@
   {
    "source": "N0024",
    "target": "N0002",
+   "source_label": "passivation",
+   "target_label": "power conversion efficiency",
    "type": "improves",
    "raw_type": "improves",
    "direction_note": "",
@@ -9064,7 +9268,7 @@
    {
     "owner": "N0001",
     "kind": "node",
-    "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC device structure: Glass|FTO|SnO2|Perovskite|w/o 4-MeO-PEAI|spiro-OMeTAD|Ag, where the 4-MeO-PEAI layer is present only in the passivated devices.",
+    "quote": "5Device characteristics of perovskite solar cells (PSCs) of FA0.9MA0.1PbI2.85Br0.15 (FAMA), passivated FA0.9MA0.1PbI2.85Br0.15 (passivated FAMA), Cs0.05FA0.90MA0.05PbI2.85Br0.15 (CsFAMA), and passivated Cs0.05FA0.90MA0.05PbI2.85Br0.15 (passivated CsFAMA).a The schematic of the adopted n-i-p PSC",
     "match": "exact"
    },
    {
@@ -9246,7 +9450,7 @@
    {
     "owner": "N0014",
     "kind": "node",
-    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
     "match": "exact"
    },
    {
@@ -9258,7 +9462,7 @@
    {
     "owner": "E0018",
     "kind": "edge",
-    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
     "match": "exact"
    },
    {
@@ -9270,7 +9474,7 @@
    {
     "owner": "E0022",
     "kind": "edge",
-    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient γAug.",
+    "quote": "A DL framework is designed to extract six key kinetic parameters, namely, effective external band-to-band bimolecular recombination coefficient γeh, electron capture coefficient γec, hole capture coefficient γhc, trap density NT, electron emission coefficient γee and Auger recombination coefficient",
     "match": "exact"
    }
   ],
