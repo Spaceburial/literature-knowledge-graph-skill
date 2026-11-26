@@ -395,6 +395,14 @@ def main():
     ap.add_argument("--out", default="/app/work/queries_result.json")
     ap.add_argument("--type", default=None)
     ap.add_argument("--name", default=None)
+    # One query of any type from the command line, not just the name-based ones.
+    ap.add_argument("--relation", default=None)
+    ap.add_argument("--keyword", default=None)
+    ap.add_argument("--direction", default=None, choices=["in", "out", "both"])
+    ap.add_argument("--from", dest="from_", default=None)
+    ap.add_argument("--to", default=None)
+    ap.add_argument("--max-hops", type=int, default=None)
+    ap.add_argument("--id", dest="id_", default=None, help="node or edge id (evidence_trace)")
     ap.add_argument("-v", "--verbose", action="store_true",
                     help="print each answer's nodes, reported values, notes and evidence")
     args = ap.parse_args()
@@ -415,7 +423,20 @@ def main():
         if isinstance(qs, dict):
             qs = qs.get("queries", [])
     elif args.type:
-        qs = [{"qid": "Q1", "type": args.type, "name": args.name, "id": args.name}]
+        q = {"qid": "Q1", "type": args.type}
+        for k, v in (("name", args.name), ("id", args.id_ or args.name), ("relation", args.relation),
+                     ("keyword", args.keyword), ("direction", args.direction),
+                     ("from", args.from_), ("to", args.to), ("max_hops", args.max_hops)):
+            if v not in (None, ""):
+                q[k] = v
+        missing = {"path": ("from", "to"), "neighbors": ("name",),
+                   "relation_search": ("relation",), "entity": ("name",),
+                   "metric_compare": ("name",), "evidence_trace": ("id",)}.get(args.type, ())
+        absent = [m for m in missing if m not in q]
+        if absent:
+            sys.stderr.write(f"FATAL: --type {args.type} needs {', '.join('--' + a for a in absent)}\n")
+            sys.exit(2)
+        qs = [q]
     else:
         qs = default_queries(G)
 
