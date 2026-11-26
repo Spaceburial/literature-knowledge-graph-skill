@@ -1,6 +1,6 @@
 ---
 name: literature-knowledge-graph
-description: Build an evidence-bound, queryable knowledge graph from a small corpus of research papers (one or more PDFs/JATS/JSON paragraph sets). Extracts typed entities (researcher, material, method, task, metric, conclusion) and directed relations (uses, compares, outperforms, supports, contradicts, measures, evaluated_on, reports, improves, part_of, produces, based_on), binds every node and edge to a source_id + paragraph_id + verbatim quote, aligns aliases across papers, records merge/non-merge decisions and conflicts, answers at least three real queries with evidence, and writes a structured result.json. Use when a task asks to turn papers into nodes/edges, to trace claims back to text, to compare papers, or to build/query a literature knowledge graph.
+description: Build an evidence-bound, queryable knowledge graph from a small corpus of research papers (one or more PDFs/JATS/JSON paragraph sets). Extracts typed entities (researcher, material, method, task, metric, conclusion) and directed relations (uses, compares, outperforms, supports, contradicts, measures, evaluated_on, reports, improves, part_of, produces, based_on), binds every node and edge to a source_id + paragraph_id + verbatim quote, aligns aliases across papers, records merge/non-merge decisions and conflicts, answers at least three real queries with evidence, and writes a structured result.json. 文献知识图谱构建：从论文抽取实体与关系、把每条结论绑定回原文段落与逐字引文、处理跨篇别名与同名冲突、保留未报告项与源内冲突、导出可查询可复核的图谱与 result.json。Use when a task asks to turn papers into nodes/edges, to extract entities and relations from papers, to trace claims back to text, to compare or align two papers, to answer questions over a small corpus, or to build/query a literature knowledge graph (文献知识图谱).
 ---
 
 # Literature knowledge graph construction
@@ -16,7 +16,7 @@ Given a case directory with papers and a task, it writes:
 | `/app/work/graph.json` | validated graph: ids, verified evidence, merge log, conflict log, uncertainty |
 | `/app/work/queries_result.json` | ≥3 executed queries with evidence |
 | `/app/output/result.json` | deliverable: `case_id` + all `output_contract` fields + status/uncertainty |
-| `/app/output/graph.{json,mmd,graphml,png}`, `nodes.csv`, `edges.csv`, `evidence.csv`, `graph_report.md` | exports, rendered preview and readable report |
+| `/app/output/graph.{json,svg,png,mmd,graphml}`, `nodes.csv`, `edges.csv`, `evidence.csv`, `graph_report.md` | exports, rendered preview (SVG needs no third-party import; PNG is optional) and readable report |
 
 All commands below use `$SKILL_DIR` = the directory that contains this `SKILL.md`
 (the evaluator installs it at `/skills/weekly-skill`). Set it once per shell:
@@ -78,8 +78,22 @@ visible, never silent — report the missing text as a limitation.
 
 ### Step 2 — Extract (your job, the LLM step)
 
-Read the paragraphs in `case_bundle.json` in windows (by source, then by section). Produce
-`/app/work/annotations.json` with this shape (full schema in `schema/graph.schema.json`):
+**Start from a draft, then improve it.** The deterministic extractor already produces a first
+annotations file whose quotes are real substrings; editing it costs a fraction of the requests that
+writing from scratch does, and it guarantees the file is well formed even if the run is cut short:
+
+```bash
+python $SKILL_DIR/scripts/heuristic_extract.py --bundle /app/work/case_bundle.json \
+       --out /app/work/annotations.json
+```
+
+Then read the paragraphs in `case_bundle.json` in windows (by source, then by section) and revise
+that file: drop wrong nodes, fix relation types and directions, add the relations the patterns miss,
+write the merge/non-merge decisions and the conflicts. Target **≤12 model requests per case**:
+1–2 to read the task and the warnings, 3–6 for the paragraph windows, 1–2 to write the file. The
+budget is 64 requests, so this leaves a wide margin. Keep `/app/work/annotations.json` valid JSON
+after every edit — a half-written file is a failed case, and `run.sh all` falls back to the draft.
+The annotated shape (full schema in `schema/graph.schema.json`):
 
 ```json
 {
@@ -151,16 +165,24 @@ python $SKILL_DIR/scripts/query_graph.py  --graph /app/work/graph.json \
        --out /app/work/queries_result.json
 python $SKILL_DIR/scripts/export_graph.py --graph /app/work/graph.json \
        --queries /app/work/queries_result.json --outdir /app/output
+python $SKILL_DIR/scripts/render_svg.py --graph /app/work/graph.json --out /app/output/graph.svg
 python $SKILL_DIR/scripts/render_png.py --graph /app/work/graph.json --out /app/output/graph.png
 python $SKILL_DIR/scripts/finalize.py     --bundle /app/work/case_bundle.json \
        --graph /app/work/graph.json --queries /app/work/queries_result.json \
        --out /app/output/result.json --outdir /app/output
 ```
 
-If the case states specific query questions, put them in a `queries.json`
-(`{"queries":[{"qid":"Q1","type":"entity","name":"..."}]}`) and pass `--queries`.
-Otherwise `query_graph.py` auto-generates at least four. Query types: `entity`, `neighbors`,
-`path`, `relation_search`, `cross_paper`, `evidence_trace`, `metric_compare`.
+If the case states specific questions, put them in a `queries.json`
+(`{"queries":[{"qid":"Q1","type":"entity","name":"..."}]}`) and pass `--queries`. Otherwise
+`query_graph.py` **reads the case task text** and answers the questions it finds there first
+(`derived_from: "task"`, each record quoting the original question), then adds the structural
+queries; the total is never fewer than four. A question it cannot ground comes back
+`undetermined` with the reason, which is a result, not a failure — the challenge asks for the
+relations that cannot be determined. Query types: `entity`, `neighbors`, `path`,
+`relation_search`, `keyword`, `cross_paper`, `evidence_trace`, `metric_compare`.
+
+`keyword` searches node names, relation conditions and the verified quotes, so a question about a
+term that never became a node still returns the passages that discuss it.
 
 `build_graph.py` verifies every quote against the cited paragraph. A quote that cannot be found
 is rejected and listed; the node/edge is kept but labelled `evidence_status="unverified"` and
