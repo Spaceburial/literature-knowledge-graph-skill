@@ -26,6 +26,7 @@ import json
 import os
 import re
 import sys
+import time
 from collections import Counter, defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -208,6 +209,7 @@ def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_defaul
 
 
 def main():
+    _t0 = time.time()
     ap = argparse.ArgumentParser()
     ap.add_argument("--bundle", default="/app/work/case_bundle.json")
     ap.add_argument("--annotations", default=None,
@@ -477,6 +479,7 @@ def main():
             "edges_by_source": _by_source(edges),
         },
         "warnings": bundle.get("warnings", []),
+        "runtime": {"build_seconds": round(time.time() - _t0, 3)},
     }
     n_verified_items = (sum(1 for n in nodes if n["evidence_status"] == "verified")
                         + sum(1 for e in edges if e["evidence_status"] == "verified"))
