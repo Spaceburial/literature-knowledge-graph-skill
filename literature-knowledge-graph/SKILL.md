@@ -277,12 +277,13 @@ summary, the 3+ query results and the uncertainty items.
 Input: two paragraphs, one per paper, both mentioning a shared HTL and different absorbers.
 
 ```bash
+WORK="${WORK:-/tmp/lkg-work}"; mkdir -p "$WORK"      # any writable directory
 python $SKILL_DIR/scripts/prepare_case.py --case-dir $SKILL_DIR/examples/demo_perovskite/input \
-       --out /tmp/work/case_bundle.json
-python $SKILL_DIR/scripts/build_graph.py --bundle /tmp/work/case_bundle.json \
-       --annotations $SKILL_DIR/examples/demo_perovskite/annotations.example.json --out /tmp/work/graph.json
-python $SKILL_DIR/scripts/query_graph.py --graph /tmp/work/graph.json \
-       --queries $SKILL_DIR/examples/demo_perovskite/queries.example.json --out /tmp/work/q.json
+       --out "$WORK/case_bundle.json"
+python $SKILL_DIR/scripts/build_graph.py --bundle "$WORK/case_bundle.json" \
+       --annotations $SKILL_DIR/examples/demo_perovskite/annotations.example.json --out "$WORK/graph.json"
+python $SKILL_DIR/scripts/query_graph.py --graph "$WORK/graph.json" \
+       --queries $SKILL_DIR/examples/demo_perovskite/queries.example.json --out "$WORK/q.json"
 ```
 
 Abridged output (`$SKILL_DIR/examples/demo_perovskite/output/result.json` is the full worked example):
