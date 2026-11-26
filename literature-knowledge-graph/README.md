@@ -119,7 +119,10 @@ mycase/
 
 A single `material.json` may hold several papers instead — keyed by source id, or as a list of
 paper objects whose paragraphs or abstract are nested — and each paper keeps its `doi`/`title`.
-A record nested under a paper object inherits that paper's `source_id`.
+A record nested under a paper object inherits that paper's `source_id`. In JATS, inline
+markup is preserved as text (`MAPbI<sub>3</sub>` becomes `MAPbI3`, not `MAPbI 3`), and
+back-matter sections (author contributions, funding, competing interests, data availability,
+acknowledgements, footnotes) are left out of the body and reported as a warning.
 
 `paragraph_id` must be the provider's own id where one exists (JATS `p` id, database id); ids
 generated from PDF/plain text are `d####` and every item built from them carries
@@ -233,7 +236,7 @@ conflicts, 6/6 queries answered, `status="success"`.
 
 ```bash
 bash run.sh test                      # 25 checks, exit 0 = pass
-python3 tests/regression/regression.py   # R1–R10, 46 checks
+python3 tests/regression/regression.py   # R1–R10, 49 checks
 ```
 
 ## Version and provenance
