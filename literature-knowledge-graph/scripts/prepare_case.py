@@ -176,6 +176,14 @@ def extract_case_meta(case_json, case_dir, warnings):
 # 2. corpus-manifest.json -> sources[]
 # --------------------------------------------------------------------------------------
 
+# A manifest may carry a "root"/"paper"/"manuscript" block that describes the FIRST paper rather than
+# an additional one. Read as a separate record it becomes a phantom source with no paragraphs, and the
+# first paper's DOI then belongs to two sources -- the exact mix-up the input revision forbids.
+ROOT_ALIAS_KEYS = {"root", "root_paper", "rootpaper", "manuscript", "main", "paper",
+                   "first_paper", "primary_paper", "primary"}
+ROOT_META = {}
+
+
 def looks_like_source_record(d):
     keys = {k.lower() for k in d.keys()}
     return bool(keys & {"doi", "title", "authors", "author", "license", "sha256", "source_id", "sourceid"})
@@ -212,7 +220,7 @@ def extract_sources(manifest, warnings):
             "raw": {k: v for k, v in rec.items() if k not in ("abstract",)},
         }
 
-    def walk(node, role_hint=None):
+    def walk(node, role_hint=None, key=None):
         if isinstance(node, list):
             for i, v in enumerate(node):
                 if isinstance(v, dict) and looks_like_source_record(v):
@@ -220,15 +228,18 @@ def extract_sources(manifest, warnings):
                 else:
                     walk(v, role_hint)
         elif isinstance(node, dict):
+            if (key or "").lower() in ROOT_ALIAS_KEYS and looks_like_source_record(node):
+                ROOT_META.update({k: v for k, v in node.items() if k not in ("abstract", "paragraphs")})
+                return
             if looks_like_source_record(node) and ("doi" in node or "source_id" in node or "title" in node):
                 sources.append(coerce(node, len(sources), role_hint))
                 # also descend in case nested papers exist
                 for k, v in node.items():
                     if isinstance(v, (list, dict)) and k not in ("authors", "raw"):
-                        walk(v, role_hint)
+                        walk(v, role_hint, key=k)
             else:
-                for v in node.values():
-                    walk(v, role_hint)
+                for k, v in node.items():
+                    walk(v, role_hint, key=k)
 
     walk(manifest)
     # de-duplicate by source_id
@@ -238,6 +249,18 @@ def extract_sources(manifest, warnings):
             continue
         seen.add(s["source_id"])
         uniq.append(s)
+    if ROOT_META and uniq:
+        rdoi = (ROOT_META.get("doi") or "").strip().lower()
+        target = next((x for x in uniq if rdoi and (x.get("doi") or "").strip().lower() == rdoi), None)
+        if target is None:
+            target = next((x for x in uniq if x.get("role") == "primary"), uniq[0])
+        for k in ("doi", "title", "authors", "license", "journal", "year", "sha256"):
+            if not target.get(k) and ROOT_META.get(k):
+                target[k] = ROOT_META[k]
+        note = (f"Manifest 'root' block describes source '{target['source_id']}'; merged into it "
+                "instead of creating a separate source.")
+        warnings.append(note if rdoi and (target.get("doi") or "").lower() == rdoi
+                        else f"{note} Its DOI '{ROOT_META.get('doi')}' matches no listed paper.")
     return uniq
 
 
@@ -480,14 +503,101 @@ def extract_paragraphs_from_text(raw, default_source, role, origin, split_blank=
     return out
 
 
+SENT_FINAL = re.compile(r"[.?!:;\u3002\uff1f\uff01][\"'\u201d\u2019)\]]?\s*$")
+HEADING_LIKE = re.compile(r"^(\d+(\.\d+)*\.?\s+[A-Z][^.]{0,70}"
+                          r"|[A-Z][A-Z0-9 \-/&]{5,60}"
+                          r"|(abstract|introduction|results?( and discussion)?|discussion|"
+                          r"conclusions?|methods?|materials? and methods|experimental( section)?|"
+                          r"background|related work)\s*)$", re.I)
+PAGE_NOISE = re.compile(r"^\s*(page\s*)?\d{1,4}(\s*/\s*\d{1,4})?\s*$", re.I)
+PARA_JOIN_HYPHEN = re.compile(r"[A-Za-z]-$")
+
+
+def pdf_blocks(raw):
+    """pdftotext output -> [(text, first_page)] paragraph blocks.
+
+    A PDF has no paragraph ids and usually no blank lines, so the block boundaries have to be
+    inferred: blank line, a heading, a line that ends a sentence while the next starts a new one, or
+    a form feed. Two column layouts interleave when `-layout` is used, so plain order is preferred.
+    """
+    lines = []
+    for pno, page in enumerate(raw.replace("\r", "").split("\f"), 1):
+        for ln in page.split("\n"):
+            t = ln.rstrip()
+            if not t.strip():
+                lines.append(("", pno))
+                continue
+            if PAGE_NOISE.match(t):
+                continue
+            lines.append((t, pno))
+
+    blocks, cur = [], []
+
+    def flush():
+        nonlocal cur
+        if not cur:
+            return
+        parts = []
+        for t, _ in cur:
+            if parts and PARA_JOIN_HYPHEN.search(parts[-1]):
+                parts[-1] = parts[-1][:-1] + t.lstrip()
+            else:
+                parts.append(t.strip())
+        text = norm_ws(" ".join(parts))
+        if text:
+            blocks.append((text, cur[0][1]))
+        cur = []
+
+    for t, pno in lines:
+        if not t:
+            flush()
+            continue
+        stripped = t.strip()
+        if BACKMATTER_TITLES.match(stripped):
+            flush()
+            break                                  # references and back matter are not body text
+        if HEADING_LIKE.match(stripped) and len(stripped) < 80 and not SENT_FINAL.search(stripped):
+            flush()
+            continue
+        if cur and SENT_FINAL.search(cur[-1][0]) and re.match(r"[A-Z\u4e00-\u9fff\u00c0-\u024f]", stripped) \
+                and sum(len(x) for x, _ in cur) > 60:
+            flush()
+        cur.append((t, pno))
+    flush()
+
+    # A block too short to be a paragraph is a fragment (caption, footnote, affiliation, a sentence
+    # split off by a layout artefact). Join it to the block after it - or before it when it is last -
+    # rather than dropping text the paper actually contains.
+    out, carry = [], ""
+    for text, page in blocks:
+        text = (carry + " " + text).strip() if carry else text
+        carry = ""
+        if len(text) < 40:
+            if out:
+                out[-1] = (out[-1][0] + " " + text, out[-1][1])
+            else:
+                carry = text
+            continue
+        out.append((text, page))
+    if carry:
+        if out:
+            out[-1] = (out[-1][0] + " " + carry, out[-1][1])
+        else:
+            out.append((carry, 1))
+    return out
+
+
 def extract_paragraphs_from_pdf(path, default_source, role, warnings):
     """Best-effort PDF text extraction. Uses pdftotext, then pypdf if available."""
     raw = None
     try:
         import subprocess
-        r = subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True, timeout=120)
-        if r.returncode == 0 and r.stdout.strip():
-            raw = r.stdout
+        # plain order first: `-layout` reads two-column papers column by column and interleaves them
+        for flags in ([path, "-"], ["-layout", path, "-"]):
+            r = subprocess.run(["pdftotext"] + flags, capture_output=True, text=True, timeout=120)
+            if r.returncode == 0 and r.stdout.strip():
+                raw = r.stdout
+                break
     except Exception as e:  # noqa: BLE001
         warnings.append(f"pdftotext failed for {os.path.basename(path)}: {e}")
     if raw is None:
@@ -498,9 +608,22 @@ def extract_paragraphs_from_pdf(path, default_source, role, warnings):
             warnings.append(f"PDF unparseable ({os.path.basename(path)}): {e}. "
                             f"Paper skipped; report it in uncertainty.")
             return []
-    paras = extract_paragraphs_from_text(raw, default_source, role, os.path.basename(path))
-    warnings.append(f"PDF {os.path.basename(path)}: {len(paras)} paragraphs extracted; paragraph ids are "
-                    f"DERIVED (d####). No PDF page numbers are used as locations.")
+    blocks = pdf_blocks(raw)
+    paras, idx = [], 0
+    for text, page in blocks:
+        if len(text) < 40:
+            note_short(os.path.basename(path), text)
+            continue
+        idx += 1
+        paras.append({"source_id": default_source, "paragraph_id": f"d{idx:04d}", "section": "",
+                      "text": text, "role": role, "id_derived": True,
+                      "origin_file": os.path.basename(path), "order_in_source": idx,
+                      # supplementary location only: the id stays a derived d#### because a PDF page
+                      # is not a paragraph id, and the challenge forbids presenting one as the other
+                      "pdf_page": page})
+    warnings.append(f"PDF {os.path.basename(path)}: {len(paras)} paragraph blocks from {len(blocks)} "
+                    f"candidate blocks; paragraph ids are DERIVED (d####) and `pdf_page` is recorded "
+                    f"only as a reading aid, never as a paragraph id.")
     return paras
 
 
