@@ -30,15 +30,36 @@ def run(cmd, label):
     return r.returncode
 
 
+def must(rc, label):
+    """A required stage that failed ends the run; carrying on produces an empty result.json."""
+    if rc != 0:
+        sys.stderr.write(f"[run_all] aborting after failed stage: {label}\n")
+        sys.exit(rc if rc > 0 else 1)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case-dir", default=None)
     ap.add_argument("--work", default="/app/work")
     ap.add_argument("--out", default="/app/output")
     ap.add_argument("--annotations", default=None)
+    ap.add_argument("--queries", default=None, help="query file for the query stage")
     ap.add_argument("--no-heuristic", action="store_true")
     ap.add_argument("--strict", action="store_true")
     args = ap.parse_args()
+
+    if not args.case_dir:
+        # Without an explicit case directory prepare_case.py searches /input, ./input and the
+        # current directory, which in the package root means it silently ingests README.md and
+        # SKILL.md as if they were the corpus.
+        sys.stderr.write(
+            "FATAL: --case-dir is required for a full run.\n"
+            "  Example: bash run.sh all --case-dir examples/demo_perovskite/input \\\n"
+            "           --annotations examples/demo_perovskite/annotations.example.json \\\n"
+            "           --work work --out out\n"
+            "  Defaults are /app/work and /app/output (the challenge runtime); elsewhere pass\n"
+            "  --work and --out explicitly.\n")
+        sys.exit(2)
 
     os.makedirs(args.work, exist_ok=True)
     os.makedirs(args.out, exist_ok=True)
@@ -50,25 +71,29 @@ def main():
     cmd = [PY, os.path.join(HERE, "prepare_case.py"), "--out", bundle]
     if args.case_dir:
         cmd += ["--case-dir", args.case_dir]
-    run(cmd, "Stage 1 prepare_case")
+    must(run(cmd, "Stage 1 prepare_case"), "Stage 1 prepare_case")
 
     if not os.path.exists(ann):
         if args.no_heuristic:
             print(f"[run_all] annotations missing at {ann} and --no-heuristic set: stopping.")
             sys.exit(3)
-        run([PY, os.path.join(HERE, "heuristic_extract.py"), "--bundle", bundle, "--out", ann],
-            "Stage 2 heuristic_extract (fallback)")
+        must(run([PY, os.path.join(HERE, "heuristic_extract.py"), "--bundle", bundle, "--out", ann],
+                 "Stage 2 heuristic_extract (fallback)"), "Stage 2 heuristic_extract")
 
-    run([PY, os.path.join(HERE, "build_graph.py"), "--bundle", bundle, "--annotations", ann,
-         "--out", graph] + (["--strict"] if args.strict else []), "Stage 3 build_graph")
-    run([PY, os.path.join(HERE, "query_graph.py"), "--graph", graph, "--out", qres], "Stage 4 query_graph")
-    run([PY, os.path.join(HERE, "export_graph.py"), "--graph", graph, "--queries", qres,
-         "--outdir", args.out], "Stage 5 export_graph")
+    must(run([PY, os.path.join(HERE, "build_graph.py"), "--bundle", bundle, "--annotations", ann,
+              "--out", graph] + (["--strict"] if args.strict else []), "Stage 3 build_graph"),
+         "Stage 3 build_graph")
+    qargs = [PY, os.path.join(HERE, "query_graph.py"), "--graph", graph, "--out", qres]
+    if args.queries:
+        qargs += ["--queries", args.queries]
+    must(run(qargs, "Stage 4 query_graph"), "Stage 4 query_graph")
+    must(run([PY, os.path.join(HERE, "export_graph.py"), "--graph", graph, "--queries", qres,
+              "--outdir", args.out], "Stage 5 export_graph"), "Stage 5 export_graph")
     run([PY, os.path.join(HERE, "render_png.py"), "--graph", graph,
          "--out", os.path.join(args.out, "graph.png")], "Stage 5b render_png (optional)")
-    run([PY, os.path.join(HERE, "finalize.py"), "--bundle", bundle, "--graph", graph,
-         "--queries", qres, "--out", os.path.join(args.out, "result.json"), "--outdir", args.out],
-        "Stage 6 finalize")
+    must(run([PY, os.path.join(HERE, "finalize.py"), "--bundle", bundle, "--graph", graph,
+              "--queries", qres, "--out", os.path.join(args.out, "result.json"), "--outdir", args.out],
+             "Stage 6 finalize"), "Stage 6 finalize")
     print("\n[run_all] done. Inspect result.json.validation for honest status.")
 
 
