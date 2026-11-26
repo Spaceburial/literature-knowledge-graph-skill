@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the six cases a change must not break before a submission.
+"""regression.py — the nine cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -9,10 +9,17 @@ R4 same label, two objects     -> two nodes with a kept_separate basis; a non-me
                                   cannot be applied is reported instead of being logged blindly
 R5 paragraph without an id     -> derived d#### id, flagged, never presented as a source id
 R6 budget guard truncation     -> bundle records the truncation, finalize reports partial
+R7 silent-failure gates        -> an empty corpus, missing annotations, node-less annotations and a
+                                  missing query file each exit non-zero with a reason (they used to
+                                  report nothing and succeed)
+R8 one digit edited in a quote -> rejected as a numeric mismatch even at 0.95 string similarity
+R9 no silent empty results   -> annotations that match no paragraph stop the build; an answer
+                                with no verified evidence is undetermined; a failed validation
+                                check cannot sit beside status="success"
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all six
+    python3 tests/regression/regression.py          # all nine
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
@@ -44,6 +51,11 @@ def sh(args, cwd=None, timeout=300):
         print("    $ " + " ".join(args[1:]))
         print("    " + (r.stdout or r.stderr).strip()[-1200:])
     return r
+
+
+def shx(args, cwd=None, timeout=300):
+    """Run a command whose failure IS the assertion; does not echo the expected error."""
+    return subprocess.run([PY] + args, capture_output=True, text=True, cwd=cwd, timeout=timeout)
 
 
 def jload(p):
@@ -229,7 +241,129 @@ def r6(work):
     check("budget reason surfaced", "budget guard" in reasons, reasons)
 
 
-CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6}
+# ---------------------------------------------------------------- R7
+def r7(work):
+    print("[R7] empty corpus / missing annotations / missing query file fail loudly")
+    ind = os.path.join(work, "input")
+    os.makedirs(ind)
+    jdump({"note": "not a paper"}, os.path.join(ind, "notes.json"))
+    b = os.path.join(work, "bundle.json")
+    r = shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", ind, "--out", b])
+    check("empty corpus exits non-zero", r.returncode != 0, r.returncode)
+    check("empty corpus names the accepted file names", "material.json" in (r.stderr or ""),
+          (r.stderr or "")[:200])
+
+    b2 = os.path.join(work, "bundle2.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b2])
+    r = shx([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b2,
+            "--annotations", os.path.join(work, "absent.json"), "--out", os.path.join(work, "g.json")])
+    check("missing annotations exits non-zero", r.returncode != 0, r.returncode)
+    check("missing annotations points at the two routes",
+          "run.sh all" in (r.stderr or ""), (r.stderr or "")[:300])
+
+    empty = os.path.join(work, "ann_empty.json")
+    jdump({"nodes": [], "edges": []}, empty)
+    r = shx([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b2,
+            "--annotations", empty, "--out", os.path.join(work, "g2.json")])
+    check("node-less annotations exits non-zero", r.returncode != 0, r.returncode)
+
+    g = os.path.join(work, "g.json")
+    sh([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b2,
+        "--annotations", os.path.join(DEMO, "annotations.example.json"), "--out", g])
+    r = shx([os.path.join(SCRIPTS, "query_graph.py"), "--graph", g,
+            "--queries", os.path.join(work, "nope.json"), "--out", os.path.join(work, "q.json")])
+    check("missing query file exits non-zero", r.returncode != 0, r.returncode)
+    check("missing query file does not fall back silently",
+          "not found" in (r.stderr or ""), (r.stderr or "")[:200])
+
+    r = shx([os.path.join(SCRIPTS, "run_all.py"), "--work", os.path.join(work, "w"),
+            "--out", os.path.join(work, "o")])
+    check("run_all without --case-dir exits non-zero", r.returncode != 0, r.returncode)
+
+
+# ---------------------------------------------------------------- R8
+def r8(work):
+    print("[R8] one digit edited inside a verbatim-looking quote")
+    b = os.path.join(work, "bundle.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b])
+    ann = jload(os.path.join(DEMO, "annotations.example.json"))
+    target = next(e for e in ann["edges"] if "14.7%" in json.dumps(e["evidence"]))
+    ev = dict(target["evidence"][0])
+    ev["quote"] = ev["quote"].replace("14.7%", "17.4%")
+    target["evidence"] = [ev]
+    bad = os.path.join(work, "ann_bad.json")
+    jdump(ann, bad)
+    g, _, _ = pipeline(b, bad, work, os.path.join(DEMO, "queries.example.json"))
+    notes = [u.get("detail", "") for u in g.get("uncertainty", []) if u.get("kind") == "quote_not_found"]
+    check("modified number rejected as quote_not_found", bool(notes), notes)
+    check("rejection states the numeric mismatch",
+          any("numeric mismatch" in n and "17.4" in n for n in notes), notes[:1])
+    check("fewer verified edges than edges",
+          g["stats"]["n_edges_verified"] < len(g["edges"]),
+          (g["stats"].get("n_edges_verified"), len(g["edges"])))
+
+
+# ---------------------------------------------------------------- R9
+def r9(work):
+    print("[R9] a result with no verified evidence is never reported as a result")
+    b = os.path.join(work, "bundle.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b])
+
+    alien = {"nodes": [{"label": "Ghost material", "type": "material",
+                        "mentions": [{"source_id": "P1", "paragraph_id": "d0063",
+                                      "quote": "An invented sentence that appears in no paragraph of this corpus."}]}],
+             "edges": []}
+    ap = os.path.join(work, "alien.json")
+    jdump(alien, ap)
+    r = shx([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b, "--annotations", ap,
+             "--out", os.path.join(work, "g_alien.json")])
+    check("annotations matching no paragraph stop the build", r.returncode != 0, r.returncode)
+    check("message says the annotations do not match this bundle",
+          "do not match" in (r.stderr or ""), (r.stderr or "")[:200])
+
+    # one good node, one node whose only quote fails: the query for the failing node has nothing
+    # verified to answer from and must not report "answered"
+    demo_ann = jload(os.path.join(DEMO, "annotations.example.json"))
+    good = next(n for n in demo_ann["nodes"] if n.get("mentions"))
+    mixed = {"nodes": [good,
+                       {"label": "Ghost material", "type": "material",
+                        "mentions": [{"source_id": "P1", "paragraph_id": "d0063",
+                                      "quote": "An invented sentence that appears in no paragraph of this corpus."}]}],
+             "edges": []}
+    mp = os.path.join(work, "mixed.json")
+    jdump(mixed, mp)
+    g = os.path.join(work, "g_mixed.json")
+    sh([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b, "--annotations", mp, "--out", g])
+    q = os.path.join(work, "q.json")
+    sh([os.path.join(SCRIPTS, "query_graph.py"), "--graph", g, "--out", q,
+        "--type", "entity", "--name", "Ghost material"])
+    res = jload(q)["queries"][0]
+    check("query on evidence-rejected node is not answered", res["status"] != "answered",
+          res["status"])
+    check("it carries no evidence records", res["n_evidence"] == 0, res["n_evidence"])
+
+    # a failed validation check must move the status off success
+    graph = jload(g)
+    for n in graph["nodes"]:
+        for m in n["mentions"]:
+            m["paragraph_id_kind"] = "derived"
+            m["paragraph_id"] = "p12"
+    gp = os.path.join(work, "g_badcheck.json")
+    jdump(graph, gp)
+    out = os.path.join(work, "out2")
+    os.makedirs(out, exist_ok=True)
+    rp = os.path.join(out, "result.json")
+    sh([os.path.join(SCRIPTS, "finalize.py"), "--bundle", b, "--graph", gp, "--queries", q,
+        "--out", rp, "--outdir", out])
+    rj = jload(rp)
+    reasons = " ".join(rj.get("status_reasons") or [])
+    check("failed validation check is not success", rj["status"] != "success", rj["status"])
+    check("the failed check is named in status_reasons",
+          "validation check(s) failed" in reasons, reasons)
+
+
+CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
+         "R9": r9}
 
 
 def main(argv):
