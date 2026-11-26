@@ -22,6 +22,7 @@ import json
 import re
 import os
 import sys
+import time
 
 ALIASES = {
     "nodes": ["entities", "entity", "nodes", "node", "实体", "节点", "实体列表", "实体集合"],
@@ -62,6 +63,7 @@ def map_field(field_name):
 
 
 def main():
+    _t0 = time.time()
     ap = argparse.ArgumentParser()
     ap.add_argument("--bundle", default="/app/work/case_bundle.json")
     ap.add_argument("--graph", default="/app/work/graph.json")
@@ -246,6 +248,14 @@ def main():
                        {"step": "query_graph", "detail": f"{queries.get('n_queries', 0)} queries executed"},
                        {"step": "export_graph", "detail": "mmd/graphml/csv/report exported"}],
         "validation": validation,
+        # Measured, not modelled: the per-stage wall time this run actually took, plus the input
+        # budget the normaliser recorded. docs/BUDGET.md explains why the scripts are not the cost.
+        "runtime": {
+            "prepare_seconds": (bundle.get("runtime") or {}).get("prepare_seconds"),
+            "build_seconds": (graph.get("runtime") or {}).get("build_seconds"),
+            "finalize_seconds": round(time.time() - _t0, 3),
+        },
+        "budget": bundle.get("budget") or {},
         "stats": graph.get("stats", {}),
         "artifacts": [os.path.join(args.outdir, f) for f in
                       ("graph.json", "graph.mmd", "graph.graphml", "nodes.csv", "edges.csv",
