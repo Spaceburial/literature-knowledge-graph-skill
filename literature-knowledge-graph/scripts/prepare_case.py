@@ -37,6 +37,7 @@ import json
 import os
 import re
 import sys
+import time
 
 # --------------------------------------------------------------------------------------
 # Small helpers
@@ -504,6 +505,7 @@ def extract_paragraphs_from_pdf(path, default_source, role, warnings):
 
 
 def main():
+    _t0 = time.time()
     ap = argparse.ArgumentParser()
     ap.add_argument("--case-dir", default=None)
     ap.add_argument("--out", default="/app/work/case_bundle.json")
@@ -823,6 +825,7 @@ def main():
         "paragraphs": paragraphs,
         "xml_originals": xml_originals,
         "budget": budget,
+        "runtime": {"prepare_seconds": round(time.time() - _t0, 3)},
         "warnings": warnings,
         "stats": {
             "n_sources": len(sources),
