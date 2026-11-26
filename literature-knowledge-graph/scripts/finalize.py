@@ -257,9 +257,7 @@ def main():
         },
         "budget": bundle.get("budget") or {},
         "stats": graph.get("stats", {}),
-        "artifacts": [os.path.join(args.outdir, f) for f in
-                      ("graph.json", "graph.mmd", "graph.graphml", "nodes.csv", "edges.csv",
-                       "evidence.csv", "graph_report.md", "result.json")],
+        "artifacts": [],   # resolved after the files are written, see below
     }
 
     # echo declared output_contract fields
@@ -278,15 +276,22 @@ def main():
     result["output_contract_mapping"] = mapping_note
 
     os.makedirs(args.outdir, exist_ok=True)
-    with open(args.out, "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=1)
-
-    # copy graph.json into output for convenience
+    # the graph belongs next to its exports: a reader who opens the output directory should not have
+    # to know that the source graph lives in the work directory
     try:
         with open(os.path.join(args.outdir, "graph.json"), "w", encoding="utf-8") as f:
             json.dump(graph, f, ensure_ascii=False, indent=1)
     except Exception:  # noqa: BLE001
         pass
+
+    # resolve the artifact list now that the files exist; result.json is the file being written
+    present = [f for f in ("graph.json", "graph.mmd", "graph.graphml", "graph.svg", "graph.png",
+                           "nodes.csv", "edges.csv", "evidence.csv", "graph_report.md")
+               if os.path.exists(os.path.join(args.outdir, f))]
+    result["artifacts"] = [os.path.join(args.outdir, f) for f in present] + [os.path.abspath(args.out)]
+
+    with open(args.out, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=1)
 
     print(f"[finalize] status={status} coverage={coverage} papers_with_evidence={n_papers_with_evidence} "
           f"queries_ok={q_ok}/{queries.get('n_queries',0)} -> {args.out}")
