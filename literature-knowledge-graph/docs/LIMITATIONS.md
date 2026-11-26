@@ -14,8 +14,13 @@
   many untyped `other` nodes and does not align entities; treat it as a baseline only.
 - **No figure/supplement mining.** Values shown only in plots or supplementary files are
   reported as `value_not_reported_in_text`, not extracted.
-- **JATS parsing is minimal.** `prepare_case.py` handles `sec/title/p`; complex tables,
-  footnotes and nested lists are flattened or skipped. The original XML is kept for cross-check.
+- **JATS parsing is minimal.** `prepare_case.py` handles `sec/title/p`, keeps inline formatting
+  from splitting tokens (`MAPbI<sub>3</sub>` → `MAPbI3`) and drops back matter by section title
+  (author contributions, funding, competing interests, data availability, acknowledgements,
+  footnotes), reporting the count. Complex tables are flattened to their text, display equations
+  become plain text, and lists are not reconstructed. The original XML is kept for cross-check.
+  On two real PMC articles (282 KB and 217 KB) the reader produced 166 body paragraphs and left
+  out 6 back-matter blocks.
 - **Alias merging is conservative.** Abbreviation/full-form and case/hyphen variants are
   merged; chemically distinct names and generic-vs-instance pairs are deliberately left
   separate, so the graph may contain two nodes a domain expert would merge. The merge log
