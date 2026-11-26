@@ -634,6 +634,15 @@ def main():
         "truncated": False,
         "dropped_by_source": {},
     }
+    # Proactive budget warning: the run contract allows 64 model requests and the reading step
+    # costs one window per ~6,000 characters (docs/BUDGET.md). Saying so at normalisation time is
+    # the only point where the cap can still be chosen deliberately.
+    est_windows = max(1, -(-budget["kept_chars"] // 6000)) if budget["kept_chars"] else 0
+    if est_windows > 56 and not (args.max_paragraphs or args.max_chars):
+        warnings.append(
+            f"reading budget: {budget['kept_chars']} characters is about {est_windows} windows of "
+            f"6,000 chars (plus ~5 requests of overhead) against a limit of 64 requests / 900 s. "
+            f"Pass --max-paragraphs or --max-chars to cap the reading, and report the truncation.")
     if args.max_paragraphs or args.max_chars:
         order = sorted(range(len(paragraphs)),
                        key=lambda i: (src_rank.get(paragraphs[i]["source_id"], 10 ** 6),
