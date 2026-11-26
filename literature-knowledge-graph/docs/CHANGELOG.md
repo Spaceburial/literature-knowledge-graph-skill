@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.3.1 — what a real two-paper run on this machine changed
+
+The first end-to-end run with the model doing the extraction (two CC BY papers, 88 paragraphs) was
+not a demo: it produced 21 nodes, 16 edges, 42 verbatim quotes and 6/7 answered queries, and it found
+three things the synthetic corpus never would.
+
+- The model wrote `increases` and `decreases` as relation types; the schema had no such names, so the
+  edges were stored as `other`. Both are now part of the vocabulary (schema, `build_graph`,
+  `SKILL.md`), with `condition` required to name the quantity.
+- `NODE_TYPES` carried `finding`, which the schema did not. That node type would have produced a
+  graph that `build_graph` accepted and the published schema rejected. `finding` now maps to
+  `conclusion`.
+- R11 gained a drift guard: the relation and node vocabularies must be identical in the schema, in
+  `build_graph` and in the test. It failed immediately on `finding`, which is the point.
+- The task's numeric question routed to `metric_compare` (per-source values with quotes) instead of a
+  generic entity lookup, and "do the papers agree…" routes to the alignment query, which now reports
+  the recorded conflicts **and** the open questions.
+- Regression: **70 checks** (R11 grew by two).
+
 ## 1.3 — deduction pass: read the delivery contract, then fix what it exposes
 
 Each change below answers a line of the challenge's delivery requirements rather than a hunch.
