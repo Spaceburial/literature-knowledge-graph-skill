@@ -110,6 +110,11 @@ def main():
     missing_meta = [s.get("source_id") for s in srcs
                     if not (s.get("doi") or s.get("title"))]
     case_id_val = bundle.get("case_id") or graph.get("case_id")
+    # Candidate edges that never made it into the graph: the annotator named an endpoint that does
+    # not resolve to any node. The graph is still valid, but it is not complete, and saying
+    # "success" would hide 68 dropped edges behind a clean status.
+    dropped_edges = sum(1 for c in (graph.get("conflict_log") or [])
+                        if c.get("kind") == "edge_endpoint_missing")
 
     # status
     reasons = []
@@ -122,12 +127,14 @@ def main():
         status = "undetermined"
         reasons.append("no evidence could be verified against the material")
     elif coverage >= 0.999 and q_ok >= 3 and n_papers_with_evidence >= 2 \
-            and not missing_meta and case_id_val:
+            and not missing_meta and case_id_val and dropped_edges == 0:
         status = "success"
     else:
         status = "partial"
         if coverage < 0.999:
             reasons.append(f"{total_items - with_evidence} node/edge item(s) lack verified evidence")
+        if dropped_edges:
+            reasons.append(f"{dropped_edges} candidate edge(s) dropped: an endpoint did not resolve to a node")
         if q_ok < 3:
             reasons.append(f"only {q_ok} query/queries answered or partial")
         if n_papers_with_evidence < 2:
