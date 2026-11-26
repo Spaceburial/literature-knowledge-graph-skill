@@ -1,7 +1,11 @@
 # Limitations
 
 - **Lexical verification.** A correct paraphrase is rejected because it is not a substring.
-  This is intentional (it blocks invented quotes) but it pushes work onto exact copying.
+  This is intentional (it blocks invented quotes) but it pushes work onto exact copying. A quote
+  that reaches 0.90 similarity is accepted as `fuzzy` and marked weak evidence; the stored text is
+  then the submitted string, so a fuzzy match is *not* proof of a verbatim quote — only an exact or
+  normalized match is. Numbers are checked separately: a quote whose numeric tokens differ from the
+  matched window is rejected outright, whatever its similarity.
 - **Paragraph granularity.** Long paragraphs are not split; a quote must fit inside one
   paragraph and be ≤300 characters after folding.
 - **Extraction quality is bounded by the reading step.** The deterministic fallback produces
