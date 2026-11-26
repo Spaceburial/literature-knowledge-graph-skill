@@ -36,7 +36,7 @@ closes one hole in the evidence gate.
 - `tests/regression/regression.py`: R7 (empty corpus, missing annotations, node-less annotations
   and missing query file each exit non-zero), R8 (one edited digit in a quote) and R9 (a build
   whose quotes match no paragraph stops; a query with no verified evidence is not `answered`;
-  a failed validation check cannot sit beside `success`). 40 checks.
+  a failed validation check cannot sit beside `success`). 41 checks.
 - `build_graph.py`: a graph in which **no** item's quote was found in the bundle exits
   non-zero. All-rejected evidence used to be printed as `0 verified` with exit 0, which read
   as a finished graph; in the default layout a stale `/app/work/annotations.json` could
@@ -46,6 +46,17 @@ closes one hole in the evidence gate.
   the documented derived-id form and failed the derived-id validation check), and a manifest
   entry's `file` field now binds that file's text to the manifest's `source_id` instead of
   producing a second, metadata-less source.
+- `query_graph.py`: a single query of any type is expressible on the command line (`--id`,
+  `--relation`, `--keyword`, `--direction`, `--from`, `--to`, `--max-hops`), and a missing required
+  field is an error naming the flag, instead of a query that silently asks nothing.
+- `verify_evidence.py` / `build_graph.py`: a fuzzy match now stores `matched_text` — the
+  paragraph's own wording at the matched span — beside the submitted quote, because "0.91 similar"
+  is not verbatim and a reviewer has to be able to see the difference.
+- `finalize.py`: the derived-id check now fails only for a bare integer (an id that could be read
+  as a PDF page number). A namespaced derived id such as `p12` or `s3p2` no longer blocks
+  `success`; the check guards its stated intent instead of one spelling of it.
+- `build_graph.py`: the audit report defaults to `build_report.txt` next to `--out` rather than a
+  fixed `/app/work` path.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
   contract with a verified minimal `primary-material.json` and `annotations.json`, the seven query
   types, and the `success`/`partial`/`undetermined` vocabulary.
