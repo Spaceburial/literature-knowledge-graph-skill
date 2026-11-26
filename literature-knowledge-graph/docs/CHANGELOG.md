@@ -80,6 +80,19 @@ closes one hole in the evidence gate.
   manifest whose files were never parsed, states its own cause instead of a generic list.
 - `finalize.py`: the no-graph result keeps the full `result.json` shape (empty `nodes`/`edges`,
   `validation` keys) instead of a three-key stub.
+- `schema/graph.schema.json`: the root used `oneOf` over the annotation and graph shapes, so a built
+  graph — which satisfies both — validated against neither. It is `anyOf` now, `merge_decision`
+  accepts `not_applicable`, and an evidence record may carry `matched_text`. The schema had never
+  been run against the shipped artifacts; both examples were failing it.
+- `build_graph.py`: graph edges carry `source_label`/`target_label` (the schema requires them; ids
+  alone force a reader to look each endpoint up), and a quote longer than the documented 300
+  characters is verified in full but stored as a word-boundary prefix with `quote_truncated` and
+  `quote_chars`. Four of the shipped example annotations exceeded the limit; they were shortened
+  to verbatim prefixes.
+- `tests/regression/regression.py`: R11 validates the shipped annotations, the shipped example
+  graph and a freshly built graph against the schema, rejects a graph with an out-of-schema
+  relation type, and asserts no stored quote exceeds 300 characters. Works with `jsonschema` when
+  installed and with a stdlib subset otherwise. 55 checks.
 - `README.md`: quickstart reduced to three commands plus one query, a "Bring your own corpus"
   contract with a verified minimal `primary-material.json` and `annotations.json`, the seven query
   types, and the `success`/`partial`/`undetermined` vocabulary.
