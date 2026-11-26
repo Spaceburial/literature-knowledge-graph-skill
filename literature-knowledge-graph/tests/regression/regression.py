@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the eleven cases a change must not break before a submission.
+"""regression.py — the thirteen cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -20,13 +20,19 @@ R10 input shapes             -> JATS .xml is discovered, an aggregate material.j
                                 metadata, a dict-of-dicts corpus is counted once, inline markup
                                 does not split tokens, back matter stays out of the body, and a
                                 nested record inherits its paper's source_id
+R12 PDF paragraphs          -> a text PDF becomes several located blocks (not one blob), hyphenated
+                                line breaks are joined, back matter is dropped, and `pdf_page` is
+                                recorded as a reading aid while the id stays a derived d####
+R13 task-driven queries     -> questions in the case task become queries that are answered from the
+                                graph; a term that is not a node is still found through the quotes;
+                                a question with no grounding comes back undetermined with a reason
 R9 no silent empty results   -> annotations that match no paragraph stop the build; an answer
                                 with no verified evidence is undetermined; a failed validation
                                 check cannot sit beside status="success"
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all eleven
+    python3 tests/regression/regression.py          # all thirteen
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
@@ -584,8 +590,122 @@ def r11(work):
           (len(r["nodes"]), len(g["nodes"])))
 
 
+def _make_pdf(path, paragraphs, heading=None):
+    """A real PDF, so the test exercises pdftotext/pypdf rather than a mock."""
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        from matplotlib.backends.backend_pdf import PdfPages
+        import matplotlib.pyplot as plt
+    except Exception:  # noqa: BLE001
+        return False
+    with PdfPages(path) as pdf:
+        fig = plt.figure(figsize=(8.5, 11))
+        body = "\n\n".join(paragraphs)
+        if heading:
+            body += "\n" + heading + "\n" + "\n".join(
+                "Doe A. et al. Journal of Tests 2024; 1: 1-10." for _ in range(3))
+        fig.text(0.06, 0.95, body, fontsize=9, va="top", wrap=True)
+        pdf.savefig(fig)
+        plt.close(fig)
+    return True
+
+
+def r12(work):
+    print("[R12] a PDF becomes located paragraph blocks")
+    case = os.path.join(work, "case")
+    os.makedirs(case)
+    paras = [
+        "Perovskite solar cells with a passivated absorber reached a power conversion efficiency of "
+        "21.3% under AM1.5G illumination in this work, as reported by the authors.",
+        "The hole transport layer was Spiro-OMeTAD, deposited by spin coating at 3000 rpm for 30 "
+        "seconds and annealed at 100 degrees for ten minutes in air.",
+        "Stability was tracked for 1000 hours under continuous one-sun illumination in a nitrogen "
+        "atmosphere, with minimal degradation observed over the whole period.",
+    ]
+    if not _make_pdf(os.path.join(case, "paper_one.pdf"), paras, heading="References"):
+        print("    (matplotlib unavailable: PDF case skipped, not failed)")
+        return
+    b = os.path.join(work, "b.json")
+    r = subprocess.run([PY, os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", case, "--out", b],
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        check("PDF corpus normalises", False, (r.stdout + r.stderr)[-400:])
+        return
+    bundle = jload(b)
+    ps = bundle["paragraphs"]
+    check("a multi-paragraph PDF yields more than one block", len(ps) >= 3, len(ps))
+    check("every block keeps a derived d#### id",
+          all(re.fullmatch(r"d\d{4}", p["paragraph_id"]) and p.get("id_derived") for p in ps))
+    check("a PDF page is recorded as an aid, never as the id",
+          all(isinstance(p.get("pdf_page"), int) and re.fullmatch(r"d\d{4}", p["paragraph_id"])
+              and p["paragraph_id"] != str(p["pdf_page"]) for p in ps),
+          [(p.get("pdf_page"), p["paragraph_id"]) for p in ps])
+    check("the reference list does not become body text",
+          not any("Journal of Tests" in p["text"] for p in ps))
+    blob = " ".join(p["text"] for p in ps)
+    check("each paragraph stays one block, not a fragment per line",
+          all(len(p["text"]) > 80 for p in ps), [len(p["text"]) for p in ps])
+
+
+def r13(work):
+    print("[R13] questions in the case task are answered from the graph")
+    case = os.path.join(work, "case")
+    os.makedirs(case)
+    with open(os.path.join(case, "case.json"), "w", encoding="utf-8") as f:
+        json.dump({"case_id": "task-questions",
+                   "task": "1. Which material appears in both papers?\n"
+                           "2. What does the second paper report about stability?\n"
+                           "3. 两篇论文里 Spiro-OMeTAD 的效率是多少？"}, f, ensure_ascii=False)
+    with open(os.path.join(case, "material.json"), "w", encoding="utf-8") as f:
+        json.dump({"paragraphs": [
+            {"source_id": "P1", "paragraph_id": "p1",
+             "text": "Spiro-OMeTAD was used as the hole transport layer and the device reached 21.3%."},
+            {"source_id": "P2", "paragraph_id": "q1",
+             "text": "The same Spiro-OMeTAD layer gave 22.1%, while stability was not measured here."}]}, f)
+    with open(os.path.join(case, "ann.json"), "w", encoding="utf-8") as f:
+        json.dump({"nodes": [
+            {"label": "Spiro-OMeTAD", "type": "material",
+             "mentions": [{"source_id": "P1", "paragraph_id": "p1", "quote": "hole transport layer"}]},
+            {"label": "power conversion efficiency", "type": "metric",
+             "mentions": [{"source_id": "P2", "paragraph_id": "q1", "quote": "gave 22.1%"}]}],
+            "edges": [{"source_label": "Spiro-OMeTAD", "target_label": "power conversion efficiency",
+                       "type": "measures",
+                       "evidence": [{"source_id": "P2", "paragraph_id": "q1",
+                                     "quote": "The same Spiro-OMeTAD layer gave 22.1%, while "
+                                               "stability was not measured here"}]}]}, f)
+    b = os.path.join(work, "b.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", case, "--out", b])
+    g, q, r = pipeline(b, os.path.join(case, "ann.json"), work)
+    if q is None:
+        check("task queries run", False)
+        return
+    qs = q["queries"]
+    derived = [x for x in qs if (x.get("query") or {}).get("derived_from") == "task"]
+    check("the task's questions become queries", len(derived) >= 2, len(derived))
+    check("each derived query quotes the question it came from",
+          all((x["query"].get("task_question") or "") for x in derived))
+    types = {x["query"]["type"] for x in derived}
+    check("a 'both papers' question routes to the alignment query", "cross_paper" in types, types)
+    st = {x["qid"]: x["status"] for x in derived}
+    check("at least one task question is answered from the graph",
+          any(v == "answered" for v in st.values()), st)
+    check("an ungrounded question is undetermined with a reason, not an error",
+          all(v in ("answered", "undetermined") for v in st.values()), st)
+    # keyword lookup reaches the quotes, not only the node labels
+    kw = os.path.join(work, "kw.json")
+    with open(kw, "w", encoding="utf-8") as f:
+        json.dump({"queries": [{"qid": "K1", "type": "keyword", "keyword": "stability"}]}, f)
+    qout = os.path.join(work, "kw_result.json")
+    sh([os.path.join(SCRIPTS, "query_graph.py"), "--graph", os.path.join(work, "graph.json"),
+        "--queries", kw, "--out", qout])
+    res = jload(qout)["queries"][0]
+    check("a term that never became a node is found in the quoted text",
+          res["status"] == "answered" and res["n_evidence"] >= 1, res["status"])
+
+
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
-         "R9": r9, "R10": r10, "R11": r11}
+         "R9": r9, "R10": r10, "R11": r11, "R12": r12, "R13": r13}
 
 
 def main(argv):
