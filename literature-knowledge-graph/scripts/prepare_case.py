@@ -416,6 +416,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case-dir", default=None)
     ap.add_argument("--out", default="/app/work/case_bundle.json")
+    ap.add_argument("--max-paragraphs", type=int, default=None,
+                    help="budget guard: keep at most N paragraphs (earliest first) and record the truncation")
+    ap.add_argument("--max-chars", type=int, default=None,
+                    help="budget guard: keep at most N characters of paragraph text in total")
     args = ap.parse_args()
 
     warnings = []
@@ -587,6 +591,48 @@ def main():
             s["role"] = "primary" if s["source_id"] == prim else "secondary"
         warnings.append("Manifest roles missing; assigned primary/secondary heuristically.")
 
+    # ---- budget guard: keep the run inside the request/time budget ----
+    # Truncation is recorded, never silent: the bundle carries a `budget` block, a warning, and
+    # finalize.py turns it into status="partial" so the report cannot claim a complete graph.
+    src_rank = {s["source_id"]: i for i, s in enumerate(sources)}
+    budget = {
+        "max_paragraphs": args.max_paragraphs,
+        "max_chars": args.max_chars,
+        "kept_paragraphs": len(paragraphs),
+        "total_paragraphs": len(paragraphs),
+        "kept_chars": sum(len(p["text"]) for p in paragraphs),
+        "truncated": False,
+        "dropped_by_source": {},
+    }
+    if args.max_paragraphs or args.max_chars:
+        order = sorted(range(len(paragraphs)),
+                       key=lambda i: (src_rank.get(paragraphs[i]["source_id"], 10 ** 6),
+                                      paragraphs[i].get("order_in_source", 10 ** 9)))
+        keep, chars = [], 0
+        for i in order:
+            p = paragraphs[i]
+            if args.max_paragraphs and len(keep) >= args.max_paragraphs:
+                break
+            if args.max_chars and keep and chars + len(p["text"]) > args.max_chars:
+                break
+            keep.append(i)
+            chars += len(p["text"])
+        keep_set = set(keep)
+        dropped = [paragraphs[i] for i in order if i not in keep_set]
+        if dropped:
+            budget["truncated"] = True
+            for p in dropped:
+                budget["dropped_by_source"][p["source_id"]] = \
+                    budget["dropped_by_source"].get(p["source_id"], 0) + 1
+            paragraphs = [paragraphs[i] for i in sorted(keep_set)]
+            budget["kept_paragraphs"] = len(paragraphs)
+            budget["kept_chars"] = chars
+            warnings.append(
+                f"input truncated by budget guard (--max-paragraphs={args.max_paragraphs}, "
+                f"--max-chars={args.max_chars}): kept {len(paragraphs)} of "
+                f"{budget['total_paragraphs']} paragraphs, dropped {budget['dropped_by_source']}. "
+                f"Report the missing material as a limitation; do not present the graph as complete.")
+
     bundle = {
         "schema_version": "1.0",
         "case_id": case_id,
@@ -596,6 +642,7 @@ def main():
         "sources": sources,
         "paragraphs": paragraphs,
         "xml_originals": xml_originals,
+        "budget": budget,
         "warnings": warnings,
         "stats": {
             "n_sources": len(sources),
