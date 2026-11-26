@@ -7009,10 +7009,11 @@
    }
   ]
  },
+ "extraction_mode": "agent",
  "runtime": {
-  "prepare_seconds": 0.243,
-  "build_seconds": 0.037,
-  "finalize_seconds": 0.008
+  "prepare_seconds": 0.211,
+  "build_seconds": 0.05,
+  "finalize_seconds": 0.009
  },
  "budget": {
   "max_paragraphs": null,
