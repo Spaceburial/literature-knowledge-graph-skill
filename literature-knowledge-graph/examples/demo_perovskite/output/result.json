@@ -7009,6 +7009,20 @@
    }
   ]
  },
+ "runtime": {
+  "prepare_seconds": 0.158,
+  "build_seconds": 0.132,
+  "finalize_seconds": 0.008
+ },
+ "budget": {
+  "max_paragraphs": null,
+  "max_chars": null,
+  "kept_paragraphs": 141,
+  "total_paragraphs": 141,
+  "kept_chars": 166815,
+  "truncated": false,
+  "dropped_by_source": {}
+ },
  "stats": {
   "n_nodes": 35,
   "n_edges": 34,
