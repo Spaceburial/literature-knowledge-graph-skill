@@ -381,6 +381,36 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
     return out
 
 
+BACKMATTER_SKIPPED = []     # (origin, section title) for back-matter blocks left out of the body
+
+# Sections that are metadata rather than scientific content. MDPI and several other publishers
+# put them inside <body> as ordinary <sec> elements, so a <body>-only filter is not enough.
+BACKMATTER_TITLES = re.compile(
+    r"^(author contributions?|authors? contributions?|funding( statement)?|conflicts? of interest|"
+    r"competing interests?|data availability( statement)?|availability of data( and materials)?|"
+    r"acknowledge?ments?|supplementary materials?|abbreviations|references|footnotes|"
+    r"author information|orcid|publisher'?s note|ethics( statement)?|consent( for publication)?|"
+    r"about the authors|supporting information)$", re.I)
+
+INLINE_TAGS = (r"sub|sup|italic|bold|sc|monospace|underline|strike|roman|sans-serif|small-caps|"
+               r"named-content|inline-formula|tex-math|alternatives|mml:[a-z]+|xref|ext-link|"
+               r"uri|email|break|hr")
+
+
+def xml_text_of(inner):
+    """Text of an XML fragment: inline markup must not split a token.
+
+    Replacing every tag with a space turned `MAPbI<sub>3</sub>` into `MAPbI 3`, which then failed
+    quote verification against the `MAPbI3` a reader copies. Formatting tags are removed without a
+    space; block-level tags keep one.
+    """
+    t = re.sub(r"</?(?:" + INLINE_TAGS + r")\b[^>]*>", "", inner)
+    t = re.sub(r"<[^>]+>", " ", t)
+    t = t.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+    t = t.replace("&nbsp;", " ").replace("&#x2212;", "-").replace("&minus;", "-")
+    return norm_ws(t)
+
+
 def extract_paragraphs_from_xml(xml_text, default_source, role):
     """Minimal JATS reader: <sec><title>..</title><p id=..>..</p></sec>."""
     out = []
@@ -401,13 +431,16 @@ def extract_paragraphs_from_xml(xml_text, default_source, role):
         if tok == "</sec>":
             continue
         if t.group(1) is not None:  # <title>
-            sec_title = norm_ws(re.sub(r"<[^>]+>", "", t.group(1)))
+            sec_title = xml_text_of(t.group(1))
             continue
         attrs = t.group(2) or ""
         inner = t.group(3) or ""
+        if BACKMATTER_TITLES.match(sec_title or ""):
+            BACKMATTER_SKIPPED.append(("jats-xml", sec_title))
+            continue
         pid_m = re.search(r'\bid="([^"]+)"', attrs)
         pid = pid_m.group(1) if pid_m else None
-        text = norm_ws(re.sub(r"<[^>]+>", " ", inner))
+        text = xml_text_of(inner)
         if len(text) < 40:
             note_short("jats-xml", text)
             continue
@@ -770,6 +803,16 @@ def main():
                 f"{budget['total_paragraphs']} paragraphs, dropped {budget['dropped_by_source']}. "
                 f"Report the missing material as a limitation; do not present the graph as complete.")
 
+    if BACKMATTER_SKIPPED:
+        titles = sorted({t for _, t in BACKMATTER_SKIPPED})
+        warnings.append(
+            f"{len(BACKMATTER_SKIPPED)} back-matter paragraph(s) skipped (not scientific content): "
+            + ", ".join(titles[:6]))
+    if SHORT_DROPPED:
+        warnings.append(
+            f"{len(SHORT_DROPPED)} short block(s) (<40 chars) were skipped and are not in the graph; "
+            f"origins: {sorted({o for o, _ in SHORT_DROPPED})}")
+
     bundle = {
         "schema_version": "1.0",
         "case_id": case_id,
@@ -807,11 +850,6 @@ def main():
                 f"  than 40 characters is ignored (longest skipped: {max(c for _, c in SHORT_DROPPED)}\n"
                 "  chars). Split or join the text so each paragraph is a full sentence.\n")
         sys.exit(2)
-    if SHORT_DROPPED:
-        warnings.append(
-            f"{len(SHORT_DROPPED)} short block(s) (<40 chars) were skipped and are not in the graph; "
-            f"origins: {sorted({o for o, _ in SHORT_DROPPED})}")
-
     print(f"[prepare_case] case_id={case_id} sources={len(sources)} paragraphs={len(paragraphs)} "
           f"derived_ids={bundle['stats']['n_id_derived']} warnings={len(warnings)}")
     print(f"[prepare_case] wrote {args.out}")
