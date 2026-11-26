@@ -1,2 +1,2 @@
-https://github.com/OWNER/REPO/tree/main/skills/literature-knowledge-graph
-skills/literature-knowledge-graph
+https://github.com/Spaceburial/literature-knowledge-graph-skill/tree/main/literature-knowledge-graph
+literature-knowledge-graph
