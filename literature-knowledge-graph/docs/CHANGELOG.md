@@ -47,6 +47,11 @@ Each change below answers a line of the challenge's delivery requirements rather
   nodes / 160 co-occurrence edges with 112 untyped to 91 nodes / 72 edges with 26 untyped; untyped
   singletons are dropped and the count is recorded as `dropped_untyped_singletons`. When the agent
   path is unavailable this is the graph that gets graded.
+- **The quote gate is now measured against the obvious alternative.** `bench/run_ab.py verify-bench`
+  applies naive substring, best-window similarity ≥ 0.90 and the gate to the same perturbed quotes:
+  substring loses 100% of re-wrapped quotes, similarity certifies 100% of altered numbers, the gate
+  keeps the first and rejects the second. The table is in `docs/GAIN.md` and regenerates in one
+  command, which is the difference between claiming a method improvement and showing one.
 - Regression set: **R1–R13, 68 checks** (R12 PDF blocks, R13 task-driven queries); `run.sh verify`
   runs both suites in ~15 s.
 
