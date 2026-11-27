@@ -1,5 +1,44 @@
 # Changelog
 
+## 1.3.5 — a wrong field type ended the run
+
+Fuzzing the annotation file with the shapes a language model actually emits found three inputs that
+raised `AttributeError` and exited 1 with a traceback: `"type": ["material"]`, `"type": 7`, and a
+`label` written as a list. On this platform an execution failure is not a low score, it is no
+result — so a one-line schema slip was worth zero, whatever the rest of the graph contained.
+
+- `as_text()` coerces any field to text without trusting its type: a list gives its first non-empty
+  string, a dict gives `label`/`name`/`value`/`text`, anything else `str()`. Applied to `canon`,
+  `norm_type`, `norm_rel`, node `label`, edge endpoints and `quote`.
+- A single evidence record written as an object instead of a one-element list is wrapped
+  (`mentions` and `evidence`), and a `quote` written as a one-element list is read as that string.
+- What is *not* forgiven: a quote that matches no paragraph still stops the run with exit 4, and a
+  file with no nodes still exits 3. Coercion addresses the shape of a field, never its truth.
+
+R16 (11 checks) locks all five shapes plus the two failures that must stay failures. Regression
+**R1–R16 / 96 checks**.
+
+## 1.3.4 — the case's own vocabulary was fatal
+
+The case file states its `output_contract` in terms of `entities` and `relations`. An annotator
+that reads `case.json` first therefore writes `entities`/`relations`, `from`/`to`, `relation` and
+`name` — and the build step, which speaks `nodes`/`edges`, found no nodes and exited 3 with
+"produced no nodes". One naming choice cost the whole case.
+
+- `load_annotations` now accepts `entities`/`relations`/`relationships`/`triples`, `from`/`to`/
+  `subject`/`object`, `relation`/`predicate`, `name`/`entity`, `kind`/`category`, and a bare JSON
+  array of records tagged `kind` (a list, not an object — a third shape that used to fall through
+  to the JSONL parser and yield nothing).
+- Every rename is written to `graph["warnings"]` as `alias->field`, and printed. The rule this
+  project already applies to type coercion applies here: adapting silently would hide a
+  disagreement between the annotator and the schema.
+- The guarantee is unchanged: quotes still have to match a paragraph, so a file that names the
+  wrong corpus still fails (R15 keeps the canonical vocabulary warning-free, so the tolerance does
+  not fire on well-formed input).
+
+Regression **R1–R15 / 85 checks** (R15: 6). Checked by hand first: the challenge-vocabulary file
+exited 3 before the change and produces 2 nodes / 1 edge after it.
+
 ## 1.3.3 — what the package looks like from the other side of an archive
 
 Three packaging faults, none of which any functional test could see, because each one lives
