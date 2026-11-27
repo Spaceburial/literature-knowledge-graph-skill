@@ -15,12 +15,14 @@ Every submission, its channel, bundle hash, observed state and what was learned.
 | 2026-11-27 00:58 | 114091 | submitted | - | 0.0 | queued | 同包重复(上一命令的输出被管道过滤,但 submit 已执行);与 114092 相隔 8 s,可作 ±7 噪声对 |
 | 2026-11-27 01:05 | 114103 | submitted | - | 0.0 | queued | v1.3.3(权限 644 / 文档改 python3 / case-dir 容错 / selftest 31);bundle 内 skill 与 submission 逐字节相同;sha256 73fde0cf…;409 实测:平台不允许替换既有 attempt 的包,故必须新开 |
 | 2026-11-27 01:14 | 114109 | submitted | - | 0.0 | queued | v1.3.5:标注词汇 entities/relations 兼容 + 字段类型强制转换(修 3 处 AttributeError 崩渍)+ 测试 31/96;bundle 与 submission 逐字节相同;sha256 f9d53d84… |
+| 2026-11-27 01:21 | 114113 | submitted | - | 0.0 | queued | v1.3.6:无后缀文件/paragraphs.json/P1-P2 键控输入的修正(此前 0 段落或两篇塌成一个 source);测试 31/102;bundle 与 submission 逐字节相同;sha256 a86fec8f… |
 
 ## Live attempts (2026-11-27 01:00 UTC)
 
 | attempt | package | state |
 |---|---|---|
-| **114109** | **v1.3.5** (current): accepts the case's `entities`/`relations` vocabulary, coerces wrong field types instead of raising, self-test 31 / regression 96, `sha256 f9d53d84…` | `submitted`, `bundleStatus=null`, `scoringState=queued`, `modelTag=unknown` |
+| **114113** | **v1.3.6** (current): extensionless/`paragraphs.json`/paper-keyed inputs, `entities`/`relations` vocabulary, field-type coercion, modes 644, self-test 31 / regression 102, `sha256 a86fec8f…` | `submitted`, `bundleStatus=null`, `scoringState=queued`, `modelTag=unknown` |
+| 114109 | v1.3.5: vocabulary + type coercion, regression 96 | `submitted`, `queued`, `sha256 f9d53d84…` |
 | 114103 | v1.3.3: files 644, `python3` everywhere, case-dir tolerance | `submitted`, `queued`, `sha256 73fde0cf…` |
 | 114091 / 114092 | v1.3.2, `sha256 464a9451…`; identical except file modes, `python`/`python3` and two doc lines | `submitted`, `queued` |
 | 113475 / 113476 | v1.0-era, `oneOf` schema, 4 merge decisions, `sha256 c1bb5398…` | `submitted`, `queued` since 11-26 13:10 |
