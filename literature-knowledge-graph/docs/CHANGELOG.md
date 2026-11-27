@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.3.6 — three input shapes that produced zero paragraphs
+
+Tested nine plausible deliveries of the same two-paper corpus through `prepare_case.py`. Three
+of them failed outright, and one of those failed silently in a worse way than an error:
+
+| shape | before | after |
+|---|---|---|
+| `P1`, `P2` — plain text, no suffix | exit 2, 0 paragraphs | 2 paragraphs, sources `P1`/`P2` |
+| `paragraphs.json` — a corpus under a name the fixed list does not know | exit 2, 0 paragraphs | 2 paragraphs |
+| `{"P1": {"text": …}, "P2": {"text": …}}` | 2 paragraphs, **both attributed to one source named after the file** | 2 paragraphs, sources `P1`/`P2` |
+
+The third is the dangerous one: it did not fail, it merged two independent papers into a single
+source, which is exactly the error the task forbids (the conditions, samples and numbers of two
+papers would then sit in one source with no way to tell them apart).
+
+- `file_kind()` decides by suffix, then by the first bytes (`%PDF`, `<`, `{`/`[`, printable text),
+  so an extensionless file is read rather than skipped.
+- Discovery also accepts any `*.json` not in the metadata set (`case`, `corpus-manifest`,
+  `queries`, `annotations`, `schema`, `result`, …), and if nothing at all is recognised it sniffs
+  every remaining regular file instead of giving up with an empty bundle.
+- A dict keyed `P1`/`P2`/`paper1` now carries that key down as `source_id`; the keys are listed in
+  `bundle.warnings`. Lowercase `p1`/`p2` stays a paragraph id, because that is the ordinary
+  paragraph id and guessing otherwise would split one paper into two sources.
+- The two extraction strategies no longer both emit the same paragraph when their source ids
+  differ: de-duplication now also runs on the text.
+
+R17 (6 checks) locks all four behaviours, including the lowercase case, which must **not** become
+a source split. Regression **R1–R17 / 102 checks**.
+
 ## 1.3.5 — a wrong field type ended the run
 
 Fuzzing the annotation file with the shapes a language model actually emits found three inputs that
