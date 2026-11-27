@@ -25,6 +25,10 @@ All commands below use `$SKILL_DIR` = the directory that contains this `SKILL.md
 export SKILL_DIR="${SKILL_DIR:-/skills/weekly-skill}"   # adjust if installed elsewhere
 ```
 
+Call the shell entry point as `bash run.sh …`, never `./run.sh`: archive tools (including the
+platform's own repack) drop the execute bit, so a copied-out skill directory keeps the file but
+not its mode. Every script also runs standalone as `python $SKILL_DIR/scripts/<name>.py`.
+
 The skill is **topic-agnostic**. It does not assume any domain label; it reads the actual files.
 It never invents a quote, a number, a page, or a DOI.
 
