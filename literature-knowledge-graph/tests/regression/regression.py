@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the sixteen cases a change must not break before a submission.
+"""regression.py — the seventeen cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -37,10 +37,13 @@ R15 challenge vocabulary      -> an annotation file written as entities/relation
 R16 wrong field types         -> type/quote/label as a list, mentions as a bare object, type as null:
                                 each builds (or fails with a message) instead of a traceback; a
                                 quote that is in no paragraph still exits non-zero
+R17 file and dict shapes      -> extensionless P1/P2 and an extra paragraphs.json are read; a
+                                paper-keyed dict keeps two sources and does not double its
+                                paragraphs; lowercase p1/p2 stay paragraph ids
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all sixteen
+    python3 tests/regression/regression.py          # all seventeen
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
@@ -876,9 +879,64 @@ def r16(work):
     check("a quote from no paragraph still exits non-zero", r.returncode != 0, r.returncode)
 
 
+# ---------------------------------------------------------------- R17
+def r17(work):
+    print("[R17] files with no suffix, extra .json corpora, and paper-keyed dicts")
+    body1 = ("Spiro-OMeTAD was used as the hole transport layer and the device reached 21.3%. " * 3)
+    body2 = ("The same layer gave 22.1% in the second laboratory; stability was not reported. " * 3)
+
+    def case(name, files):
+        d = os.path.join(work, name)
+        os.makedirs(d, exist_ok=True)
+        for fn, content in files.items():
+            with open(os.path.join(d, fn), "w", encoding="utf-8") as f:
+                f.write(content if isinstance(content, str) else json.dumps(content, ensure_ascii=False))
+        return d
+
+    def paragraphs(d, tag):
+        out = os.path.join(work, tag + ".bundle.json")
+        r = shx([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", d, "--out", out])
+        b = jload(out) if os.path.exists(out) else None
+        return r, b
+
+    # (a) two plain files with no extension at all
+    d = case("no_suffix", {"P1": body1, "P2": body2})
+    r, b = paragraphs(d, "no_suffix")
+    check("extensionless P1/P2 are read", r.returncode == 0 and b and len(b["paragraphs"]) == 2,
+          (r.returncode, (r.stderr or "")[-200:]))
+    check("extensionless pair stays two sources",
+          b and {p["source_id"] for p in b["paragraphs"]} == {"P1", "P2"},
+          [p["source_id"] for p in (b or {}).get("paragraphs", [])])
+
+    # (b) a corpus JSON under a name the fixed list does not know
+    d = case("extra_json", {"paragraphs.json": [
+        {"source_id": "P1", "paragraph_id": "a1", "text": body1},
+        {"source_id": "P2", "paragraph_id": "b1", "text": body2}]})
+    r, b = paragraphs(d, "extra_json")
+    check("paragraphs.json is discovered",
+          r.returncode == 0 and b and len(b["paragraphs"]) == 2, (r.returncode, (b or {}).get("paragraphs")))
+
+    # (c) one JSON keyed by paper: the two papers must not collapse into one source, and the two
+    #     extraction strategies must not both emit the same paragraph
+    d = case("paper_keyed", {"material.json": {"P1": {"text": body1}, "P2": {"text": body2}}})
+    r, b = paragraphs(d, "paper_keyed")
+    check("a paper-keyed dict keeps two sources",
+          b and len({p["source_id"] for p in b["paragraphs"]}) == 2,
+          [(p["source_id"], p["text"][:20]) for p in (b or {}).get("paragraphs", [])])
+    check("...and does not emit each paragraph twice",
+          b and len(b["paragraphs"]) == 2, len((b or {}).get("paragraphs", [])))
+
+    # (d) a paragraph id that merely looks like a paper key must not become a source
+    d = case("lower_pid", {"material.json": {"p1": {"text": body1}, "p2": {"text": body2}}})
+    r, b = paragraphs(d, "lower_pid")
+    check("lowercase p1/p2 stay paragraph ids of one source",
+          b and len({p["source_id"] for p in b["paragraphs"]}) == 1,
+          [p["source_id"] for p in (b or {}).get("paragraphs", [])])
+
+
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
          "R9": r9, "R10": r10, "R11": r11, "R12": r12, "R13": r13, "R14": r14, "R15": r15,
-         "R16": r16}
+         "R16": r16, "R17": r17}
 
 
 def main(argv):
