@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the thirteen cases a change must not break before a submission.
+"""regression.py — the fourteen cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -29,10 +29,12 @@ R13 task-driven queries     -> questions in the case task become queries that ar
 R9 no silent empty results   -> annotations that match no paragraph stop the build; an answer
                                 with no verified evidence is undetermined; a failed validation
                                 check cannot sit beside status="success"
+R14 formatting vs numbers     -> whitespace and thousands separators are ignored (both directions),
+                                while a changed or re-grouped number is still rejected
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all thirteen
+    python3 tests/regression/regression.py          # all fourteen
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
@@ -717,8 +719,56 @@ def r13(work):
           res["status"] == "answered" and res["n_evidence"] >= 1, res["status"])
 
 
+# ---------------------------------------------------------------- R14
+def r14(work):
+    print("[R14] formatting-only differences are accepted; number changes are not")
+    sys.path.insert(0, SCRIPTS)
+    from verify_evidence import verify_quote
+
+    # Whitespace and thousands separators are formatting: the same digits, differently written.
+    # Both directions matter -- a paper prints "1350 °C", a model writes "1,350 °C", and vice versa.
+    cases = [
+        ("quote groups, paper does not", "heated to 1,350 °C for two hours",
+         "heated to 1350 °C for two hours", "normalized"),
+        ("paper groups, quote does not", "held at 1350 °C for two hours",
+         "held at 1,350 °C for two hours", "normalized"),
+        ("space before the percent sign", "a retention of 88.1 % over 500 cycles",
+         "a retention of 88.1% over 500 cycles", "normalized"),
+        ("digit changed inside a group", "reached 1,234 mAh g-1 after 50 cycles",
+         "reached 1,235 mAh g-1 after 50 cycles", "not_found"),
+        ("grouping dropped from a bigger number", "reached 1350 mAh g-1 after 50 cycles",
+         "reached 135 mAh g-1 after 50 cycles", "not_found"),
+        ("different notation, different value", "a density of 1030 kg m-3 was measured",
+         "a density of 10^3 kg m-3 was measured", "not_found"),
+    ]
+    for name, quote, para, want in cases:
+        got = verify_quote(quote, para)
+        check(f"{name} -> {want}", got["status"] == want, (got["status"], got["note"]))
+    r = verify_quote("reached 1,235 mAh g-1 after 50 cycles", "reached 1,234 mAh g-1 after 50 cycles")
+    check("a rejected number still says which number it saw",
+          "numeric mismatch" in r["note"] and "1235" in r["note"], r["note"])
+
+    # End to end: the same accepted-as-normalized quote must reach the graph as verified evidence.
+    b = os.path.join(work, "bundle.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b])
+    ann = jload(os.path.join(DEMO, "annotations.example.json"))
+    target = next(e for e in ann["edges"] if "14.7%" in json.dumps(e["evidence"]))
+    ev = dict(target["evidence"][0])
+    ev["quote"] = ev["quote"].replace("14.7%", "14.7 %")
+    target["evidence"] = [ev]
+    reformatted = os.path.join(work, "ann_reformatted.json")
+    jdump(ann, reformatted)
+    g, _, _ = pipeline(b, reformatted, work, os.path.join(DEMO, "queries.example.json"))
+    hits = [x for x in g["edges"] if "14.7" in json.dumps(x.get("evidence", []), ensure_ascii=False)]
+    check("a quote whose only change is spacing is kept, not dropped",
+          any(e.get("match") == "normalized" for x in hits for e in x.get("evidence", [])),
+          [e.get("match") for x in hits for e in x.get("evidence", [])])
+    check("formatting-insensitive acceptance keeps the original spacing out of the stored quote",
+          all(e.get("quote") for x in hits for e in x.get("evidence", [])))
+
+
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
-         "R9": r9, "R10": r10, "R11": r11, "R12": r12, "R13": r13}
+         "R9": r9, "R10": r10, "R11": r11, "R12": r12, "R13": r13, "R14": r14}
 
 
 def main(argv):
