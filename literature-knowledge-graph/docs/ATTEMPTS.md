@@ -11,6 +11,24 @@ Every submission, its channel, bundle hash, observed state and what was learned.
 | 2026-11-26 13:46 | 113476 | submitted | - | 0.0 | queued | W2/W3 提交包更新 |
 | 2026-11-26 14:20 | 113476 | submitted | - | 0.0 | queued | W4 开工时复查:`scoringState.state=queued`,`resultsJson=null`,`execStatus=null`,`createdAt` 未变,仍未出分;113475 同状态 |
 | 2026-11-27 00:32 | 113476 | submitted | - | 0.0 | queued | W7 复查:仍未出分;worker 打分前沿冻结在 112648(11-26 04:12),其后 66 条全部 queued,我方前方约 31 条。归因不成立,不重交 |
+| 2026-11-27 00:58 | 114092 | submitted | - | 0.0 | queued | 当前包首次提交(v1.3.2,49 文件 / 644 权限 / 含 R14);bundle 与 submission 逐字节相同;sha256 464a9451…;modelTag 仍 unknown(环境未提供模型/harness 标识,不自造) |
+| 2026-11-27 00:58 | 114091 | submitted | - | 0.0 | queued | 同包重复(上一命令的输出被管道过滤,但 submit 已执行);与 114092 相隔 8 s,可作 ±7 噪声对 |
+
+## Live attempts (2026-11-27 01:00 UTC)
+
+| attempt | package | state |
+|---|---|---|
+| 114091 / 114092 | v1.3.2 (current), bundle `464a9451…`, 89 members, skill dir byte-identical to `submission/` | `submitted`, `bundleStatus=null`, `scoringState=queued`, `modelTag=unknown` |
+| 113475 / 113476 | v1.0-era, `oneOf` schema, 4 merge decisions | `submitted`, `queued` since 11-26 13:10 |
+
+`modelTag=unknown` on all four: the CLI takes `--model`/`--harness` as self-reported strings and
+this environment exports neither (no `PLAYGROUND_MODEL`/`PLAYGROUND_HARNESS`, no `/logs/agent`
+session file). Reporting a name that was not observed would be an invention, so the field stays
+`unknown`.
+
+The duplicate pair of the current package (114091, 114092, 8 s apart) exists because a command whose
+stdout was piped through a filter still executed the submission twice; it is kept as the noise pair
+the attribution rule asks for. Platform has no delete endpoint.
 
 ## Attribution rule — what a score means, fixed before the score arrives
 
