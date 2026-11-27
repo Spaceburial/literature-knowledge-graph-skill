@@ -240,6 +240,10 @@ summary, the 3+ query results and the uncertainty items.
 
 - Every node and edge cites `source_id`, `paragraph_id`, `quote`; the build step adds the
   surrounding `context` sentence and the `match` level (`exact`/`normalized`/`fuzzy`).
+- `annotations.json` may be written in either vocabulary: `nodes`/`edges`/`source_label`/
+  `target_label`, or the case's own `entities`/`relations`/`from`/`to`/`relation`, or a bare JSON
+  array of records tagged `kind`. Renames are applied and listed in `graph["warnings"]`; the file
+  is never silently reinterpreted, and a file whose quotes match no paragraph still stops the run.
 - Copy quotes as the text stands. Whitespace and thousands separators are forgiven
   (`1,350 °C` = `1350 °C`); numbers are not — a quote whose digits differ from the paragraph is
   rejected, so never round, rescale or convert a value inside a quote.
