@@ -1,11 +1,16 @@
 # Limitations
 
 - **Lexical verification.** A correct paraphrase is rejected because it is not a substring.
-  This is intentional (it blocks invented quotes) but it pushes work onto exact copying. A quote
+  This is intentional (it blocks invented quotes) but it pushes work onto exact copying. Two
+  differences are forgiven because they are formatting, not wording: whitespace and thousands
+  separators (`1,350 °C` = `1350 °C`, `88.1 %` = `88.1%`), which is what makes a normalized match.
+  A quote
   that reaches 0.90 similarity is accepted as `fuzzy` and marked weak evidence; the stored text is
   then the submitted string, so a fuzzy match is *not* proof of a verbatim quote — only an exact or
   normalized match is. Numbers are checked separately: a quote whose numeric tokens differ from the
-  matched window is rejected outright, whatever its similarity. For a fuzzy record the
+  matched window is rejected outright, whatever its similarity, and digit grouping is compared
+  after the separators are removed so that `1,350` and `1350` agree while `1,234` and `1,235` do
+  not. For a fuzzy record the
   paragraph's own wording is kept in `matched_text`, so the difference from the submitted
   quote stays visible.
 - **Paragraph granularity.** Long paragraphs are not split; a quote must fit inside one
