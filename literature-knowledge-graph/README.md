@@ -244,9 +244,9 @@ conflicts, 6/6 queries answered, `status="success"`.
 ## Testing
 
 ```bash
-bash run.sh verify                       # the gate: 31 self-test + 96 regression checks, exit 0 = pass
+bash run.sh verify                       # the gate: 31 self-test + 102 regression checks, exit 0 = pass
 bash run.sh test                         # self-test only
-python3 tests/regression/regression.py    # regression only (R1–R16)
+python3 tests/regression/regression.py    # regression only (R1–R17)
 ```
 
 ## Version and provenance
