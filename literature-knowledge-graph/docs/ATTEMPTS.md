@@ -13,13 +13,19 @@ Every submission, its channel, bundle hash, observed state and what was learned.
 | 2026-11-27 00:32 | 113476 | submitted | - | 0.0 | queued | W7 复查:仍未出分;worker 打分前沿冻结在 112648(11-26 04:12),其后 66 条全部 queued,我方前方约 31 条。归因不成立,不重交 |
 | 2026-11-27 00:58 | 114092 | submitted | - | 0.0 | queued | 当前包首次提交(v1.3.2,49 文件 / 644 权限 / 含 R14);bundle 与 submission 逐字节相同;sha256 464a9451…;modelTag 仍 unknown(环境未提供模型/harness 标识,不自造) |
 | 2026-11-27 00:58 | 114091 | submitted | - | 0.0 | queued | 同包重复(上一命令的输出被管道过滤,但 submit 已执行);与 114092 相隔 8 s,可作 ±7 噪声对 |
+| 2026-11-27 01:05 | 114103 | submitted | - | 0.0 | queued | v1.3.3(权限 644 / 文档改 python3 / case-dir 容错 / selftest 31);bundle 内 skill 与 submission 逐字节相同;sha256 73fde0cf…;409 实测:平台不允许替换既有 attempt 的包,故必须新开 |
 
 ## Live attempts (2026-11-27 01:00 UTC)
 
 | attempt | package | state |
 |---|---|---|
-| 114091 / 114092 | v1.3.2 (current), bundle `464a9451…`, 89 members, skill dir byte-identical to `submission/` | `submitted`, `bundleStatus=null`, `scoringState=queued`, `modelTag=unknown` |
-| 113475 / 113476 | v1.0-era, `oneOf` schema, 4 merge decisions | `submitted`, `queued` since 11-26 13:10 |
+| **114103** | **v1.3.3** (current): files 644, `python3` in every documented command, case-dir tolerance, self-test 31, `sha256 73fde0cf…` | `submitted`, `bundleStatus=null`, `scoringState=queued`, `modelTag=unknown` |
+| 114091 / 114092 | v1.3.2, `sha256 464a9451…`; identical except file modes, `python`/`python3` and two doc lines | `submitted`, `queued` |
+| 113475 / 113476 | v1.0-era, `oneOf` schema, 4 merge decisions, `sha256 c1bb5398…` | `submitted`, `queued` since 11-26 13:10 |
+
+The platform refuses to replace an attempt's bundle: `--attempt-id 114092 --bundle …` returns
+`HTTP 409 submission_conflict` ("this attempt already has a different submission"). A corrected
+package therefore always costs a new attempt; checked on 11-27 01:04 UTC rather than assumed.
 
 `modelTag=unknown` on all four: the CLI takes `--model`/`--harness` as self-reported strings and
 this environment exports neither (no `PLAYGROUND_MODEL`/`PLAYGROUND_HARNESS`, no `/logs/agent`
