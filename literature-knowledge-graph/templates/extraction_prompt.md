@@ -31,6 +31,10 @@ Output shape:
  "uncertainty":[{"kind":"","detail":"","items":[]}]}
 ```
 
+`entities`/`relations` and `from`/`to`/`relation` are also accepted in place of `nodes`/`edges` and
+`source_label`/`target_label`/`type` (the build renames them and records the rename in
+`graph["warnings"]`), so a file written in the case's own vocabulary is not wasted.
+
 source_id = `<P1 or P2>`. Paragraphs:
 
 <[pid] (section) text ...>
