@@ -71,8 +71,42 @@ REL_SYNONYMS = {
 }
 
 
+def as_text(v, sep=" "):
+    """Coerce a field to text without trusting its type.
+
+    An annotator that emits `"type": ["material"]` or `"type": 7` is wrong, but it is wrong in a
+    way that used to raise AttributeError and end the run with a traceback — an execution failure,
+    which this task treats as no result at all. A list becomes its first non-empty string.
+    """
+    if v is None:
+        return ""
+    if isinstance(v, str):
+        return v
+    if isinstance(v, (list, tuple)):
+        for item in v:
+            text = as_text(item)
+            if text:
+                return text
+        return ""
+    if isinstance(v, dict):
+        for key in ("label", "name", "value", "text"):
+            if key in v:
+                return as_text(v[key])
+        return ""
+    return str(v)
+
+
+def _as_list(v):
+    """One evidence record written as an object instead of a one-element list is still one record."""
+    if isinstance(v, dict):
+        return [v]
+    if isinstance(v, (list, tuple)):
+        return list(v)
+    return []
+
+
 def canon(s):
-    s = (s or "").strip().lower()
+    s = as_text(s).strip().lower()
     s = re.sub(r"[\u2010-\u2015\-_/]+", " ", s)
     s = re.sub(r"[^\w\u4e00-\u9fff \+\.]+", " ", s)
     s = re.sub(r"\s+", " ", s).strip()
@@ -85,7 +119,7 @@ TYPE_COERCIONS = Counter()
 
 
 def norm_type(t):
-    t = (t or "other").strip().lower()
+    t = (as_text(t) or "other").strip().lower()
     if t in NODE_TYPES:
         return t
     if t in NODE_TYPE_SYNONYMS:
@@ -96,7 +130,7 @@ def norm_type(t):
 
 
 def norm_rel(t):
-    t = (t or "other").strip().lower()
+    t = (as_text(t) or "other").strip().lower()
     if t in REL_TYPES:
         return t
     if t in REL_SYNONYMS:
@@ -116,8 +150,58 @@ def load_json(path, default=None):
             return default
 
 
+# The challenge's own vocabulary is `entities` / `relations`, and an annotator that has just read
+# case.json will write exactly that. The graph's internal vocabulary is `nodes` / `edges`. Both are
+# accepted, and a rename is recorded in graph["warnings"] so that nothing is silently reinterpreted.
+ANNOTATION_ALIASES = {
+    "entities": "nodes", "relations": "edges",
+    "relationships": "edges", "triples": "edges",
+    "merge_candidates": "merge_candidates", "merges": "merge_candidates",
+    "conflicts": "source_conflicts", "source_conflicts": "source_conflicts",
+}
+FIELD_ALIASES = {
+    "node": {"name": "label", "entity": "label", "kind": "type", "category": "type",
+             "quotes": "mentions", "evidence": "mentions", "source_ids": "source_ids"},
+    "edge": {"from": "source_label", "subject": "source_label", "source": "source_label",
+             "to": "target_label", "object": "target_label", "target": "target_label",
+             "relation": "type", "predicate": "type", "quotes": "evidence", "mentions": "evidence"},
+}
+
+
+def _apply_aliases(obj, renamed):
+    for src, dst in ANNOTATION_ALIASES.items():
+        if src == dst:
+            continue
+        if obj.get(src) and not obj.get(dst):
+            obj[dst] = obj[src]
+            renamed[src] = dst
+    for kind, table in FIELD_ALIASES.items():
+        bucket = obj.get("nodes" if kind == "node" else "edges") or []
+        for rec in bucket:
+            if not isinstance(rec, dict):
+                continue
+            for src, dst in table.items():
+                if src in rec and dst not in rec:
+                    rec[dst] = rec[src]
+                    renamed.setdefault(f"{kind}.{src}", dst)
+    return obj
+
+
+def _split_records(items):
+    nodes, edges = [], []
+    for rec in items:
+        kind = (rec.get("kind") or rec.get("record_type") or "").lower()
+        if kind in ("edge", "relation", "relationship") or (
+                kind != "node" and any(k in rec for k in ("from", "to", "source_label", "target_label"))):
+            edges.append(rec)
+        else:
+            nodes.append(rec)
+    return {"nodes": nodes, "edges": edges, "merge_candidates": [], "source_conflicts": []}
+
+
 def load_annotations(path):
     """Accept JSON or JSONL annotations; normalise to one dict."""
+    global ANNOTATION_RENAMES
     if not os.path.exists(path):
         return {"nodes": [], "edges": [], "merge_candidates": [], "source_conflicts": []}
     with open(path, "r", encoding="utf-8", errors="replace") as f:
@@ -129,6 +213,9 @@ def load_annotations(path):
             obj = json.loads(raw)
             if isinstance(obj.get("annotations"), dict):
                 obj = obj["annotations"]
+            renamed = {}
+            obj = _apply_aliases(obj, renamed)
+            ANNOTATION_RENAMES.update(renamed)
             obj.setdefault("nodes", [])
             obj.setdefault("edges", [])
             obj.setdefault("merge_candidates", [])
@@ -136,6 +223,19 @@ def load_annotations(path):
             return obj
         except Exception:  # noqa: BLE001
             pass
+    if raw[0] == "[":
+        # A bare JSON array of records: the annotator wrote one list and tagged each record.
+        try:
+            items = json.loads(raw)
+        except Exception:  # noqa: BLE001
+            items = []
+        if isinstance(items, list):
+            obj = _split_records([x for x in items if isinstance(x, dict)])
+            renamed = {}
+            obj = _apply_aliases(obj, renamed)
+            ANNOTATION_RENAMES.update(renamed)
+            ANNOTATION_RENAMES.setdefault("json-array", "nodes/edges")
+            return obj
     # JSONL
     nodes, edges = [], []
     for line in raw.splitlines():
@@ -152,6 +252,8 @@ def load_annotations(path):
             edges.append(rec)
     return {"nodes": nodes, "edges": edges, "merge_candidates": [], "source_conflicts": []}
 
+
+ANNOTATION_RENAMES = {}    # alias -> canonical field, reported in graph["warnings"]
 
 QUOTE_LIMIT = 300          # schema/graph.schema.json and SKILL.md both state 8-300 characters
 
@@ -180,7 +282,7 @@ def verify_evidence_list(ev_list, para_index, para_meta=None, attribution_defaul
             continue
         sid = str(ev.get("source_id") or ev.get("source") or "")
         pid = str(ev.get("paragraph_id") or ev.get("pid") or "")
-        quote = ev.get("quote") or ev.get("text") or ""
+        quote = as_text(ev.get("quote") or ev.get("text"))
         key = (sid, pid)
         if key not in para_index:
             rejected.append({"evidence": ev, "reason": f"paragraph {sid}/{pid} not in case material"})
@@ -262,13 +364,13 @@ def main():
     by_key = {}
     nodes = []
     for raw in annotations.get("nodes", []):
-        label = (raw.get("label") or raw.get("name") or "").strip()
+        label = as_text(raw.get("label") or raw.get("name")).strip()
         if not label:
             continue
         ntype = norm_type(raw.get("type"))
         aliases = [a for a in (raw.get("aliases") or []) if isinstance(a, str)]
         key = canon(raw.get("canonical_key") or label)
-        kept, rejected = verify_evidence_list(raw.get("mentions") or raw.get("evidence") or [],
+        kept, rejected = verify_evidence_list(_as_list(raw.get("mentions") or raw.get("evidence")),
                                              para_index, para_meta)
         rejected_all += rejected
         status = "verified" if kept else ("unverified" if not rejected else "rejected")
@@ -385,8 +487,8 @@ def main():
     edges = []
     pair_rels = defaultdict(list)
     for raw in annotations.get("edges", []):
-        s_lbl = raw.get("source_label") or raw.get("source")
-        t_lbl = raw.get("target_label") or raw.get("target")
+        s_lbl = as_text(raw.get("source_label") or raw.get("source")).strip()
+        t_lbl = as_text(raw.get("target_label") or raw.get("target")).strip()
         s_id = surface_to_id.get(canon(s_lbl)) or key_to_id.get(canon(s_lbl))
         t_id = surface_to_id.get(canon(t_lbl)) or key_to_id.get(canon(t_lbl))
         if not s_id or not t_id:
@@ -397,7 +499,7 @@ def main():
         if s_id == t_id:
             continue
         rtype = norm_rel(raw.get("type") or raw.get("relation"))
-        kept, rejected = verify_evidence_list(raw.get("evidence") or [], para_index, para_meta)
+        kept, rejected = verify_evidence_list(_as_list(raw.get("evidence")), para_index, para_meta)
         rejected_all += rejected
         status = "verified" if kept else ("unverified" if not rejected else "rejected")
         rec = {
@@ -514,6 +616,11 @@ def main():
             f"FATAL: {ann_path} produced no nodes. Check that it has a non-empty \"nodes\"\n"
             "  list of {label, type, mentions:[{source_id, paragraph_id, quote}]} objects.\n")
         sys.exit(3)
+    if ANNOTATION_RENAMES:
+        msg = ("annotation fields renamed to the graph vocabulary: "
+               + ", ".join(f"{k}->{v}" for k, v in sorted(ANNOTATION_RENAMES.items())))
+        graph["warnings"].append(msg)
+        sys.stderr.write("  ! " + msg + "\n")
     for (kind_kind, raw), n in sorted(TYPE_COERCIONS.items()):
         allowed = sorted(REL_TYPES if kind_kind == "edge" else NODE_TYPES)
         msg = (f"type coercion: {kind_kind} type \"{raw}\" is not in the schema and was stored "
