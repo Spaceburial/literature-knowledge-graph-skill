@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.3.2 — a correct quote lost to a formatting difference
+
+Found by sampling 120 sentences from the demo corpus and re-quoting each one the way a model
+transcribes from a PDF: inserting a thousands separator, spacing the percent sign, replacing the
+degree symbol, dropping superscripts, substituting ASCII for Unicode minus. Of 120 quotes:
+
+- **digit grouping** (`1350` → `1,350`, and the reverse) was **rejected in both directions**, 5 of
+  120 sentences. The gate's own numeric comparison split `1,350` into `1` and `350`, so a quote that
+  agreed with the paper digit for digit failed as a "numeric mismatch". That is the worst kind of
+  error for this task: a true quote discarded, coverage down, and the rejection message blames the
+  number.
+- **spacing-only differences** (`88.1%` → `88.1 %`) dropped to `fuzzy`, i.e. weak evidence, although
+  nothing but whitespace differed.
+
+Both are formatting, not wording. `verify_evidence.py` now builds a comparison key that drops
+whitespace and thousands separators from quote and paragraph alike and requires every other
+character to agree; a key match is `normalized` with score 1.0 and the paragraph's own span. The
+numeric check runs on the same key, so `1,350` and `1350` agree while a changed digit does not:
+re-running the perturbation bench still rejects **100%** of altered digits, and `1030` versus
+`10^3` — a different notation for a different value — is still refused. A comma counts as a
+separator only when a digit precedes it and exactly three digits follow, so `2,5-dimethoxy` and
+`3, 4 and 5` keep theirs.
+
+Cost of the change, stated: the gate is now blind to spacing and digit grouping in a way it was
+not before, so the question is whether it still refuses what it must. It does — `verify-bench` is
+unchanged after the edit (exact 100%, whitespace 100%, punctuation 100%, **digit 0%**, word 90%),
+and the 120-sentence sample still rejects every altered digit — all 73 sentences that contain a
+digit were rejected, the remaining 47 contain none — while accepting every
+formatting-only rewrite. `R14` (9 checks) locks both directions of the acceptance and the three
+rejections; regression is now **R1–R14 / 79 checks**.
+
 ## 1.3.1 — what a real two-paper run on this machine changed
 
 The first end-to-end run with the model doing the extraction (two CC BY papers, 88 paragraphs) was
