@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""regression.py — the fourteen cases a change must not break before a submission.
+"""regression.py — the sixteen cases a change must not break before a submission.
 
 R1 full two-paper case         -> success, 35/34, >=3 queries answered
 R2 one paper, no case.json     -> partial, says which evidence/identity is missing
@@ -31,10 +31,16 @@ R9 no silent empty results   -> annotations that match no paragraph stop the bui
                                 check cannot sit beside status="success"
 R14 formatting vs numbers     -> whitespace and thousands separators are ignored (both directions),
                                 while a changed or re-grouped number is still rejected
+R15 challenge vocabulary      -> an annotation file written as entities/relations with from/to and
+                                relation builds a graph instead of exiting 3, the rename is recorded
+                                in warnings, and the canonical vocabulary adds no warning
+R16 wrong field types         -> type/quote/label as a list, mentions as a bare object, type as null:
+                                each builds (or fails with a message) instead of a traceback; a
+                                quote that is in no paragraph still exits non-zero
 
 Run before every submission:
 
-    python3 tests/regression/regression.py          # all fourteen
+    python3 tests/regression/regression.py          # all sixteen
     python3 tests/regression/regression.py R4 R6    # a subset
 
 Exit code 0 = all pass. Each case is independent and builds its own fixture in a temp dir.
@@ -767,8 +773,112 @@ def r14(work):
           all(e.get("quote") for x in hits for e in x.get("evidence", [])))
 
 
+# ---------------------------------------------------------------- R15
+def r15(work):
+    print("[R15] an annotation file written in the challenge's own vocabulary still builds")
+    # The case's output_contract says entities/relations; a graph is nodes/edges. An annotator that
+    # has just read case.json writes entities/relations, from/to, relation, name -- and the build
+    # used to exit 3 with "produced no nodes", which loses the whole case over a naming choice.
+    b = os.path.join(work, "bundle.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b])
+    bundle = jload(b)
+    para = next(p for p in bundle["paragraphs"] if "Spiro-OMeTAD" in p["text"])
+    quote = para["text"][para["text"].index("Spiro-OMeTAD"):][:60].strip()
+    ev = {"source_id": para["source_id"], "paragraph_id": para["paragraph_id"], "quote": quote}
+
+    def build(obj, name):
+        path = os.path.join(work, name)
+        jdump(obj, path)
+        out = os.path.join(work, name + ".graph.json")
+        r = sh([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b,
+                "--annotations", path, "--out", out]) if False else shx(
+            [os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b,
+             "--annotations", path, "--out", out])
+        return r, (jload(out) if os.path.exists(out) else None)
+
+    challenge_vocab = {
+        "entities": [{"name": "Spiro-OMeTAD", "type": "material", "mentions": [ev]},
+                     {"name": "power conversion efficiency", "type": "metric", "mentions": [ev]}],
+        "relations": [{"from": "Spiro-OMeTAD", "to": "power conversion efficiency",
+                       "relation": "measures", "evidence": [ev]}]}
+    r, g = build(challenge_vocab, "ann_challenge.json")
+    check("entities/relations file exits 0", r.returncode == 0, (r.returncode, r.stderr[-300:]))
+    check("entities became nodes and relations became edges",
+          g and len(g["nodes"]) == 2 and len(g["edges"]) == 1,
+          (len(g["nodes"]) if g else None, len(g["edges"]) if g else None))
+    check("the rename is written to warnings, not applied silently",
+          g and any("renamed" in w for w in g["warnings"]), (g or {}).get("warnings"))
+    check("from/to resolved to real nodes, keeping the labels",
+          g and g["edges"] and g["edges"][0]["source_label"] == "Spiro-OMeTAD"
+          and g["edges"][0]["target_label"] == "power conversion efficiency"
+          and g["edges"][0]["source"] in {n["id"] for n in g["nodes"]},
+          (g or {}).get("edges"))
+
+    array_form = [dict(e, kind="entity") for e in challenge_vocab["entities"]] + \
+                 [dict(e, kind="relation") for e in challenge_vocab["relations"]]
+    r2, g2 = build(array_form, "ann_array.json")
+    check("a bare JSON array of tagged records builds too",
+          r2.returncode == 0 and g2 and len(g2["nodes"]) == 2 and len(g2["edges"]) == 1,
+          (r2.returncode, (g2 or {}).get("stats")))
+
+    canonical = {"nodes": [{"label": "Spiro-OMeTAD", "type": "material", "mentions": [ev]}],
+                 "edges": []}
+    r3, g3 = build(canonical, "ann_canonical.json")
+    check("the canonical vocabulary adds no rename warning",
+          r3.returncode == 0 and g3 and not any("renamed" in w for w in g3["warnings"]),
+          (g3 or {}).get("warnings"))
+
+
+# ---------------------------------------------------------------- R16
+def r16(work):
+    print("[R16] wrong field types are coerced, never a traceback")
+    # Every item below is something a language model plausibly emits. Each one used to raise
+    # AttributeError and end the run with exit 1, which the platform reads as an execution
+    # failure -- i.e. no result at all, whatever the rest of the graph would have been worth.
+    b = os.path.join(work, "bundle.json")
+    sh([os.path.join(SCRIPTS, "prepare_case.py"), "--case-dir", os.path.join(DEMO, "input"), "--out", b])
+    bundle = jload(b)
+    para = next(p for p in bundle["paragraphs"] if "Spiro-OMeTAD" in p["text"])
+    quote = para["text"][para["text"].index("Spiro-OMeTAD"):][:40].strip()
+    base_ev = {"source_id": para["source_id"], "paragraph_id": para["paragraph_id"], "quote": quote}
+
+    cases = [
+        ("type as a list", {"label": "Spiro-OMeTAD", "type": ["material"], "mentions": [base_ev]},
+         "material"),
+        ("type as null", {"label": "Spiro-OMeTAD", "type": None, "mentions": [base_ev]}, "other"),
+        ("quote as a one-element list",
+         {"label": "Spiro-OMeTAD", "type": "material",
+          "mentions": [dict(base_ev, quote=[quote])]}, "material"),
+        ("mentions as a bare object",
+         {"label": "Spiro-OMeTAD", "type": "material", "mentions": base_ev}, "material"),
+        ("label as a list", {"label": ["Spiro-OMeTAD"], "type": "material", "mentions": [base_ev]},
+         "material"),
+    ]
+    for name, node, want_type in cases:
+        path = os.path.join(work, "coerce.json")
+        jdump({"nodes": [node], "edges": []}, path)
+        out = os.path.join(work, "coerce.graph.json")
+        if os.path.exists(out):
+            os.unlink(out)
+        r = shx([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b,
+                 "--annotations", path, "--out", out])
+        check(f"{name}: no traceback", "Traceback" not in (r.stderr or ""), (r.stderr or "")[-200:])
+        g = jload(out) if os.path.exists(out) else None
+        check(f"{name}: builds with type {want_type}",
+              g is not None and g["nodes"] and g["nodes"][0]["type"] == want_type,
+              (r.returncode, [n.get("type") for n in (g or {}).get("nodes", [])]))
+    # A genuinely wrong corpus must still fail loudly, not be coerced into a result.
+    bad = os.path.join(work, "bad.json")
+    jdump({"nodes": [{"label": "Spiro-OMeTAD", "type": "material",
+                      "mentions": [dict(base_ev, quote="this sentence is in no paragraph at all")]}]}, bad)
+    r = shx([os.path.join(SCRIPTS, "build_graph.py"), "--bundle", b,
+             "--annotations", bad, "--out", os.path.join(work, "bad.graph.json")])
+    check("a quote from no paragraph still exits non-zero", r.returncode != 0, r.returncode)
+
+
 CASES = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8,
-         "R9": r9, "R10": r10, "R11": r11, "R12": r12, "R13": r13, "R14": r14}
+         "R9": r9, "R10": r10, "R11": r11, "R12": r12, "R13": r13, "R14": r14, "R15": r15,
+         "R16": r16}
 
 
 def main(argv):
