@@ -27,7 +27,7 @@ export SKILL_DIR="${SKILL_DIR:-/skills/weekly-skill}"   # adjust if installed el
 
 Call the shell entry point as `bash run.sh …`, never `./run.sh`: archive tools (including the
 platform's own repack) drop the execute bit, so a copied-out skill directory keeps the file but
-not its mode. Every script also runs standalone as `python $SKILL_DIR/scripts/<name>.py`.
+not its mode. Every script also runs standalone as `python3 $SKILL_DIR/scripts/<name>.py`.
 
 The skill is **topic-agnostic**. It does not assume any domain label; it reads the actual files.
 It never invents a quote, a number, a page, or a DOI.
@@ -47,6 +47,10 @@ correctness. It records what the text says and where; it does not adjudicate tru
 
 ### Step 0 — Read before acting
 
+0. Locate the case. It is `/input` in the reference layout; if the task names another directory
+   (or the files sit somewhere else), use that path — `--case-dir` takes any directory. Do not
+   copy inputs into the skill directory. Create `/app/work` and `/app/output` if they are missing
+   and writable; otherwise write under the directory the task designates.
 1. `ls /input` and read `/input/task.md` in full.
 2. Read `/input/case.json`: note `case_id` and every key of `output_contract`. Your `result.json`
    must contain those keys (the script maps them; see Step 5).
@@ -62,7 +66,7 @@ correctness. It records what the text says and where; it does not adjudicate tru
 ### Step 1 — Normalise inputs
 
 ```bash
-python $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/case_bundle.json
+python3 $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/case_bundle.json
 ```
 
 This assigns stable ids and flags `id_derived=true` for paragraphs that had no provider id.
@@ -72,7 +76,7 @@ Read the printed warnings; they are part of your report.
 900 s), cap it instead of overrunning:
 
 ```bash
-python $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/case_bundle.json \
+python3 $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/case_bundle.json \
        --max-paragraphs 120 --max-chars 400000
 ```
 
@@ -87,7 +91,7 @@ annotations file whose quotes are real substrings; editing it costs a fraction o
 writing from scratch does, and it guarantees the file is well formed even if the run is cut short:
 
 ```bash
-python $SKILL_DIR/scripts/heuristic_extract.py --bundle /app/work/case_bundle.json \
+python3 $SKILL_DIR/scripts/heuristic_extract.py --bundle /app/work/case_bundle.json \
        --out /app/work/annotations.json
 ```
 
@@ -165,15 +169,15 @@ Apply these rules and record each decision in `merge_candidates`:
 ### Step 4 — Build, query, export
 
 ```bash
-python $SKILL_DIR/scripts/build_graph.py  --bundle /app/work/case_bundle.json \
+python3 $SKILL_DIR/scripts/build_graph.py  --bundle /app/work/case_bundle.json \
        --annotations /app/work/annotations.json --out /app/work/graph.json
-python $SKILL_DIR/scripts/query_graph.py  --graph /app/work/graph.json \
+python3 $SKILL_DIR/scripts/query_graph.py  --graph /app/work/graph.json \
        --out /app/work/queries_result.json
-python $SKILL_DIR/scripts/export_graph.py --graph /app/work/graph.json \
+python3 $SKILL_DIR/scripts/export_graph.py --graph /app/work/graph.json \
        --queries /app/work/queries_result.json --outdir /app/output
-python $SKILL_DIR/scripts/render_svg.py --graph /app/work/graph.json --out /app/output/graph.svg
-python $SKILL_DIR/scripts/render_png.py --graph /app/work/graph.json --out /app/output/graph.png
-python $SKILL_DIR/scripts/finalize.py     --bundle /app/work/case_bundle.json \
+python3 $SKILL_DIR/scripts/render_svg.py --graph /app/work/graph.json --out /app/output/graph.svg
+python3 $SKILL_DIR/scripts/render_png.py --graph /app/work/graph.json --out /app/output/graph.png
+python3 $SKILL_DIR/scripts/finalize.py     --bundle /app/work/case_bundle.json \
        --graph /app/work/graph.json --queries /app/work/queries_result.json \
        --out /app/output/result.json --outdir /app/output
 ```
@@ -203,8 +207,8 @@ When a new paper arrives, do **not** rebuild from scratch: rebuild renumbers ids
 review. Instead, extract the new paper into its own `annotations.json` (same rules), then merge:
 
 ```bash
-python $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/new_bundle.json
-python $SKILL_DIR/scripts/add_paper.py --graph /app/work/graph.json \
+python3 $SKILL_DIR/scripts/prepare_case.py --case-dir /input --out /app/work/new_bundle.json
+python3 $SKILL_DIR/scripts/add_paper.py --graph /app/work/graph.json \
        --bundle /app/work/new_bundle.json --annotations /app/work/new_annotations.json \
        --out /app/work/graph_v2.json --change-log /app/work/change_log.json
 ```
@@ -263,14 +267,14 @@ summary, the 3+ query results and the uncertainty items.
 
 ## Self-check before finishing
 
-1. `python $SKILL_DIR/tests/regression/regression.py` passes: fourteen cases covering the full run,
+1. `python3 $SKILL_DIR/tests/regression/regression.py` passes: fourteen cases covering the full run,
    a single paper with no `case.json`, an altered quote, same-label different objects, missing
    paragraph ids, budget truncation, the silent-failure gates (empty corpus, missing annotations,
    missing query file each exit non-zero), a single edited digit inside a quote, the rule
    that a graph with no verified evidence, or a failed validation check, is never `success`, that
    every produced artifact satisfies `schema/graph.schema.json`, and that a formatting-only rewrite
    of a quote is accepted while a changed number is not.
-2. `python $SKILL_DIR/tests/selftest.py` passes (checks schema, evidence, merge, query).
+2. `python3 $SKILL_DIR/tests/selftest.py` passes (checks schema, evidence, merge, query).
 3. `result.json.validation.checks` are all `true`.
 4. Every `output_contract` key is present in `result.json` (see `output_contract_mapping`).
 5. `evidence.csv` rows all have non-empty `quote` and a `match` in {exact, normalized, fuzzy}.
@@ -286,11 +290,11 @@ Input: two paragraphs, one per paper, both mentioning a shared HTL and different
 
 ```bash
 WORK="${WORK:-/tmp/lkg-work}"; mkdir -p "$WORK"      # any writable directory
-python $SKILL_DIR/scripts/prepare_case.py --case-dir $SKILL_DIR/examples/demo_perovskite/input \
+python3 $SKILL_DIR/scripts/prepare_case.py --case-dir $SKILL_DIR/examples/demo_perovskite/input \
        --out "$WORK/case_bundle.json"
-python $SKILL_DIR/scripts/build_graph.py --bundle "$WORK/case_bundle.json" \
+python3 $SKILL_DIR/scripts/build_graph.py --bundle "$WORK/case_bundle.json" \
        --annotations $SKILL_DIR/examples/demo_perovskite/annotations.example.json --out "$WORK/graph.json"
-python $SKILL_DIR/scripts/query_graph.py --graph "$WORK/graph.json" \
+python3 $SKILL_DIR/scripts/query_graph.py --graph "$WORK/graph.json" \
        --queries $SKILL_DIR/examples/demo_perovskite/queries.example.json --out "$WORK/q.json"
 ```
 
