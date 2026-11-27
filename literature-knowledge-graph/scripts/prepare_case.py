@@ -48,6 +48,10 @@ ID_KEYS = ("paragraph_id", "para_id", "pid", "paraId", "jats_id", "xml_id", "p_i
 SEC_KEYS = ("section", "section_title", "sec", "heading", "head", "title_of_section")
 SRC_KEYS = ("source_id", "sourceId", "paper_id", "doc_id", "document_id", "sid", "source")
 
+NON_MATERIAL_JSON = re.compile(
+    r"^(case|corpus-manifest|manifest|queries|query|annotations?|schema|submission|metadata|"
+    r"graph|result|package)\.json$")
+
 ROLE_BY_NAME = {
     "primary-material.json": "primary",
     "secondary-material.json": "secondary",
@@ -103,6 +107,52 @@ def load_json(path):
             return json.load(f)
     except Exception as e:  # noqa: BLE001
         return {"__load_error__": str(e)}
+
+
+# A dict keyed by "P1"/"P2" or "paper1" is keyed by paper, not by paragraph: such keys carry the
+# two papers apart. Lowercase "p1" is left alone, because that is the ordinary paragraph id.
+SOURCE_KEY_UPPER = re.compile(r"^[PSD]\d{1,3}$")
+SOURCE_KEY_WORD = re.compile(r"^(?:paper|doc|src|source|article|manuscript)[-_]?\d{1,3}$", re.I)
+SOURCE_KEYS_SEEN = []          # keys read as source ids, reported in bundle warnings
+
+
+def is_source_key(k):
+    k = str(k)
+    return bool(SOURCE_KEY_UPPER.match(k) or SOURCE_KEY_WORD.match(k))
+
+
+def file_kind(path):
+    """Decide what a file is from its suffix, then from its first bytes.
+
+    A corpus is sometimes delivered as `P1`, `P2` with no extension at all. Matching on the
+    suffix alone missed them, the case produced zero paragraphs, and prepare_case exited 2 --
+    a total loss on a case whose text was sitting right there.
+    """
+    low = os.path.basename(path).lower()
+    if low.endswith(".xml"):
+        return "xml"
+    if low.endswith(".pdf"):
+        return "pdf"
+    if low.endswith((".json", ".jsonl")):
+        return "json"
+    if low.endswith((".md", ".markdown")):
+        return "md"
+    if low.endswith((".txt", ".text", ".tsv", ".csv")):
+        return "txt"
+    try:
+        with open(path, "rb") as f:
+            head = f.read(4096)
+    except OSError:
+        return "unknown"
+    if head.startswith(b"%PDF"):
+        return "pdf"
+    text = head.decode("utf-8", "replace").lstrip()
+    if text.startswith("<"):
+        return "xml"
+    if text.startswith(("{", "[")):
+        return "json"
+    printable = sum(1 for ch in text if ch.isprintable() or ch in "\n\r\t")
+    return "txt" if text and printable / max(len(text), 1) > 0.9 else "unknown"
 
 
 # --------------------------------------------------------------------------------------
@@ -341,8 +391,13 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
             t = first_key(node, TEXT_KEYS)
             if isinstance(t, str) and 0 < len(norm_ws(t)) < 40:
                 note_short(os.path.basename(path_label), t)
-            for v in node.values():
-                yield from walk(v, sid_here)
+            for k, v in node.items():
+                child_sid = sid_here
+                if is_source_key(k) and isinstance(v, (dict, list)):
+                    child_sid = str(k)
+                    if str(k) not in SOURCE_KEYS_SEEN:
+                        SOURCE_KEYS_SEEN.append(str(k))
+                yield from walk(v, child_sid)
         elif isinstance(node, list):
             for v in node:
                 yield from walk(v, inherited_sid)
@@ -368,6 +423,12 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
             "origin_file": os.path.basename(path_label),
         })
 
+    # Strategy (b) offers a second route to records strategy (a) already emitted. The two used to
+    # collide on the same (source, id, text) key and one was dropped; once a paper-keyed dict gives
+    # each route a different source id they no longer collide, so de-duplicate on the text itself --
+    # the same paragraph reached twice must not become two paragraphs.
+    emitted_text = {p_["text"][:80] for p_ in out}
+
     # (b) dict keyed by paragraph id -> {text: ...}
     STRUCTURAL = {"abstract", "fulltext", "full_text", "body", "text", "content", "sections",
                   "paragraphs", "papers", "records", "items", "data", "result", "results"}
@@ -384,8 +445,9 @@ def extract_paragraphs_from_json(obj, default_source, role, warnings, path_label
                     sid = first_key(v, SRC_KEYS) or hint or default_source
                     sec = first_key(v, SEC_KEYS) or ""
                     key = (str(sid), str(k), text[:80])
-                    if key not in seen:
+                    if key not in seen and text[:80] not in emitted_text:
                         seen.add(key)
+                        emitted_text.add(text[:80])
                         out.append({
                             "source_id": str(sid),
                             "paragraph_id": str(k),
@@ -730,6 +792,29 @@ def main():
         elif low.endswith(".md") and low != "task.md" and f not in [m[0] for m in material_files]:
             role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
             material_files.append((f, role))
+        elif low.endswith(".json") and f not in [m[0] for m in material_files] \
+                and not NON_MATERIAL_JSON.match(low):
+            # paragraphs.json, texts.json, corpus.json ...: any JSON that the fixed names miss
+            role = "primary" if "primary" in low else ("secondary" if "secondary" in low else None)
+            material_files.append((f, role))
+
+    # Nothing recognised by name or suffix: sniff every remaining regular file. A case delivered as
+    # extensionless `P1`/`P2`, or as one `text.dat`, is then still read instead of failing with
+    # "no material files" and an empty bundle.
+    if not any(os.path.exists(os.path.join(case_dir, m[0])) for m in material_files):
+        for f in sorted(os.listdir(case_dir)):
+            path = os.path.join(case_dir, f)
+            if not os.path.isfile(path) or f in [m[0] for m in material_files]:
+                continue
+            if NON_MATERIAL_JSON.match(f.lower()) or f.lower() in ("task.md", "readme.md", "readme.txt"):
+                continue
+            kind = file_kind(path)
+            if kind == "unknown":
+                continue
+            role = "primary" if "primary" in f.lower() else (
+                "secondary" if "secondary" in f.lower() else None)
+            material_files.append((f, role))
+            warnings.append(f"{f} has no recognised suffix; read as {kind}")
 
     loaded_any = False
     for fname, role_hint in material_files:
@@ -753,7 +838,7 @@ def main():
             with open(path, "r", encoding="utf-8", errors="replace") as f:
                 paragraphs += extract_paragraphs_from_text(f.read(), default_sid, role or "unknown", fname)
             continue
-        if fname.endswith(".txt"):
+        if file_kind(path) == "txt" and not fname.lower().endswith((".json", ".jsonl", ".xml", ".pdf")):
             with open(path, "r", encoding="utf-8", errors="replace") as f:
                 blocks = [b for b in re.split(r"\n\s*\n", f.read()) if norm_ws(b)]
             for i, b in enumerate(blocks):
@@ -803,6 +888,10 @@ def main():
                 p["order_in_source"] = prev.get("order_in_source")
                 by_pid[key] = p
     paragraphs = list(by_pid.values())
+
+    if SOURCE_KEYS_SEEN:
+        warnings.append("dict keys read as source ids (two papers kept apart): "
+                        + ", ".join(SOURCE_KEYS_SEEN))
 
     # ---- one paragraph read twice must not become two ----
     # `{"p1": {"text": ...}}` is picked up both as a keyed paragraph (id p1) and as a bare record
