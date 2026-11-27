@@ -17,7 +17,7 @@ bash run.sh all --case-dir examples/demo_perovskite/input \
      --annotations examples/demo_perovskite/annotations.example.json \
      --queries examples/demo_perovskite/queries.example.json --work work --out out
 
-# 2 · check the installation (25 self-test checks)
+# 2 · check the installation (31 self-test checks)
 bash run.sh test
 
 # 3 · ask the graph one question, with its evidence printed
@@ -184,7 +184,7 @@ writing an empty graph.
 | `run.sh` | stage dispatcher: `prepare \| build \| query \| export \| finalize \| extract \| test \| verify \| all` (`extract` takes `--bundle`/`--out`; `verify` runs both suites) |
 | `templates/` | fill-in annotation JSON + a per-window extraction prompt |
 | `examples/demo_perovskite/` | a real two-paper worked example (inputs, curated annotations, outputs) |
-| `tests/selftest.py` | 25 checks: quote verification, merge safety, type conflicts, end-to-end |
+| `tests/selftest.py` | 31 checks: quote verification, merge safety, type conflicts, end-to-end, packaging (modes, entry points, documented paths) |
 | `docs/` | method, limitations, measured gain, budget, changelog, attempt ledger, usability test |
 
 ## Runtime contract
@@ -244,7 +244,7 @@ conflicts, 6/6 queries answered, `status="success"`.
 ## Testing
 
 ```bash
-bash run.sh verify                       # the gate: 25 self-test + 79 regression checks, exit 0 = pass
+bash run.sh verify                       # the gate: 31 self-test + 79 regression checks, exit 0 = pass
 bash run.sh test                         # self-test only
 python3 tests/regression/regression.py    # regression only (R1–R14)
 ```
