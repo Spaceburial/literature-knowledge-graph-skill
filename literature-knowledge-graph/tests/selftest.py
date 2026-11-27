@@ -13,6 +13,7 @@ Exit code 0 = all pass.
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -219,6 +220,15 @@ def packaging_tests():
     check("every file is readable by another account (mode 644, not 600)", not unreadable, unreadable)
     check("shell entry points are executable", not not_exec, not_exec)
     check("no symlinks in the package", not links, links)
+    # The documented commands are what a harness copies out of SKILL.md. A renamed script or a
+    # `python` that only exists as `python3` on the target image both turn into a failed case.
+    skill = open(os.path.join(ROOT, "SKILL.md"), encoding="utf-8").read()
+    named = sorted(set(re.findall(r"\$SKILL_DIR/(scripts/[\w.]+\.py)", skill)))
+    missing = [n for n in named if not os.path.exists(os.path.join(ROOT, n))]
+    check("every script path quoted in SKILL.md exists", not missing, missing)
+    bare = re.findall(r"(?<![\w/])python (?!3)[^\n`]*", skill)
+    check("SKILL.md never calls bare `python` (only `python3`)", not bare, bare[:3])
+
     tmp = tempfile.mkdtemp()
     try:
         r = subprocess.run(["bash", os.path.join(ROOT, "run.sh"), "all",
