@@ -259,12 +259,13 @@ summary, the 3+ query results and the uncertainty items.
 
 ## Self-check before finishing
 
-1. `python $SKILL_DIR/tests/regression/regression.py` passes: eleven cases covering the full run,
+1. `python $SKILL_DIR/tests/regression/regression.py` passes: fourteen cases covering the full run,
    a single paper with no `case.json`, an altered quote, same-label different objects, missing
    paragraph ids, budget truncation, the silent-failure gates (empty corpus, missing annotations,
-   missing query file each exit non-zero), a single edited digit inside a quote, and the rule
-   that a graph with no verified evidence, or a failed validation check, is never `success`, and
-   that every produced artifact satisfies `schema/graph.schema.json`.
+   missing query file each exit non-zero), a single edited digit inside a quote, the rule
+   that a graph with no verified evidence, or a failed validation check, is never `success`, that
+   every produced artifact satisfies `schema/graph.schema.json`, and that a formatting-only rewrite
+   of a quote is accepted while a changed number is not.
 2. `python $SKILL_DIR/tests/selftest.py` passes (checks schema, evidence, merge, query).
 3. `result.json.validation.checks` are all `true`.
 4. Every `output_contract` key is present in `result.json` (see `output_contract_mapping`).
