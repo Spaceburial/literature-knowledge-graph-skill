@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.3.3 — what the package looks like from the other side of an archive
+
+Three packaging faults, none of which any functional test could see, because each one lives
+outside the process the tests run in.
+
+- **21 of 49 files were mode 600** — readable only by the account that wrote them. A skill
+  installed by a different user would fail at `python3 scripts/prepare_case.py` with a permission
+  error, on every case. All files are now 644, the two `.sh` entry points 755.
+- **`run.sh` loses its execute bit when the platform repacks the bundle** (verified: the submitted
+  ARM bundle carries it as `-rw-r--r--`). `SKILL.md` now says to call it as `bash run.sh`, never
+  `./run.sh`, and states that every script also runs standalone.
+- **`SKILL.md` called `python`**, which is not guaranteed to exist where `python3` does; all 17
+  documented invocations now use `python3`. Step 0 also no longer assumes the case is at `/input`:
+  it names the fallback when the task puts the files elsewhere.
+
+`tests/selftest.py` gained a `[packaging]` block (6 checks): every file readable by another
+account, shell entry points executable, no symlinks, every `$SKILL_DIR/scripts/*.py` quoted in
+`SKILL.md` exists, no bare `python`, and `bash run.sh all` runs from an unrelated working
+directory. Self-test 25 → **31**.
+
 ## 1.3.2 — a correct quote lost to a formatting difference
 
 Found by sampling 120 sentences from the demo corpus and re-quoting each one the way a model
