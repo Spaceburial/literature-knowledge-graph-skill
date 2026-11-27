@@ -26,8 +26,13 @@ only look alike**.
    as a baseline.
 
 3. **Verify (`verify_evidence.py`).** Every quote is located in the cited paragraph by
-   whitespace folding (exact), Unicode/quote/dash folding (normalized), or a ≥0.90
-   similarity sliding window (fuzzy, flagged weak). Failures are rejected and logged. This is
+   whitespace folding (exact), Unicode/quote/dash folding plus a formatting-insensitive pass
+   that ignores whitespace and thousands separators (normalized), or a ≥0.90
+   similarity sliding window (fuzzy, flagged weak). The normalized pass matters in practice:
+   a model that writes `1,350 °C` for a paper's `1350 °C`, or `88.1 %` for `88.1%`, is still
+   quoting the paper, and rejecting it would cost coverage for a formatting difference no reader
+   counts. Only formatting is forgiven — the digits must agree exactly. Failures are rejected and
+   logged. This is
    the mechanism that makes “回得去” (traceable back to the text) enforceable rather than
    aspirational: an invented quote cannot pass.
 
