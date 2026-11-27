@@ -232,6 +232,9 @@ summary, the 3+ query results and the uncertainty items.
 
 - Every node and edge cites `source_id`, `paragraph_id`, `quote`; the build step adds the
   surrounding `context` sentence and the `match` level (`exact`/`normalized`/`fuzzy`).
+- Copy quotes as the text stands. Whitespace and thousands separators are forgiven
+  (`1,350 °C` = `1350 °C`); numbers are not — a quote whose digits differ from the paragraph is
+  rejected, so never round, rescale or convert a value inside a quote.
 - `paragraph_id` is the provider's JATS paragraph id. If the provider gave none, the id is
   derived (`d0001…`) and flagged `paragraph_id_kind="derived"`.
 - **Never call a location a PDF page.** There is no PDF page in this contract. Do not write
