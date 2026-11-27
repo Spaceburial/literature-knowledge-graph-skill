@@ -192,10 +192,53 @@ def negative_tests():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def packaging_tests():
+    """The package travels as an archive and is installed by someone else's process.
+
+    Two things have broken submissions of this shape: a skill directory whose files are mode
+    600 (readable only by the account that wrote them) and a `run.sh` without the execute bit,
+    which is lost again whenever the archive is repacked. Neither shows up in any functional
+    test, and both stop a case dead before the first script runs.
+    """
+    print("\n[packaging]")
+    unreadable, not_exec, links = [], [], []
+    for base, dirs, files in os.walk(ROOT):
+        if "__pycache__" in base:
+            continue
+        for name in files:
+            path = os.path.join(base, name)
+            rel = os.path.relpath(path, ROOT)
+            if os.path.islink(path):
+                links.append(rel)
+                continue
+            mode = os.stat(path).st_mode
+            if not mode & 0o044:                      # neither group nor other can read it
+                unreadable.append(rel)
+            if name.endswith(".sh") and not mode & 0o111:
+                not_exec.append(rel)
+    check("every file is readable by another account (mode 644, not 600)", not unreadable, unreadable)
+    check("shell entry points are executable", not not_exec, not_exec)
+    check("no symlinks in the package", not links, links)
+    tmp = tempfile.mkdtemp()
+    try:
+        r = subprocess.run(["bash", os.path.join(ROOT, "run.sh"), "all",
+                            "--case-dir", os.path.join(ROOT, "examples", "demo_perovskite", "input"),
+                            "--work", os.path.join(tmp, "work"), "--out", os.path.join(tmp, "out")],
+                           cwd=tmp, capture_output=True, text=True, timeout=300)
+        res = os.path.join(tmp, "out", "result.json")
+        ok = r.returncode == 0 and os.path.exists(res) and \
+            json.load(open(res, encoding="utf-8"))["status"] == "success"
+        check("`bash run.sh all` works from an unrelated cwd", ok,
+              (r.returncode, (r.stderr or r.stdout)[-400:]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unit_tests()
     e2e_tests()
     incremental_test()
     negative_tests()
+    packaging_tests()
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     sys.exit(1 if FAIL else 0)
