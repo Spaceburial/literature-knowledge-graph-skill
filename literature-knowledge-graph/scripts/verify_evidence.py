@@ -9,10 +9,17 @@ conservative: a quote that cannot be located in the cited paragraph is reported 
 ``not_found`` and the build step downgrades or rejects it.
 
 Match levels (returned as ``status``):
-  exact      — quote equals a substring after whitespace folding
-  normalized — matches after Unicode/quote/dash folding and case folding
+  exact      — quote is a substring of the paragraph as stored (whitespace folded)
+  normalized — matches after Unicode/quote/dash folding, case folding, and after ignoring
+               whitespace and thousands separators (``1,350`` = ``1350``, ``80.1%`` = ``80.1 %``)
   fuzzy      — >=0.90 token-sequence similarity against a sliding window (flagged, weaker)
   not_found  — no acceptable match
+
+Whitespace and thousands separators are the two formatting differences a reader never counts as
+a different quote: a model transcribing ``1,350 °C`` or ``88.1 %`` from a paper that prints
+``1350 °C`` and ``88.1%`` is still quoting the paper. Both are dropped when building the
+comparison key, on the quote and on the paragraph alike; digits themselves are never altered, so
+a changed number still fails the numeric check below.
 
 The ``span`` field gives character offsets in the paragraph text and the ``context`` field
 returns the surrounding original sentence, which is what the reader actually needs to re-check.
@@ -48,6 +55,33 @@ def _find_span(hay, needle):
     return (i, i + len(needle))
 
 
+def _key(text):
+    """Comparison key: drop whitespace and thousands separators, keep every other character.
+
+    Returns ``(key, src)`` where ``src[i]`` is the offset in ``text`` of ``key[i]``, so a match
+    found in the key can still be reported as a span of the paragraph. A comma is a thousands
+    separator only when a digit precedes it and exactly three digits follow it.
+    """
+    key, src = [], []
+    n = len(text)
+    for i, ch in enumerate(text):
+        if ch == "," and key and key[-1].isdigit():
+            group = text[i + 1:i + 4]
+            after = text[i + 4:i + 5]
+            if len(group) == 3 and group.isdigit() and not after.isdigit():
+                continue
+        if ch.isspace():
+            continue
+        key.append(ch)
+        src.append(i)
+    return "".join(key), src
+
+
+def numbers(text):
+    """Multiset of numeric tokens, with digit grouping ignored (``1,350`` counts as ``1350``)."""
+    return Counter(NUM_RE.findall(_key(text)[0]))
+
+
 def _sentence_bounds(text, span):
     if not span:
         return (0, min(len(text), 240))
@@ -81,6 +115,19 @@ def verify_quote(quote, paragraph_text, min_len=12, fuzzy_threshold=0.90):
         ctx = paragraph_text[_sentence_bounds(paragraph_text, span)[0]:_sentence_bounds(paragraph_text, span)[1]]
         return {"status": status, "score": 1.0, "span": span, "context": ctx, "note": ""}
 
+    # Same text, different formatting: whitespace and thousands separators are dropped from both
+    # sides, every other character must still agree, so this stays a "normalized" match and never
+    # becomes a semantic one. Without this tier a quote that only writes "1,350" for "1350" falls
+    # through to the fuzzy window, where the numeric check rejects it — a correct quote lost.
+    qkey, _ = _key(q)
+    hkey, hsrc = _key(hay)
+    pos = hkey.find(qkey) if qkey else -1
+    if pos >= 0:
+        span = (hsrc[pos], hsrc[pos + len(qkey) - 1] + 1)
+        a, b = _sentence_bounds(paragraph_text, span)
+        return {"status": "normalized", "score": 1.0, "span": span, "context": paragraph_text[a:b],
+                "note": "formatting-insensitive: whitespace and thousands separators ignored"}
+
     # fuzzy: slide a window the length of the quote over sentences
     best = 0.0
     best_span = None
@@ -97,7 +144,7 @@ def verify_quote(quote, paragraph_text, min_len=12, fuzzy_threshold=0.90):
         # 200-character sentence still scores >0.90, so similarity alone would certify a quote
         # the paper never makes. Numbers must agree exactly, or the quote is rejected.
         window = hay[best_span[0]:best_span[1]]
-        qn, wn = Counter(NUM_RE.findall(q)), Counter(NUM_RE.findall(window))
+        qn, wn = numbers(q), numbers(window)
         if qn != wn:
             changed = sorted((qn - wn).elements())
             found = sorted((wn - qn).elements())
