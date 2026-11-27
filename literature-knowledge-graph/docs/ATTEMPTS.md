@@ -10,6 +10,7 @@ Every submission, its channel, bundle hash, observed state and what was learned.
 | 2026-11-26 13:40 | 113476 | submitted | - | 0.0 | queued | W1 变更后复查 |
 | 2026-11-26 13:46 | 113476 | submitted | - | 0.0 | queued | W2/W3 提交包更新 |
 | 2026-11-26 14:20 | 113476 | submitted | - | 0.0 | queued | W4 开工时复查:`scoringState.state=queued`,`resultsJson=null`,`execStatus=null`,`createdAt` 未变,仍未出分;113475 同状态 |
+| 2026-11-27 00:32 | 113476 | submitted | - | 0.0 | queued | W7 复查:仍未出分;worker 打分前沿冻结在 112648(11-26 04:12),其后 66 条全部 queued,我方前方约 31 条。归因不成立,不重交 |
 
 ## Attribution rule — what a score means, fixed before the score arrives
 
@@ -34,3 +35,34 @@ it spends a queue slot on the same expectation. The candidate differences after 
 guard on quotes (evidence correctness), non-silent failures (reliability), and a README that a
 stranger can follow (ecosystem). `modelTag` is `unknown` on both live attempts; any resubmission
 should pass `--model`/`--harness` so the tag is recorded.
+
+## Why there is nothing to attribute yet (2026-11-27 00:20 UTC)
+
+The queue is not slow, it is stopped. Read from the public attempt list, all 66 attempts of this
+challenge created after 2026-11-26T04:12Z are still `scoringState.state=queued`; the last attempt
+the worker scored is 112648, created 04:12. The attempts that do change state after that point are
+`pending_review`/`execStatus=failed` — the execution path, not the scoring path.
+
+| observation | value |
+|---|---|
+| last scored attempt | 112648, `createdAt` 2026-11-26T04:12:32Z, score 59, `scoreIsFinal=true` |
+| attempts created after it | 66, all `queued` except `pending_review`/`draft` |
+| our position | 113476 is ~31 attempts behind that frontier; its duplicate 113475 sits one slot earlier |
+| 113476 state | `status=submitted`, `execStatus=null`, `resultsJson=null`, `score=0.0`, `createdAt` unchanged for 11 h |
+
+Two consequences, both mechanical:
+
+- A **resubmission now does not buy time**: the new attempt would join the same stopped queue,
+  behind the same frontier, and the two queued attempts of this package already bracket the noise
+  (`analysis/competitor_analysis.md`: ±7). Nothing in the attribution rule can run until a score
+  exists, and a score cannot depend on when the row is added to a stalled queue.
+- 113476's bundle is **not** the current package. Replaying `skills/literature-knowledge-graph/`
+  from `bohrium/submitted-bundle-113476.zip` end to end on the demo case gives `status=success`,
+  35 nodes / 34 edges, coverage 1.0 — but 4 merge decisions and 4 queries, where the current package
+  ships 9 merge decisions and 6 queries, and the bundle's `schema/graph.schema.json` still has the
+  `oneOf` root — checked under draft-07, both the built `graph.json` and the shipped
+  `annotations.example.json` fail it, because each satisfies two branches at once. Whatever score
+  lands on 113476 is therefore a reading of
+  v1.0-era artefacts, and must not be attributed to the v1.3 extraction rules. The next submission
+  carries the current package.
+
